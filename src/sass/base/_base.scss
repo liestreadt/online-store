@@ -1,6 +1,7 @@
 html {
   font-size: 10px;
   box-sizing: border-box;
+  color: $color-bags;
 }
 
 body {
@@ -12,4 +13,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+a {
+  text-decoration: none;
+  color: $color-bags;
+  &:visited {
+    color: $color-bags;
+  }
 }
