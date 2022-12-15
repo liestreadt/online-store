@@ -1,3 +1,3 @@
-import './global.css';
-
-console.log('init project');
+import './style.scss';
+console.log('line');
+console.log('another line');
