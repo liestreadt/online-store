@@ -1,0 +1,7 @@
+%body-gradient {
+  background: linear-gradient(to left top, $color-blue-gradient, $color-sand-gradient);
+}
+
+%transition {
+  transition: all 0.3s ease-out;
+}
