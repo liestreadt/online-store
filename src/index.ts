@@ -1,3 +1,5 @@
 import './style.scss';
+import { initRouting } from './router/router';
+
 console.log('line');
-console.log('another line');
+initRouting();
