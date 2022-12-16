@@ -1,26 +1,31 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   padding: $padding-tiny $padding-small;
+  @extend %border;
+  border-radius: 0 0 $radius-small $radius-small;
 }
 .header__logo {
   font-size: 6rem;
   text-decoration: none;
-  color: $color-bags;
   display: flex;
+}
+.header__logo-bag {
+  color: $color-bag;
 }
 .header__store-name {
   font-size: 2rem;
-  align-self: flex-end;
+  align-self: center;
+}
+.header__total {
+  font-size: 1.8rem;
 }
 .header__goods-number {
-  align-self: flex-end;
   font-size: 1.6rem;
   font-weight: 700;
   text-decoration: none;
-  padding-bottom: 1.6rem;
-  &::after {
+  &:after {
     content: ' 🛒';
   }
 }

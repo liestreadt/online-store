@@ -1,10 +1,9 @@
 .footer {
   align-self: center;
-  border: 2px solid white;
+  @extend %border;
   border-radius: $radius-small;
 
-  padding-right: $padding-small;
-  padding-left: $padding-small;
+  padding: $padding-small;
 
   display: flex;
   flex-wrap: wrap;
@@ -15,6 +14,7 @@
   display: block;
   height: 30px;
   width: 70px;
+  margin-left: $padding-tiny;
   align-self: center;
   background: no-repeat;
   background-image: url(https://rs.school/images/rs_school_js.svg);
