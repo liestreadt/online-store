@@ -1,0 +1,34 @@
+.not-found__wrapper {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    @extend %border;
+    border-radius: $radius-small;
+    padding: $padding-small;
+}
+
+.not-found__text {
+    text-align: center;
+    font-size: 5rem;
+}
+
+@media screen and (max-width: 800px) {
+
+    .not-found__text {
+        font-size: 3rem;
+    }
+
+}
+
+@media screen and (max-width: 500px) {
+
+    .not-found__text {
+        font-size: 2rem;
+    }
+
+    .not-found__wrapper {
+        padding: 0;
+    }
+
+}
