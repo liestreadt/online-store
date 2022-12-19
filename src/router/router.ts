@@ -11,9 +11,15 @@ const mainContent = {
         >`,
     cart: `<div class="cart">Here is the cart</div>`,
 };
+const routes = {
+    '404': mainContent.errPage,
+    '/': mainContent.store,
+    cart: mainContent.cart,
+};
 function queryFromPrice() {
     const queryURL = new URLSearchParams();
     const priceInput = document.querySelector('.store__range');
+
     if (priceInput instanceof HTMLInputElement) {
         queryURL.set('price', priceInput.value);
     }
@@ -22,9 +28,10 @@ function queryFromPrice() {
 function appendQueryToURL() {
     const url = new URL(window.location.href);
     url.search = queryFromPrice().toString();
-    // window.location.href = url.toString();
+
     const priceInput = document.querySelector('.store__range');
     let priceValue: string | null = null;
+
     if (priceInput instanceof HTMLInputElement) {
         priceValue = priceInput.value;
     }
@@ -35,33 +42,13 @@ function priceFromQuery() {
     const price = queryParams.get('price');
     return price;
 }
-const routes = {
-    '404': mainContent.errPage,
-    '/': mainContent.store,
-    cart: mainContent.cart,
-};
-function parseRequestURL() {
-    const url = document.location.hash.toLowerCase();
-    const requestInUrl = url.split('/');
-    return {
-        resource: requestInUrl[1],
-        // id: request[2],
-        // action: requestInUrl[3],
-    };
-}
-const loadPage = async () => {
-    const request = parseRequestURL();
-    const pageForRoute = request.resource ? request.resource : '/';
-
-    const route = routes[pageForRoute as keyof typeof routes] || routes['404'];
-    const htmlMainCode = route;
-    renderPage(htmlMainCode, 'main');
-};
-const renderPage = (htmlCode: string, selector: string) => {
+function renderPage(htmlCode: string, selector: string) {
     const parentNode = document.querySelector(selector);
+
     if (parentNode) {
         parentNode.innerHTML = htmlCode;
         const priceInput = parentNode.querySelector('.store__range');
+
         if (priceInput instanceof HTMLInputElement) {
             priceInput.value = priceFromQuery() ?? '50';
             priceInput.addEventListener('change', () => {
@@ -72,6 +59,21 @@ const renderPage = (htmlCode: string, selector: string) => {
     } else {
         throw new Error(`No parent node with class ${selector}`);
     }
+}
+function parseRequestURL() {
+    const url = document.location.hash.toLowerCase();
+    const requestInUrl = url.split('/');
+    return {
+        resource: requestInUrl[1], // when implementing product links there will be more elements
+    };
+}
+const loadPage = async () => {
+    const request = parseRequestURL();
+    const pageForRoute = request.resource ? request.resource : '/';
+    // TODO: 404 works only with errors after #/ in url
+    const route = routes[pageForRoute as keyof typeof routes] || routes['404'];
+    const htmlMainCode = route;
+    renderPage(htmlMainCode, 'main');
 };
 
 export function initRouting() {
