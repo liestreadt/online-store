@@ -33,7 +33,7 @@ const baseConfig = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, './src/page-cart/index.html'),
+        template: path.resolve(__dirname, './src/index.html'),
         filename: 'index.html',
         }),
         new miniCss({
