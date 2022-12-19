@@ -7,19 +7,20 @@
 .cart {
     display: flex;
     flex-direction: column;
+    margin: $margin-medium auto;
+    border-radius: $radius-small;
+    padding: $padding-tiny 0;
     width: 80%;
     height: fit-content;
-    margin: $margin-block auto;
-    padding: $padding-tiny 0;
+
     @extend %border;
-    border-radius: $radius-small;
 
     &__header {
         display: flex;
         justify-content: space-around;
-        font-size: $font-header;
-        padding-bottom: $padding-tiny;
         border-bottom: $border;
+        padding-bottom: $padding-tiny;
+        font-size: $font-header;
     }
 
     &__pagination {
@@ -27,11 +28,11 @@
 
         .pag-left,
         .pag-right {
-            cursor: pointer;
-            padding: 0 $padding-tiny;
             border: $border-small;
-            border-radius: $max-radius;
+            border-radius: $radius-big;
+            padding: 0 $padding-tiny;
             background-color: $color-blue-gradient;
+            cursor: pointer;
             font-size: inherit;
 
             @extend %transition-fast;
@@ -61,20 +62,20 @@
     display: flex;
     justify-content: space-between;
     margin: $margin-tiny 0;
-    padding: $padding-tiny;
     border-top: $border;
     border-bottom: $border;
+    padding: $padding-tiny;
     font-size: $font-body;
 
     &__num {
         display: flex;
         justify-content: center;
         margin: auto 0;
+        border: $border;
+        border-radius: $radius-big;
+        padding: $padding-tiny;
         width: 2rem;
         height: fit-content;
-        border: $border;
-        border-radius: $max-radius;
-        padding: $padding-tiny;
     }
 
     &__pic {
@@ -89,8 +90,8 @@
     }
 
     &__title {
-        text-align: center;
         border-bottom: $border-small;
+        text-align: center;
         font-weight: bold;
     }
 
@@ -117,13 +118,13 @@
 
             &-increase,
             &-decrease {
+                border: $border-small;
+                border-radius: $radius-big;
+                background-color: $color-blue-gradient;
                 cursor: pointer;
                 width: 30%;
                 text-align: center;
                 font-size: 3rem;
-                border: $border-small;
-                border-radius: $max-radius;
-                background-color: $color-blue-gradient;
 
                 @extend %transition-fast;
 
@@ -155,19 +156,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: $margin-block auto;
+    margin: $margin-medium auto;
+    border: $border;
+    border-radius: $radius-small;
     padding: $padding-small;
     width: 60%;
-    border: $border;
     font-size: $font-body;
 
     &__header {
-        width: 100%;
-        font-size: $font-header;
         margin-bottom: $margin-tiny;
-        padding-bottom: $padding-small;
         border-bottom: $border;
+        padding-bottom: $padding-small;
+        width: 100%;
         text-align: center;
+        font-size: $font-header;
     }
 
     &__body {
@@ -191,15 +193,15 @@
     }
 
     &__promo-input {
-        padding: $padding-small;
         border: $border-small;
-        border-radius: $max-radius;
+        border-radius: $radius-big;
+        padding: $padding-small;
         background-color: $color-blue-gradient;
         font-size: inherit;
 
         &:focus {
-            border: $border-small-focus;
             outline: none;
+            border: $border-small-focus;
         }
 
         &::placeholder {
@@ -214,15 +216,15 @@
 
     &__btn-buy {
         grid-column: 1 / span 2;
+        margin: auto;
+        border: $border-small;
+        border-radius: $radius-big;
+        padding: 0 $padding-tiny;
+        background-color: $color-blue-gradient;
+        cursor: pointer;
         height: 80%;
         width: 50%;
-        margin: auto;
-        padding: 0 $padding-tiny;
-        border: $border-small;
-        border-radius: $max-radius;
-        background-color: $color-blue-gradient;
         font-size: inherit;
-        cursor: pointer;
 
         @extend %transition-fast;
 
