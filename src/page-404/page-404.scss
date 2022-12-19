@@ -1,11 +1,12 @@
 .not-found__wrapper {
-    margin: 0 auto;
     display: flex;
     justify-content: center;
-    width: fit-content;
-    @extend %border;
+    margin: 0 auto;
     border-radius: $radius-small;
     padding: $padding-small;
+    width: fit-content;
+
+    @extend %border;
 }
 
 .not-found__text {
