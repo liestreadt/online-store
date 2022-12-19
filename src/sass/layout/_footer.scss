@@ -1,0 +1,26 @@
+.footer {
+  align-self: center;
+  @extend %border;
+  border-radius: $radius-small;
+
+  padding: $padding-small;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  width: fit-content;
+}
+.footer__logo {
+  display: block;
+  height: 30px;
+  width: 70px;
+  margin-left: $padding-tiny;
+  align-self: center;
+  background: no-repeat;
+  background-image: url(https://rs.school/images/rs_school_js.svg);
+}
+.footer__github {
+  display: block;
+  align-self: center;
+  padding: 0 $padding-tiny;
+}

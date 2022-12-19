@@ -1,0 +1,11 @@
+@import "abstracts/constants";
+@import "abstracts/mixins";
+@import "abstracts/placeholders";
+
+@import "base/base";
+
+@import "layout/header";
+@import "layout/footer";
+
+@import "../page-cart/page-cart.scss";
+@import "../page-404/page-404.scss";
