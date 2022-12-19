@@ -1,9 +1,40 @@
 const mainContent = {
     errPage: `<p class="error-caption">The page does not exist</p>`,
     store: `<div class="store__filters">Container with the store</div>
-    <div class="store__goods">Goos are here</div>`,
+    <div class="store__goods">Goods are here</div>
+    <input
+        class="store__range"
+        type="range"
+        name="price"
+        min="0"
+        max="100"
+        >`,
     cart: `<div class="cart">Here is the cart</div>`,
 };
+function queryFromPrice() {
+    const queryURL = new URLSearchParams();
+    const priceInput = document.querySelector('.store__range');
+    if (priceInput instanceof HTMLInputElement) {
+        queryURL.set('price', priceInput.value);
+    }
+    return queryURL;
+}
+function appendQueryToURL() {
+    const url = new URL(window.location.href);
+    url.search = queryFromPrice().toString();
+    // window.location.href = url.toString();
+    const priceInput = document.querySelector('.store__range');
+    let priceValue: string | null = null;
+    if (priceInput instanceof HTMLInputElement) {
+        priceValue = priceInput.value;
+    }
+    history.pushState({ price: priceValue }, '', url.toString());
+}
+function priceFromQuery() {
+    const queryParams = new URLSearchParams(window.location.search);
+    const price = queryParams.get('price');
+    return price;
+}
 const routes = {
     '404': mainContent.errPage,
     '/': mainContent.store,
@@ -30,6 +61,14 @@ const renderPage = (htmlCode: string, selector: string) => {
     const parentNode = document.querySelector(selector);
     if (parentNode) {
         parentNode.innerHTML = htmlCode;
+        const priceInput = parentNode.querySelector('.store__range');
+        if (priceInput instanceof HTMLInputElement) {
+            priceInput.value = priceFromQuery() ?? '50';
+            priceInput.addEventListener('change', () => {
+                console.log('new price filter value');
+                appendQueryToURL();
+            });
+        }
     } else {
         throw new Error(`No parent node with class ${selector}`);
     }
