@@ -10,16 +10,16 @@ export default function getCartPage(): string {
                         Items in cart: <span class="cart__amount-num">2</span>
                     </div>
                     <div class="cart__pagination">
-                        <div class="pag-text">
+                        <div class="pagination-text">
                             Page:
                         </div>
-                        <a class="pag-left">
+                        <a class="pagination-left">
                             ←
                         </a>
-                        <div class="pag-current">
+                        <div class="pagination-current">
                             1
                         </div>
-                        <a class="pag-right">
+                        <a class="pagination-right">
                             →
                         </a>
                     </div>
