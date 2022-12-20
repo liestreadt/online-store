@@ -1,0 +1,32 @@
+.side-filter {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    border: $border;
+    border-radius: $radius-small;
+    box-sizing: border-box;
+    width: $width-small;
+    padding: $padding-tiny;
+}
+.side-filter__control-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
+.side-filter__category {
+    border: $border;
+    border-radius: $radius-small;
+}
+.side-filter__filter-header {
+    margin: $margin-tiny;
+    border-bottom: $border;
+    font-size: 1.8rem;
+    text-align: center;
+}
+.category-item {
+    display: flex;
+    padding: 0 $padding-tiny;
+}
+.category-item__amount {
+   flex-grow: 10;
+   text-align: end;
+}
