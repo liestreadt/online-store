@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Domine&display=swap"
+        rel="stylesheet">
+        <title>Online Store</title>
+    </head>
+    <body>
+        <header class="header">
+            <a href="#!" class="header__logo">
+                <span class="header__logo-bag">
+                    🛍
+                </span>
+                <h1 class="header__store-name">Online Store</h1>
+            </a>
+            <p class="header__total">
+                Cart total: <span class="header__total-price">€6,232.00</span>
+            </p>
+            <a href="#!" class="header__goods-number">10</a>
+        </header>
+        <main>
+            <section class="sorting">
+              <div class="sorting-header">
+                <select name="" id="sorting-menu" class="sorting__menu">
+                  <option value="default-sort" class="sorting-option" selected>Sort default</option>
+                  <option value="ascending-price" class="sorting-option">Sort by price (ascending)</option>
+                  <option value="desending-price" class="sorting-option">Sort by price (descending)</option>
+                  <option value="ascending-rating" class="sorting-option">Sort by rating (ascending)</option>
+                  <option value="descending-rating" class="sorting-option">Sort by rating (descending)</option>
+                </select>
+                <div class="sorting__total-found">
+                  Found:
+                  <span class="sorting__amount">5</span>
+                </div>
+                <input
+                  type="text"
+                  name=""
+                  id="sorting-search"
+                  class="sorting__search"
+                  placeholder="Search product">
+                <div class="sorting__view-buttons">
+                  <button class="sorting__tiny-view">
+                    📱
+                  </button>
+                  <button class="sorting__small-view">
+                    💻
+                  </button>
+                </div>
+              </div>
+              <div class="sorting__card-container">
+                <div class="demo-placeholder">1</div>
+                <div class="demo-placeholder">1</div>
+                <div class="demo-placeholder">1</div>
+              </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p class="footer__year">2022</p>
+            <a href="https://github.com/neemkashu" class="footer__github">neemkashu</a>
+            <a href="https://github.com/liestreadt" class="footer__github">liestreadt</a>
+            <a href="https://rs.school/js/" class="footer__logo"></a>
+        </footer>
+    </body>
+</html>
