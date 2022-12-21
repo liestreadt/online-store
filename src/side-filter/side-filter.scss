@@ -12,21 +12,31 @@
     display: flex;
     justify-content: space-evenly;
 }
-.side-filter__category {
+.side-filter__field {
     border: $border;
     border-radius: $radius-small;
 }
 .side-filter__filter-header {
-    margin: $margin-tiny;
+    margin: 0;
     border-bottom: $border;
+    border-radius: $radius-small $radius-small 0 0;
+    padding: $padding-tiny;
+    background-color: $color-headers-bkg;
     font-size: 1.8rem;
     text-align: center;
 }
+.side-filter__items-container {
+    overflow-y: scroll;
+    height: 10rem;
+}
+.brand-item,
 .category-item {
     display: flex;
+    align-items: center;
+    height: 2.5rem;
     padding: 0 $padding-tiny;
 }
-.category-item__amount {
+.filter-item__amount {
    flex-grow: 10;
    text-align: end;
 }
