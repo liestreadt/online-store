@@ -1,0 +1,107 @@
+.main-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.breadcrumbs {
+    margin: $margin-medium 0;
+    text-align: center;
+    font-size: $font-body;
+
+    &__item {
+        margin: 0 $margin-medium;
+    }
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    margin: $margin-medium auto;
+    border: $border;
+    border-radius: $radius-small;
+    max-width: 80%;
+
+    &__header {
+        border-bottom: $border;
+        padding: $padding-small 0;
+        text-align: center;
+        font-size: $font-header;
+    }
+
+    &__body {
+        display: flex;
+        padding: $padding-small 0;
+        font-size: $font-body;
+    }
+
+    &__aside-slides {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $padding-small;
+
+        img {
+            margin-bottom: $margin-tiny;
+            border: $border-small;
+            border-radius: $radius-small;
+            width: 7rem;
+
+            &:hover {
+                border: $border-small-focus;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__main-picture {
+        display: flex;
+        align-items: center;
+        padding: 0 $padding-small;
+        width: fit-content;
+
+        img {
+            border-radius: $radius-small;
+            width: 35rem;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $padding-small;
+
+        .details-item {
+            border: $border;
+            border-radius: $radius-small;
+            text-align: center;
+
+            &:nth-child(-n + 5) {
+                margin-bottom: $margin-tiny;
+            }
+
+            &__head {
+                border-bottom: $border;
+                font-weight: bold;
+            }
+
+            &__body {
+                padding: $padding-tiny;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 $padding-small;
+    }
+
+    &__btn-add-to-cart,
+    &__btn-buy-now {
+        @include button;
+
+        margin-top: $margin-medium;
+        width: 15rem;
+    }
+}
