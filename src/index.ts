@@ -3,3 +3,4 @@ import './sass/style.scss';
 
 const model = new Model(window.location.href);
 model.loadProducts();
+model.readParamsFromURL();
