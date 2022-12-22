@@ -1,0 +1,69 @@
+.main-product-card {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    width: 800px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    border: $border;
+    border-radius: $radius-small;
+    background: url('https://i.dummyjson.com/data/products/6/thumbnail.png');
+    background-size: cover;
+    background-position: center;
+
+    &__header {
+        border-bottom: $border;
+        padding: $padding-tiny 0;
+        text-align: center;
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    &__info {
+        border-bottom: $border-small;
+        border-right: $border-small;
+        padding: $padding-tiny;
+        border-bottom-right-radius: $radius-small;
+        background-color: $color-minor-light;
+        width: 70%;
+        height: fit-content;
+    }
+
+    &__info-item {
+        font-weight: bold;
+
+        & span {
+            font-weight: 400;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-end;
+        padding: $padding-tiny 0;
+        height: 50%;
+    }
+
+    &__btn-add-to-cart {
+        @include button;
+
+        height: 40%;
+    }
+
+    &__link-to-details {
+        @include button;
+
+        display: flex;
+        align-items: center;
+        height: 40%;
+        color: $color-font;
+    }
+}
