@@ -26,7 +26,7 @@
 .sorting__card-container {
   justify-content: center;
   display: grid;
-  grid-gap: $padding-tiny;
+  grid-gap: $padding-small;
   padding: $padding-small;
 }
 .sorting__card-container_small {
@@ -36,6 +36,7 @@
   grid-template-columns: repeat(auto-fill, $width-card-tiny);
 }
 .demo-placeholder {
+  box-sizing: border-box;
   width: $width-card-small;
   height: $height-card-small;
   border: $border;
