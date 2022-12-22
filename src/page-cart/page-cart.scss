@@ -26,28 +26,14 @@
     &__pagination {
         display: flex;
 
-        .pag-left,
-        .pag-right {
-            border: $border-small;
-            border-radius: $radius-big;
-            padding: 0 $padding-tiny;
-            background-color: $color-blue-gradient;
-            cursor: pointer;
-            font-size: inherit;
-
-            @extend %transition-fast;
-
-            &:hover {
-                @extend %transform-hover;
-            }
-
-            &:active {
-                @extend %transform-active;
-            }
+        .pagination-left,
+        .pagination-right {
+            @include button;
+            color: $color-bag;
         }
 
         & div:nth-child(n) {
-            margin: 0 $margin-tiny;
+            margin: 0 $margin-medium;
         }
     }
 
@@ -118,28 +104,15 @@
 
             &-increase,
             &-decrease {
-                border: $border-small;
-                border-radius: $radius-big;
-                background-color: $color-blue-gradient;
-                cursor: pointer;
-                width: 30%;
-                text-align: center;
+                @include button;
+                width: 4rem;
                 font-size: 3rem;
-
-                @extend %transition-fast;
-
-                &:hover {
-                    @extend %transform-hover;
-                }
-
-                &:active {
-                    @extend %transform-active;
-                }
             }
 
             &-count {
                 display: flex;
                 align-items: center;
+                margin: 0 $margin-tiny;
             }
 
         }
@@ -215,25 +188,10 @@
     }
 
     &__btn-buy {
+        @include button;
         grid-column: 1 / span 2;
         margin: auto;
-        border: $border-small;
-        border-radius: $radius-big;
-        padding: 0 $padding-tiny;
-        background-color: $color-blue-gradient;
-        cursor: pointer;
         height: 80%;
         width: 50%;
-        font-size: inherit;
-
-        @extend %transition-fast;
-
-        &:hover {
-            @extend %transform-hover;
-        }
-
-        &:active {
-            @extend %transform-active;
-        }
     }
 }

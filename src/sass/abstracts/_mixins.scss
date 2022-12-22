@@ -1,0 +1,18 @@
+@mixin button {
+    border: $border-small;
+    border-radius: $radius-big;
+    padding: 0 $padding-small;
+    background-color: $color-blue-gradient;
+    cursor: pointer;
+    font-size: inherit;
+
+    @extend %transition-fast;
+
+    &:hover {
+        @extend %transform-hover;
+    }
+
+    &:active {
+        @extend %transform-active;
+    }
+}
