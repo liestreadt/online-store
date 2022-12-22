@@ -29,6 +29,7 @@ h1 {
   margin: 0;
 }
 button {
+  @include button();
   font-family: inherit;
 }
 input, select {
