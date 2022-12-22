@@ -5,6 +5,7 @@
     background-color: $color-blue-gradient;
     cursor: pointer;
     font-size: inherit;
+    color: $color-font;
 
     @extend %transition-fast;
 
