@@ -1,12 +1,11 @@
-@mixin button {
+@mixin button($var-radius: $radius-big, $var-font-size: inherit) {
     border: $border-small;
-    border-radius: $radius-big;
+    border-radius: $var-radius;
     padding: 0 $padding-small;
     background-color: $color-blue-gradient;
     cursor: pointer;
-    font-size: inherit;
     color: $color-font;
-
+    font-size: $var-font-size;
     @extend %transition-fast;
 
     &:hover {
