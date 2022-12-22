@@ -1,0 +1,45 @@
+.sorting-box {
+  display: flex;
+}
+.sorting-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: $padding-tiny  $padding-small;
+}
+.sorting__menu {
+  background-color: $color-primary-light;
+  border: $border;
+  border-radius: $radius-small;
+  outline-color: transparent;
+  font-family: inherit;
+}
+.sorting__search {
+  border: $border;
+  border-radius: $radius-small;
+  font-family: inherit;
+  text-align: center;
+}
+.sorting-option {
+  font-family: inherit;
+}
+.sorting__card-container {
+  justify-content: center;
+  display: grid;
+  grid-gap: $padding-small;
+  padding: $padding-small;
+}
+.sorting__card-container_small {
+  grid-template-columns: repeat(auto-fill, $width-card-small);
+}
+.sorting__card-container_tiny {
+  grid-template-columns: repeat(auto-fill, $width-card-tiny);
+}
+.demo-placeholder {
+  box-sizing: border-box;
+  width: $width-card-small;
+  height: $height-card-small;
+  border: $border;
+  border-radius: $radius-small;
+  background: rgb(20,150,160);
+}

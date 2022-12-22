@@ -29,5 +29,13 @@ h1 {
   margin: 0;
 }
 button {
+  @include button();
   font-family: inherit;
+}
+input, select {
+  border: $border;
+  &:focus-visible {
+    outline-width: 0;
+    background-color: $color-sand-gradient;
+  }
 }
