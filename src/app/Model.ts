@@ -64,17 +64,15 @@ class Model {
         this.productJSON = {};
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
-        fetch(source)
-            .then((response: Response) => response.json())
-            .then((data: dummyJSON) => {
-                this.productJSON = data;
-                console.log('this.productJSON', this.productJSON);
-            })
-            .then(() => this.findInitialFilterValues())
-            .then(() => this.readParamsFromURL())
-            .catch(() => {
-                throw new Error('Fail to connect dummy json');
-            });
+        try {
+            const response = await fetch(source);
+            const data = await response.json();
+            this.productJSON = data;
+            this.readParamsFromURL();
+            this.findInitialFilterValues();
+        } catch {
+            throw new Error('Fail to connect dummy json');
+        }
     }
     readParamsFromURL(): Partial<FilterParamsFromArray> {
         const activeFilters: Partial<FilterParamsFromArray> = {};
