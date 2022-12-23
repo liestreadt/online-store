@@ -50,6 +50,7 @@
     border-top: $border;
     border-bottom: $border;
     padding: $padding-tiny;
+    min-height: 8rem;
     font-size: $font-body;
 
     &__num {
@@ -89,6 +90,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        min-width: 9rem;
     }
 
     &__amount {
@@ -103,8 +105,9 @@
 
             &-increase,
             &-decrease {
-                width: 4rem;
-                font-size: 3rem;
+                padding: 0;
+                width: 3rem;
+                font-size: 2rem;
             }
 
             &-count {
@@ -127,8 +130,8 @@
     margin: $margin-medium auto;
     border: $border;
     border-radius: $radius-small;
-    padding: $padding-small;
-    width: 60%;
+    padding: $padding-small $padding-medium;
+    width: fit-content;
     font-size: $font-body;
 
     &__header {

@@ -19,7 +19,7 @@
     margin: $margin-medium auto;
     border: $border;
     border-radius: $radius-small;
-    max-width: 80%;
+    max-width: 90%;
 
     &__header {
         border-bottom: $border;
@@ -94,7 +94,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 0 $padding-small;
+        padding: 0 $padding-medium;
     }
 
     &__btn-add-to-cart,
