@@ -1,45 +1,45 @@
 .sorting-box {
-  display: flex;
+    display: flex;
 }
 .sorting-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: $padding-tiny  $padding-small;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: $padding-tiny  $padding-small;
 }
 .sorting__menu {
-  background-color: $color-primary-light;
-  border: $border;
-  border-radius: $radius-small;
-  outline-color: transparent;
-  font-family: inherit;
+    border: $border;
+    border-radius: $radius-small;
+    outline-color: transparent;
+    background-color: $color-primary-light;
+    font-family: inherit;
 }
 .sorting__search {
-  border: $border;
-  border-radius: $radius-small;
-  font-family: inherit;
-  text-align: center;
+    border: $border;
+    border-radius: $radius-small;
+    text-align: center;
+    font-family: inherit;
 }
 .sorting-option {
-  font-family: inherit;
+    font-family: inherit;
 }
 .sorting__card-container {
-  justify-content: center;
-  display: grid;
-  grid-gap: $padding-small;
-  padding: $padding-small;
+    justify-content: center;
+    display: grid;
+    grid-gap: $padding-small;
+    padding: $padding-small;
 }
 .sorting__card-container_small {
-  grid-template-columns: repeat(auto-fill, $width-card-small);
+    grid-template-columns: repeat(auto-fill, $width-card-small);
 }
 .sorting__card-container_tiny {
-  grid-template-columns: repeat(auto-fill, $width-card-tiny);
+    grid-template-columns: repeat(auto-fill, $width-card-tiny);
 }
 .demo-placeholder {
-  box-sizing: border-box;
-  width: $width-card-small;
-  height: $height-card-small;
-  border: $border;
-  border-radius: $radius-small;
-  background: rgb(20,150,160);
+    box-sizing: border-box;
+    border: $border;
+    border-radius: $radius-small;
+    background: rgb(20,150,160);
+    width: $width-card-small;
+    height: $height-card-small;
 }

@@ -2,9 +2,9 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    box-sizing: border-box;
     border: $border;
     border-radius: $radius-small;
-    box-sizing: border-box;
     width: $width-small;
     padding: $padding-tiny;
 }
@@ -23,8 +23,8 @@
     border-radius: $radius-small $radius-small 0 0;
     padding: $padding-tiny;
     background-color: $color-headers-bkg;
-    font-size: 1.8rem;
     text-align: center;
+    font-size: 1.8rem;
 }
 .side-filter__items-container {
     overflow-y: scroll;
@@ -34,10 +34,10 @@
 .category-item {
     display: flex;
     align-items: center;
-    height: 2.5rem;
     padding: 0 $padding-tiny;
+    height: 2.5rem;
 }
 .filter-item__amount {
-   flex-grow: 10;
-   text-align: end;
+    flex-grow: 10;
+    text-align: end;
 }
