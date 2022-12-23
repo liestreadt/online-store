@@ -13,6 +13,7 @@
     }
 
     &:active {
+        border: $border-small-focus;
         @extend %transform-active;
     }
 }
