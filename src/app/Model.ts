@@ -70,6 +70,8 @@ class Model {
                 this.productJSON = data;
                 console.log('this.productJSON', this.productJSON);
             })
+            .then(() => this.findInitialFilterValues())
+            .then(() => this.readParamsFromURL())
             .catch(() => {
                 throw new Error('Fail to connect dummy json');
             });
@@ -89,7 +91,7 @@ class Model {
         return activeFilters;
     }
     findInitialFilterValues() {
-        console.log(this.productJSON.products);
+        console.log('this.productJSON and products', this.productJSON);
         if (this.productJSON.products) {
             const allProducts: Array<productDetail> = this.productJSON.products;
             const allCategories: Array<string> = [];
