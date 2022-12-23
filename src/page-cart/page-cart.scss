@@ -29,7 +29,6 @@
         .pagination-left,
         .pagination-right {
             @include button;
-            color: $color-bag;
         }
 
         & div:nth-child(n) {
