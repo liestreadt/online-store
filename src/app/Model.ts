@@ -33,6 +33,23 @@ const FilterParams = {
     stockMax: 'stockMax',
 } as const;
 
+type FilterAmounts = {
+    brandOrCategory: string;
+    amounts: [avaluableAmount: number, totalAmount: number];
+};
+interface InitialFilterValues {
+    minPrice: number;
+    maxPrice: number;
+    minStock: number;
+    maxStock: number;
+    Categories: Array<FilterAmounts>;
+    Brands: Array<FilterAmounts>;
+}
+
+interface modelData {
+    ActiveFilters: Partial<FilterParamsFromArray>;
+    InitialFilterValues: InitialFilterValues;
+}
 // type FilterParameter = typeof FilterParams[keyof typeof FilterParams];
 
 class Model {
@@ -51,7 +68,7 @@ class Model {
             .then((response: Response) => response.json())
             .then((data: dummyJSON) => {
                 this.productJSON = data;
-                console.log(typeof this.productJSON, this.productJSON);
+                console.log('this.productJSON', this.productJSON);
             })
             .catch(() => {
                 throw new Error('Fail to connect dummy json');
@@ -59,6 +76,7 @@ class Model {
     }
     readParamsFromURL(): Partial<FilterParamsFromArray> {
         const activeFilters: Partial<FilterParamsFromArray> = {};
+
         for (const [key, value] of this.queryParams.entries()) {
             if (Object.keys(FilterParams).includes(key)) {
                 const filter = key;
@@ -69,6 +87,34 @@ class Model {
             }
         }
         return activeFilters;
+    }
+    findInitialFilterValues() {
+        console.log(this.productJSON.products);
+        if (this.productJSON.products) {
+            const allProducts: Array<productDetail> = this.productJSON.products;
+            const allCategories: Array<string> = [];
+            const allBrands: Array<string> = [];
+
+            const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
+                (info, product: productDetail) => {
+                    info.minPrice = info.minPrice < product.price ? info.minPrice : product.price;
+                    info.maxPrice = info.maxPrice > product.price ? info.maxPrice : product.price;
+                    allCategories.push(product.category);
+                    allBrands.push(product.brand);
+                    return info;
+                },
+                {
+                    minPrice: Infinity,
+                    maxPrice: 0,
+                    minStock: Infinity,
+                    maxStock: 0,
+                    Categories: [],
+                    Brands: [],
+                }
+            );
+            console.log('allBrands', allBrands);
+            return productsSummaryInfo;
+        }
     }
 }
 
