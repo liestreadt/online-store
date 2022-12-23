@@ -75,16 +75,17 @@
             text-align: center;
 
             &:nth-child(-n + 5) {
-                margin-bottom: $margin-tiny;
+                margin-bottom: $margin-small;
             }
 
             &__head {
                 border-bottom: $border;
+                padding: $padding-tiny 0;
                 font-weight: bold;
             }
 
             &__body {
-                padding: $padding-tiny;
+                padding: $padding-tiny $padding-small;
             }
         }
     }
