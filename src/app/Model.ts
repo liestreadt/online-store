@@ -13,10 +13,10 @@ interface productDetail {
     stock: number;
 }
 interface dummyJSON {
-    products?: Array<productDetail>;
-    limit?: number;
-    total?: number;
-    skip?: number;
+    products: Array<productDetail>;
+    limit: number;
+    total: number;
+    skip: number;
 }
 const FilterParamsArray = ['category', 'brand', 'priceMin', 'priceMax', 'stockMin', 'stockMax'] as const;
 
@@ -33,35 +33,46 @@ const FilterParams = {
     stockMax: 'stockMax',
 } as const;
 
-type FilterAmounts = {
-    brandOrCategory: string;
-    amounts: [avaluableAmount: number, totalAmount: number];
-};
+// type FilterAmounts = {
+//     brandOrCategory: string;
+//     totalAmount: number;
+// };
 interface InitialFilterValues {
     minPrice: number;
     maxPrice: number;
     minStock: number;
     maxStock: number;
-    Categories: Array<FilterAmounts>;
-    Brands: Array<FilterAmounts>;
+    categories: Map<string, number>;
+    brands: Map<string, number>;
 }
 
-interface modelData {
-    ActiveFilters: Partial<FilterParamsFromArray>;
-    InitialFilterValues: InitialFilterValues;
+interface ModelData {
+    activeFilters: Partial<FilterParamsFromArray>;
+    initialFilterValues: InitialFilterValues;
+    allBrands: string[];
+    allCategories: string[];
 }
 // type FilterParameter = typeof FilterParams[keyof typeof FilterParams];
-
+function increaseValueInMap(myMap: Map<string, number>, value: string): void {
+    if (!myMap.has(value)) {
+        myMap.set(value, 1);
+    } else {
+        const previousValue = myMap.get(value) as number;
+        myMap.set(value, previousValue + 1);
+    }
+}
 class Model {
     queryParams: URLSearchParams;
     cart: Cart;
-    productJSON: dummyJSON;
+    productJSON: Partial<dummyJSON>;
+    modelData: Partial<ModelData>;
 
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
         this.cart = new Cart();
         this.productJSON = {};
+        this.modelData = {};
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
         try {
@@ -70,6 +81,7 @@ class Model {
             this.productJSON = data;
             this.readParamsFromURL();
             this.findInitialFilterValues();
+            console.log(this.modelData);
         } catch {
             throw new Error('Fail to connect dummy json');
         }
@@ -77,15 +89,16 @@ class Model {
     readParamsFromURL(): Partial<FilterParamsFromArray> {
         const activeFilters: Partial<FilterParamsFromArray> = {};
 
-        for (const [key, value] of this.queryParams.entries()) {
+        for (const key of this.queryParams.keys()) {
             if (Object.keys(FilterParams).includes(key)) {
                 const filter = key;
-                activeFilters[filter as keyof typeof activeFilters] = [value];
-                console.log(key, value);
+                activeFilters[filter as keyof typeof activeFilters] = this.queryParams.getAll(key);
+                console.log(key);
             } else {
                 console.log(`${key} is not a key!`);
             }
         }
+        this.modelData.activeFilters = activeFilters;
         return activeFilters;
     }
     findInitialFilterValues() {
@@ -96,11 +109,19 @@ class Model {
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info, product: productDetail) => {
+                (info: InitialFilterValues, product: productDetail) => {
                     info.minPrice = info.minPrice < product.price ? info.minPrice : product.price;
                     info.maxPrice = info.maxPrice > product.price ? info.maxPrice : product.price;
+
+                    info.minStock = info.minStock < product.stock ? info.minStock : product.stock;
+                    info.maxStock = info.maxStock > product.stock ? info.maxStock : product.stock;
+
                     allCategories.push(product.category);
                     allBrands.push(product.brand);
+
+                    increaseValueInMap(info.categories, product.category);
+                    increaseValueInMap(info.brands, product.brand);
+
                     return info;
                 },
                 {
@@ -108,11 +129,13 @@ class Model {
                     maxPrice: 0,
                     minStock: Infinity,
                     maxStock: 0,
-                    Categories: [],
-                    Brands: [],
+                    categories: new Map(),
+                    brands: new Map(),
                 }
             );
-            console.log('allBrands', allBrands);
+            this.modelData.allBrands = [...new Set(allBrands)];
+            this.modelData.allCategories = [...new Set(allCategories)];
+            this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
     }
