@@ -46,14 +46,14 @@
     }
 
     &__btn-add-to-cart {
-        height: 40%;
+        height: fit-content;
     }
 
     &__link-to-details {
         display: flex;
         align-items: center;
         @include button;
-        height: 40%;
+        height: fit-content;
         color: $color-font;
     }
 }

@@ -1,7 +1,7 @@
 @mixin button($var-radius: $radius-big, $var-font-size: inherit) {
     border: $border-small;
     border-radius: $var-radius;
-    padding: 0 $padding-small;
+    padding: $padding-tiny $padding-small;
     background-color: $color-blue-gradient;
     cursor: pointer;
     color: $color-font;

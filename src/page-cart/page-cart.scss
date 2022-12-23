@@ -29,6 +29,8 @@
         .pagination-left,
         .pagination-right {
             @include button;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         & div:nth-child(n) {
