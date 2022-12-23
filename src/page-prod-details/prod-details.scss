@@ -99,8 +99,6 @@
 
     &__btn-add-to-cart,
     &__btn-buy-now {
-        @include button;
-
         margin-top: $margin-medium;
         width: 15rem;
     }

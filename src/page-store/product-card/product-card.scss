@@ -46,14 +46,10 @@
     }
 
     &__btn-add-to-cart {
-        @include button;
-
         height: 40%;
     }
 
     &__link-to-details {
-        @include button;
-
         display: flex;
         align-items: center;
         height: 40%;
