@@ -39,10 +39,22 @@ button {
     font-family: inherit;
 }
 input, select {
-    border: $border;
+    border: $border-small;
+    text-align: center;
+
     &:focus-visible {
+        border: $border-small-focus;
         outline-width: 0;
         background-color: $color-sand-gradient;
+    }
+
+    &::placeholder {
+        text-align: center;
+    }
+
+    &::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
     }
 }
 .header_medium {

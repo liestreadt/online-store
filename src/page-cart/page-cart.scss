@@ -169,20 +169,6 @@
         padding: $padding-small;
         background-color: $color-blue-gradient;
         font-size: inherit;
-
-        &:focus {
-            outline: none;
-            border: $border-small-focus;
-        }
-
-        &::placeholder {
-            text-align: center;
-        }
-
-        &::-webkit-search-cancel-button {
-            -webkit-appearance: none;
-            appearance: none;
-        }
     }
 
     &__btn-buy {

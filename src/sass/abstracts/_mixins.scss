@@ -25,3 +25,11 @@
     background-color: $color-headers-bkg;
     text-align: center;
 }
+
+@mixin modal-input($var-width: 95%, $var-height: 95%) {
+    display: block;
+    margin: 0 auto;
+    border-radius: $radius-big;
+    width: $var-width;
+    height: $var-height;
+}
