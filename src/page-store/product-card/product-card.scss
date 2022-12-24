@@ -6,16 +6,19 @@
 }
 
 .product-card {
-
-    &__header {
-        border-bottom: $border;
-        padding: $padding-tiny 0;
-        text-align: center;
-    }
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    border: $border;
+    border-radius: $radius-small;
+    width: $width-card-small;
+    height: $height-card-small;
 
     &__body {
         display: flex;
         flex-direction: column;
+        background: url('https://i.dummyjson.com/data/products/6/thumbnail.png') center;
+        background-size: cover;
         height: 100%;
     }
 

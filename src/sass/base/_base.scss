@@ -31,6 +31,9 @@ p {
 h1 {
     margin: 0;
 }
+h2 {
+    margin: 0;
+}
 button {
     @include button();
     font-family: inherit;
@@ -41,4 +44,12 @@ input, select {
         outline-width: 0;
         background-color: $color-sand-gradient;
     }
+}
+.header_medium {
+    @include header;
+    font-size: 2rem;
+}
+.header_small {
+    @include header;
+    font-size: 1.8rem;
 }

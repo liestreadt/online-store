@@ -17,3 +17,11 @@
         @extend %transform-active;
     }
 }
+
+@mixin header {
+    border-bottom: $border;
+    border-radius: $radius-small $radius-small 0 0;
+    padding: $padding-tiny;
+    background-color: $color-headers-bkg;
+    text-align: center;
+}
