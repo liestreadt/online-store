@@ -9,8 +9,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    border: $border;
-    border-radius: $radius-small;
+    @extend %border;
     width: $width-card-small;
     height: $height-card-small;
 

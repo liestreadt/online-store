@@ -4,8 +4,7 @@
     flex-wrap: wrap;
     box-sizing: border-box;
     margin: 0 $margin-tiny;
-    border: $border;
-    border-radius: $radius-small;
+    @extend %border;
     padding: $padding-tiny;
     width: $width-small;
 
@@ -16,8 +15,7 @@
 
     &__field {
         margin-top: $margin-medium;
-        border: $border;
-        border-radius: $radius-small;
+        @extend %border;
     }
 
     &__items-container {

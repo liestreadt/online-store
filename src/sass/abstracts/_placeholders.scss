@@ -22,3 +22,8 @@
     border: 2px solid $color-primary-light;
     border-radius: $radius-small;
 }
+
+%border-tiny {
+    border: 1px solid #FAEBD7;
+    border-radius: $radius-small;
+}

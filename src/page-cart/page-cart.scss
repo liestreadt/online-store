@@ -8,12 +8,10 @@
     display: flex;
     flex-direction: column;
     margin: $margin-medium auto;
-    border-radius: $radius-small;
+    @extend %border;
     padding-bottom: $padding-tiny;
     width: 80%;
     height: fit-content;
-
-    @extend %border;
 
     &__header {
         display: flex;
@@ -128,8 +126,7 @@
     flex-direction: column;
     align-items: center;
     margin: $margin-medium auto;
-    border: $border;
-    border-radius: $radius-small;
+    @extend %border;
     padding: $padding-small $padding-medium;
     width: fit-content;
     font-size: $font-body;
@@ -164,7 +161,6 @@
     }
 
     &__promo-input {
-        border: $border-small;
         border-radius: $radius-big;
         padding: $padding-small;
         background-color: $color-blue-gradient;

@@ -15,20 +15,18 @@
 
 .sorting {
     margin: 0 $margin-tiny;
-    border: $border;
-    border-radius: $radius-small;
+    @extend %border;
     width: 100%;
 
     &__menu {
-        border: $border;
         border-radius: $radius-small;
         outline-color: transparent;
         background-color: $color-primary-light;
+        cursor: pointer;
         font-family: inherit;
     }
 
     &__search {
-        border: $border;
         border-radius: $radius-small;
         text-align: center;
         font-family: inherit;

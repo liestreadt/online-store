@@ -17,8 +17,7 @@
     display: flex;
     flex-direction: column;
     margin: $margin-medium auto;
-    border: $border;
-    border-radius: $radius-small;
+    @extend %border;
     max-width: 90%;
 
     &__header {
@@ -41,8 +40,7 @@
 
         img {
             margin-bottom: $margin-tiny;
-            border: $border-small;
-            border-radius: $radius-small;
+            @extend %border;
             width: 7rem;
 
             &:hover {
@@ -70,8 +68,7 @@
         padding: 0 $padding-small;
 
         .details-item {
-            border: $border;
-            border-radius: $radius-small;
+            @extend %border;
             text-align: center;
 
             &:nth-child(-n + 5) {
