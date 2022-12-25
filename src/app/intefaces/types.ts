@@ -44,4 +44,5 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
+    page: string;
 }
