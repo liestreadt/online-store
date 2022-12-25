@@ -6,8 +6,8 @@ interface ElementsToListenStore {
     copy?: HTMLButtonElement;
     category: HTMLDivElement;
     brand: HTMLDivElement;
-    priceInput: any; // double-input element
-    stockInput: any; // double-input element
+    priceInput: HTMLInputElement; // double-input element
+    stockInput: HTMLInputElement; // double-input element
     sorting: HTMLSelectElement;
     searching: HTMLInputElement;
     viewButtons: HTMLDivElement;
@@ -21,13 +21,13 @@ const eventTargetsID = {
     stock: '', // element id which contains stock input
     sorting: 'sorting-options',
     searching: 'searching-field',
-    viewButtons: 'view-buttons-container'
-}
+    viewButtons: 'view-buttons-container',
+};
 
-class Controller {
+export class Controller {
     model: Model;
     view: View;
-    constructor () {
+    constructor() {
         this.model = new Model(document.location.href);
         this.view = new View(this.model.modelData);
         this.addListeners();
@@ -39,7 +39,7 @@ class Controller {
     addListeners() {
         switch (this.model.modelData.page) {
             case 'store': {
-                const elementsToListen: Partial<ElementsToListenStore> = {} // = this.view.getElementsForEvents();
+                const elementsToListen: Partial<ElementsToListenStore> = {}; // = this.view.getElementsForEvents();
 
                 console.log('add event listeners to buttons and other inputs');
                 console.log('be sure handle events by class handler');
@@ -49,41 +49,40 @@ class Controller {
     }
     handleEvent(event: Event): void {
         if (event.target instanceof HTMLElement) {
-
             switch (event.target.id) {
-            // this switch case is not pretty;
-            // any suggestions how to construct method name from
-            // event.target and call it are welcome!
+                // this switch case is not pretty;
+                // any suggestions how to construct method name from
+                // event.target and call it are welcome!
 
-                case eventTargetsID.reset:{
+                case eventTargetsID.reset: {
                     this.resetEvent();
                     break;
                 }
-                case eventTargetsID.copy:{
+                case eventTargetsID.copy: {
                     this.copyEvent();
                     break;
                 }
-                case eventTargetsID.category:{
+                case eventTargetsID.category: {
                     this.copyEvent();
                     break;
                 }
-                case eventTargetsID.brand:{
+                case eventTargetsID.brand: {
                     this.categoryEvent(event);
                     break;
                 }
-                case eventTargetsID.price:{
+                case eventTargetsID.price: {
                     break;
                 }
-                case eventTargetsID.stock:{
+                case eventTargetsID.stock: {
                     break;
                 }
-                case eventTargetsID.sorting:{
+                case eventTargetsID.sorting: {
                     break;
                 }
-                case eventTargetsID.searching:{
+                case eventTargetsID.searching: {
                     break;
                 }
-                case eventTargetsID.viewButtons:{
+                case eventTargetsID.viewButtons: {
                     break;
                 }
             }
@@ -112,21 +111,21 @@ class Controller {
         }
     }
     private brandEvent() {
-
+        console.log('brandEvent, same as categoryEvent');
     }
     private priceEvent() {
-
+        console.log('priceEvent');
     }
     private stockEvent() {
-
+        console.log('stockEvent');
     }
     private sortingEvent() {
-
+        console.log('sortingEvent');
     }
     private searchingEvent() {
-
+        console.log('searchingEvent');
     }
     private viewButtonsEvent() {
-
+        console.log('viewButtonsEvent');
     }
 }
