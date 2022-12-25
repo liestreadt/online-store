@@ -6,8 +6,8 @@ interface ElementsToListenStore {
     copy?: HTMLButtonElement;
     category: HTMLDivElement;
     brand: HTMLDivElement;
-    priceInput: HTMLInputElement; // double-input element
-    stockInput: HTMLInputElement; // double-input element
+    price: HTMLInputElement; // double-input element
+    stock: HTMLInputElement; // double-input element
     sorting: HTMLSelectElement;
     searching: HTMLInputElement;
     viewButtons: HTMLDivElement;
@@ -29,21 +29,32 @@ export class Controller {
     view: View;
     constructor() {
         this.model = new Model(document.location.href);
+        this.model.loadProducts();
         this.view = new View(this.model.modelData);
         this.addListeners();
     }
-    initViewAndListeners() {
+    initViewAndListeners(): void {
         this.view = new View(this.model.modelData);
         this.addListeners();
     }
-    addListeners() {
+    addListeners(): void {
+        window.addEventListener('hashchange', this);
         switch (this.model.modelData.page) {
             case 'store': {
                 const elementsToListen: Partial<ElementsToListenStore> = {}; // = this.view.getElementsForEvents();
 
                 console.log('add event listeners to buttons and other inputs');
                 console.log('be sure handle events by class handler');
+
                 elementsToListen.reset?.addEventListener('click', this);
+                elementsToListen.copy?.addEventListener('click', this);
+                elementsToListen.category?.addEventListener('click', this);
+                elementsToListen.brand?.addEventListener('click', this);
+                elementsToListen.price?.addEventListener('change', this);
+                elementsToListen.stock?.addEventListener('change', this);
+                elementsToListen.sorting?.addEventListener('change', this);
+                elementsToListen.searching?.addEventListener('input', this);
+                elementsToListen.viewButtons?.addEventListener('click', this);
             }
         }
     }
@@ -63,26 +74,31 @@ export class Controller {
                     break;
                 }
                 case eventTargetsID.category: {
-                    this.copyEvent();
-                    break;
-                }
-                case eventTargetsID.brand: {
                     this.categoryEvent(event);
                     break;
                 }
+                case eventTargetsID.brand: {
+                    this.brandEvent(event);
+                    break;
+                }
                 case eventTargetsID.price: {
+                    this.priceEvent();
                     break;
                 }
                 case eventTargetsID.stock: {
+                    this.stockEvent();
                     break;
                 }
                 case eventTargetsID.sorting: {
+                    this.sortingEvent(event);
                     break;
                 }
                 case eventTargetsID.searching: {
+                    this.searchingEvent(event);
                     break;
                 }
                 case eventTargetsID.viewButtons: {
+                    this.viewButtonsEvent(event);
                     break;
                 }
             }
@@ -94,14 +110,14 @@ export class Controller {
             }
         }
     }
-    private resetEvent() {
+    private resetEvent(): void {
         console.log('this.model.resetFilters()');
         this.initViewAndListeners();
     }
-    private copyEvent() {
+    private copyEvent(): void {
         console.log('this.view.copyURLtoClipboard()');
     }
-    private categoryEvent(event: Event) {
+    private categoryEvent(event: Event): void {
         console.log('be prepared to handle both input or label click');
         if (event.currentTarget instanceof HTMLElement) {
             console.log(`
@@ -110,22 +126,37 @@ export class Controller {
             this.initViewAndListeners();
         }
     }
-    private brandEvent() {
-        console.log('brandEvent, same as categoryEvent');
+    private brandEvent(event: Event): void {
+        console.log('be prepared to handle both input or label click');
+        if (event.currentTarget instanceof HTMLElement) {
+            console.log(`
+                this.model.applyFilter(event.currentTarget.id);
+            `);
+            this.initViewAndListeners();
+        }
     }
-    private priceEvent() {
+    private priceEvent(): void {
         console.log('priceEvent');
     }
-    private stockEvent() {
+    private stockEvent(): void {
         console.log('stockEvent');
     }
-    private sortingEvent() {
-        console.log('sortingEvent');
+    private sortingEvent(event: Event): void {
+        console.log(`
+            this.model.applyFilter(event.currentTarget.id);
+        `);
+        this.initViewAndListeners();
     }
-    private searchingEvent() {
-        console.log('searchingEvent');
+    private searchingEvent(event: Event): void {
+        console.log(`
+            this.model.applySearchFilter(event.currentTarget);
+        `);
+        this.initViewAndListeners();
     }
-    private viewButtonsEvent() {
-        console.log('viewButtonsEvent');
+    private viewButtonsEvent(event: Event): void {
+        console.log(`
+            this.model.changeViewMode(event.currentTarget);
+        `);
+        this.initViewAndListeners();
     }
 }
