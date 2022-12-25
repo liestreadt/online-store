@@ -1,58 +1,20 @@
 import Cart from './Cart';
-
-interface productDetail {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    discountPercentage: number;
-    brand: string;
-    category: string;
-    images: Array<string>;
-    rating: number;
-    stock: number;
-}
-interface dummyJSON {
-    products: Array<productDetail>;
-    limit: number;
-    total: number;
-    skip: number;
-}
-const FilterParamsArray = ['category', 'brand', 'priceMin', 'priceMax', 'stockMin', 'stockMax'] as const;
-
-type FilterParamsFromArray = {
-    [K in typeof FilterParamsArray[number]]: string[];
-};
-
-const FilterParams = {
-    category: 'category',
-    brand: 'brand',
-    priceMin: 'priceMin',
-    priceMax: 'priceMax',
-    stockMin: 'stockMin',
-    stockMax: 'stockMax',
-} as const;
+import {
+    productDetail,
+    dummyJSON,
+    FilterParamsArray,
+    FilterParamsFromArray,
+    FilterParams,
+    InitialFilterValues,
+    ModelData,
+} from './intefaces/types';
 
 // type FilterAmounts = {
 //     brandOrCategory: string;
 //     totalAmount: number;
 // };
-interface InitialFilterValues {
-    minPrice: number;
-    maxPrice: number;
-    minStock: number;
-    maxStock: number;
-    categories: Map<string, number>;
-    brands: Map<string, number>;
-}
-
-interface ModelData {
-    activeFilters: Partial<FilterParamsFromArray>;
-    initialFilterValues: InitialFilterValues;
-    allBrands: string[];
-    allCategories: string[];
-}
 // type FilterParameter = typeof FilterParams[keyof typeof FilterParams];
+
 function increaseValueInMap(myMap: Map<string, number>, value: string): void {
     if (!myMap.has(value)) {
         myMap.set(value, 1);
