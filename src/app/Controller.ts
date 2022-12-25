@@ -41,10 +41,9 @@ export class Controller {
         window.addEventListener('hashchange', this);
         switch (this.model.modelData.page) {
             case 'store': {
-                const elementsToListen: Partial<ElementsToListenStore> = {}; // = this.view.getElementsForEvents();
-
-                console.log('add event listeners to buttons and other inputs');
-                console.log('be sure handle events by class handler');
+                const elementsToListen: Partial<ElementsToListenStore> = {};
+                // replace with
+                // const elementsToListen: Partial<ElementsToListenStore> = this.view.getElementsForEvents();
 
                 elementsToListen.reset?.addEventListener('click', this);
                 elementsToListen.copy?.addEventListener('click', this);
@@ -61,10 +60,6 @@ export class Controller {
     handleEvent(event: Event): void {
         if (event.target instanceof HTMLElement) {
             switch (event.target.id) {
-                // this switch case is not pretty;
-                // any suggestions how to construct method name from
-                // event.target and call it are welcome!
-
                 case eventTargetsID.reset: {
                     this.resetEvent();
                     break;
@@ -82,11 +77,11 @@ export class Controller {
                     break;
                 }
                 case eventTargetsID.price: {
-                    this.priceEvent();
+                    this.priceEvent(event);
                     break;
                 }
                 case eventTargetsID.stock: {
-                    this.stockEvent();
+                    this.stockEvent(event);
                     break;
                 }
                 case eventTargetsID.sorting: {
@@ -105,6 +100,10 @@ export class Controller {
         } else {
             if (event.type === 'hashchange') {
                 console.log('handle for hash change');
+                console.log(`
+                this.model.changePage(event.currentTarget.href);
+                this.initViewAndListeners();
+                `);
             } else {
                 throw new Error(`No event handler for ${event.type} and ${event.target}`);
             }
@@ -121,7 +120,7 @@ export class Controller {
         console.log('be prepared to handle both input or label click');
         if (event.currentTarget instanceof HTMLElement) {
             console.log(`
-                this.model.applyFilter(event.currentTarget.id);
+                this.model.applyQueryParam(event.currentTarget);
             `);
             this.initViewAndListeners();
         }
@@ -130,32 +129,38 @@ export class Controller {
         console.log('be prepared to handle both input or label click');
         if (event.currentTarget instanceof HTMLElement) {
             console.log(`
-                this.model.applyFilter(event.currentTarget.id);
+                this.model.applyQueryParam(event.currentTarget);
             `);
             this.initViewAndListeners();
         }
     }
-    private priceEvent(): void {
-        console.log('priceEvent');
+    private priceEvent(event: Event): void {
+        console.log(`
+            this.model.applyQueryParam(event.currentTarget);
+        `);
+        this.initViewAndListeners();
     }
-    private stockEvent(): void {
-        console.log('stockEvent');
+    private stockEvent(event: Event): void {
+        console.log(`
+            this.model.applyQueryParam(event.currentTarget);
+        `);
+        this.initViewAndListeners();
     }
     private sortingEvent(event: Event): void {
         console.log(`
-            this.model.applyFilter(event.currentTarget.id);
+            this.model.applyQueryParam(event.currentTarget);
         `);
         this.initViewAndListeners();
     }
     private searchingEvent(event: Event): void {
         console.log(`
-            this.model.applySearchFilter(event.currentTarget);
+            this.model.applyQueryParam(event.currentTarget);
         `);
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {
         console.log(`
-            this.model.changeViewMode(event.currentTarget);
+            this.model.applyQueryParam(event.currentTarget);
         `);
         this.initViewAndListeners();
     }
