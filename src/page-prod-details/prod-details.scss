@@ -6,7 +6,7 @@
 .breadcrumbs {
     margin: $margin-medium 0;
     text-align: center;
-    font-size: $font-body;
+    font-size: $font-header;
 
     &__item {
         margin: 0 $margin-medium;
@@ -17,9 +17,8 @@
     display: flex;
     flex-direction: column;
     margin: $margin-medium auto;
-    border: $border;
-    border-radius: $radius-small;
-    max-width: 80%;
+    @extend %border;
+    max-width: 90%;
 
     &__header {
         border-bottom: $border;
@@ -41,8 +40,7 @@
 
         img {
             margin-bottom: $margin-tiny;
-            border: $border-small;
-            border-radius: $radius-small;
+            @extend %border;
             width: 7rem;
 
             &:hover {
@@ -70,21 +68,21 @@
         padding: 0 $padding-small;
 
         .details-item {
-            border: $border;
-            border-radius: $radius-small;
+            @extend %border;
             text-align: center;
 
             &:nth-child(-n + 5) {
-                margin-bottom: $margin-tiny;
+                margin-bottom: $margin-medium;
             }
 
             &__head {
                 border-bottom: $border;
+                padding: $padding-tiny 0;
                 font-weight: bold;
             }
 
             &__body {
-                padding: $padding-tiny;
+                padding: $padding-tiny $padding-small;
             }
         }
     }
@@ -94,13 +92,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 0 $padding-small;
+        padding: 0 $padding-medium;
     }
 
     &__btn-add-to-cart,
     &__btn-buy-now {
-        @include button;
-
         margin-top: $margin-medium;
         width: 15rem;
     }
