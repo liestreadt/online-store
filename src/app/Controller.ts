@@ -1,9 +1,10 @@
 import View from './View';
 import Model from './Model';
+
 class Controller {
     model: Model;
     view: View;
-    constructor () {
+    constructor() {
         this.model = new Model(document.location.href);
         this.view = new View(this.model.modelData);
     }
@@ -17,3 +18,5 @@ class Controller {
         }
     }
 }
+
+export default Controller;
