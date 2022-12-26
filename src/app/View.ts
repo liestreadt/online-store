@@ -42,6 +42,12 @@ class View {
     getButtonsArray() {
         console.log('for the current page make the array of buttons to listen');
     }
+    copyURLtoClipboard() {
+        console.log('copy url');
+    }
+    getElementsForEvents() {
+        console.log('get elements to add to listeners');
+    }
 }
 
 export default View;
