@@ -4,16 +4,17 @@
     &__indicators {
         display: flex;
         flex-wrap: nowrap;
-        justify-content: space-around;
+        justify-content: space-between;
         padding-bottom: $padding-tiny;
     }
     &__inputs {
         position: relative;
+        height: $height-range-thumb;
     }
     &__input {
         position: absolute;
         top: 0;
-        left: 0;
+        left: 2%;
         appearance: none;
         box-sizing: border-box;
         border-radius: $radius-small;
