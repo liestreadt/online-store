@@ -16,20 +16,15 @@ export interface dummyJSON {
     total: number;
     skip: number;
 }
-export const FilterParamsArray = ['category', 'brand', 'priceMin', 'priceMax', 'stockMin', 'stockMax'] as const;
+export const filterParamsKeys = ['category', 'brand', 'priceMin', 'priceMax', 'stockMin', 'stockMax'];
 
-export type FilterParamsFromArray = {
-    [K in typeof FilterParamsArray[number]]: string[];
+export type FilterParamsValues = {
+    category: string[];
+    priceMin: string[];
+    priceMax: string[];
+    stockMin: string[];
+    stockMax: string[];
 };
-
-export const FilterParams = {
-    category: 'category',
-    brand: 'brand',
-    priceMin: 'priceMin',
-    priceMax: 'priceMax',
-    stockMin: 'stockMin',
-    stockMax: 'stockMax',
-} as const;
 
 export interface InitialFilterValues {
     minPrice: number;
@@ -40,7 +35,7 @@ export interface InitialFilterValues {
     brands: Map<string, number>;
 }
 export interface ModelData {
-    activeFilters: Partial<FilterParamsFromArray>;
+    activeFilters: Partial<FilterParamsValues>;
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];

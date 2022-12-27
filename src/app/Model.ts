@@ -2,18 +2,11 @@ import Cart from './Cart';
 import {
     productDetail,
     dummyJSON,
-    FilterParamsArray,
-    FilterParamsFromArray,
-    FilterParams,
+    filterParamsKeys,
+    FilterParamsValues,
     InitialFilterValues,
     ModelData,
 } from './intefaces/types';
-
-// type FilterAmounts = {
-//     brandOrCategory: string;
-//     totalAmount: number;
-// };
-// type FilterParameter = typeof FilterParams[keyof typeof FilterParams];
 
 function increaseValueInMap(myMap: Map<string, number>, value: string): void {
     if (!myMap.has(value)) {
@@ -48,11 +41,11 @@ class Model {
             throw new Error('Fail to connect dummy json');
         }
     }
-    readParamsFromURL(): Partial<FilterParamsFromArray> {
-        const activeFilters: Partial<FilterParamsFromArray> = {};
+    readParamsFromURL(): Partial<FilterParamsValues> {
+        const activeFilters: Partial<FilterParamsValues> = {};
 
         for (const key of this.queryParams.keys()) {
-            if (Object.keys(FilterParams).includes(key)) {
+            if (filterParamsKeys.includes(key)) {
                 const filter = key;
                 activeFilters[filter as keyof typeof activeFilters] = this.queryParams.getAll(key);
                 console.log(key);
