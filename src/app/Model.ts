@@ -39,6 +39,7 @@ class Model {
             },
             allBrands: [],
             allCategories: [],
+            filteredProducts: null,
             page: '',
         };
     }
@@ -49,6 +50,7 @@ class Model {
             this.productJSON = data;
             this.readParamsFromURL();
             this.findInitialFilterValues();
+            this.applyFilters();
             console.log(this.modelData);
         } catch {
             throw new Error('Fail to connect dummy json');
@@ -61,7 +63,6 @@ class Model {
             if (filterParamsKeys.includes(key)) {
                 const filter = key;
                 activeFilters[filter as keyof typeof activeFilters] = this.queryParams.getAll(key);
-                console.log(key);
             } else {
                 console.log(`${key} is not a key!`);
             }
@@ -70,7 +71,6 @@ class Model {
         return activeFilters;
     }
     findInitialFilterValues() {
-        console.log('this.productJSON and products', this.productJSON);
         if (this.productJSON && this.productJSON.products) {
             const allProducts: Array<ProductDetail> = this.productJSON.products;
             const allCategories: Array<string> = [];
@@ -106,6 +106,10 @@ class Model {
             this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
+    }
+    applyFilters() {
+        console.log('apply filters to product list');
+        this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
     }
 }
 

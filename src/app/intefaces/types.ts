@@ -39,5 +39,6 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
+    filteredProducts: Array<ProductDetail> | null;
     page: string;
 }
