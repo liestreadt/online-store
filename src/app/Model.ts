@@ -19,15 +19,28 @@ function increaseValueInMap(myMap: Map<string, number>, value: string): void {
 class Model {
     queryParams: URLSearchParams;
     cart: Cart;
-    productJSON: Partial<dummyJSON>;
-    modelData: Partial<ModelData>;
+    productJSON: dummyJSON | null;
+    modelData: ModelData;
 
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
         this.cart = new Cart();
-        this.productJSON = {};
-        this.modelData = {};
+        this.productJSON = null;
+        this.modelData = {
+            activeFilters: {},
+            initialFilterValues: {
+                minPrice: Infinity,
+                maxPrice: 0,
+                minStock: Infinity,
+                maxStock: 0,
+                categories: new Map(),
+                brands: new Map(),
+            },
+            allBrands: [],
+            allCategories: [],
+            page: '',
+        };
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
         try {
@@ -58,18 +71,18 @@ class Model {
     }
     findInitialFilterValues() {
         console.log('this.productJSON and products', this.productJSON);
-        if (this.productJSON.products) {
+        if (this.productJSON && this.productJSON.products) {
             const allProducts: Array<productDetail> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
                 (info: InitialFilterValues, product: productDetail) => {
-                    info.minPrice = info.minPrice < product.price ? info.minPrice : product.price;
-                    info.maxPrice = info.maxPrice > product.price ? info.maxPrice : product.price;
+                    info.minPrice = Math.min(info.minPrice, product.price);
+                    info.maxPrice = Math.max(info.maxPrice, product.price);
 
-                    info.minStock = info.minStock < product.stock ? info.minStock : product.stock;
-                    info.maxStock = info.maxStock > product.stock ? info.maxStock : product.stock;
+                    info.minStock = Math.min(info.minStock, product.stock);
+                    info.maxStock = Math.max(info.maxStock, product.stock);
 
                     allCategories.push(product.category);
                     allBrands.push(product.brand);
