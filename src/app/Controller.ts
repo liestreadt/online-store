@@ -1,17 +1,7 @@
 import View from './View';
 import Model from './Model';
+import { ElementsToListenStore } from './intefaces/types';
 
-interface ElementsToListenStore {
-    reset?: HTMLButtonElement;
-    copy?: HTMLButtonElement;
-    category: HTMLDivElement;
-    brand: HTMLDivElement;
-    price: HTMLInputElement; // double-input element
-    stock: HTMLInputElement; // double-input element
-    sorting: HTMLSelectElement;
-    searching: HTMLInputElement;
-    viewButtons: HTMLDivElement;
-}
 const eventTargetsID = {
     reset: 'button-reset',
     copy: 'button-copy',
@@ -41,7 +31,17 @@ export class Controller {
         window.addEventListener('hashchange', this);
         switch (this.model.modelData.page) {
             case 'store': {
-                const elementsToListen: Partial<ElementsToListenStore> = {};
+                const elementsToListen: ElementsToListenStore = {
+                    reset: null,
+                    copy: null,
+                    category: null,
+                    brand: null,
+                    price: null, // double-input element
+                    stock: null, // double-input element
+                    sorting: null,
+                    searching: null,
+                    viewButtons: null,
+                };
                 // replace with
                 // const elementsToListen: Partial<ElementsToListenStore> = this.view.getElementsForEvents();
 

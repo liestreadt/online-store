@@ -46,3 +46,14 @@ export interface ModelData {
     allCategories: string[];
     page: string;
 }
+export interface ElementsToListenStore {
+    reset: HTMLButtonElement | null;
+    copy: HTMLButtonElement | null;
+    category: HTMLDivElement | null;
+    brand: HTMLDivElement | null;
+    price: HTMLInputElement | null; // double-input element
+    stock: HTMLInputElement | null; // double-input element
+    sorting: HTMLSelectElement | null;
+    searching: HTMLInputElement | null;
+    viewButtons: HTMLDivElement | null;
+}
