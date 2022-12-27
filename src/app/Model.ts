@@ -1,7 +1,7 @@
 import Cart from './Cart';
 import {
-    productDetail,
-    dummyJSON,
+    ProductDetail,
+    DummyJSON,
     filterParamsKeys,
     FilterParamsValues,
     InitialFilterValues,
@@ -19,7 +19,7 @@ function increaseValueInMap(myMap: Map<string, number>, value: string): void {
 class Model {
     queryParams: URLSearchParams;
     cart: Cart;
-    productJSON: dummyJSON | null;
+    productJSON: DummyJSON | null;
     modelData: ModelData;
 
     constructor(urlString: string = window.location.href) {
@@ -72,12 +72,12 @@ class Model {
     findInitialFilterValues() {
         console.log('this.productJSON and products', this.productJSON);
         if (this.productJSON && this.productJSON.products) {
-            const allProducts: Array<productDetail> = this.productJSON.products;
+            const allProducts: Array<ProductDetail> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info: InitialFilterValues, product: productDetail) => {
+                (info: InitialFilterValues, product: ProductDetail) => {
                     info.minPrice = Math.min(info.minPrice, product.price);
                     info.maxPrice = Math.max(info.maxPrice, product.price);
 

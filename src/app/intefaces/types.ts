@@ -1,4 +1,4 @@
-export interface productDetail {
+export interface ProductDetail {
     id: number;
     title: string;
     description: string;
@@ -10,8 +10,8 @@ export interface productDetail {
     rating: number;
     stock: number;
 }
-export interface dummyJSON {
-    products: Array<productDetail>;
+export interface DummyJSON {
+    products: Array<ProductDetail>;
     limit: number;
     total: number;
     skip: number;
