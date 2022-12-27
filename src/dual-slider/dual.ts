@@ -44,9 +44,9 @@ export class DualSlider {
     }
     private addListeners() {
         const elementMax = this.container.querySelector('#dual-slider-max');
-        elementMax?.addEventListener('input', this);
+        elementMax?.addEventListener('change', this);
         const elementMin = this.container.querySelector('#dual-slider-min');
-        elementMin?.addEventListener('input', this);
+        elementMin?.addEventListener('change', this);
     }
     insertSlider(parent: HTMLElement) {
         parent.appendChild(this.updateSlider());
@@ -56,8 +56,13 @@ export class DualSlider {
         if (event.currentTarget instanceof HTMLInputElement) {
             if (event.currentTarget.id === 'dual-slider-max') {
                 this.inputMax = +event.currentTarget.value;
+                this.inputMin = Math.min(this.inputMin, this.inputMax);
             }
-            console.log('value', event.currentTarget.value);
+            if (event.currentTarget.id === 'dual-slider-min') {
+                this.inputMin = +event.currentTarget.value;
+                this.inputMax = Math.max(this.inputMin, this.inputMax);
+            }
+            this.updateSlider();
         }
     }
     set minScale(newMin: number) {

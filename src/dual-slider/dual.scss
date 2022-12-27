@@ -14,11 +14,12 @@
     &__input {
         position: absolute;
         top: 0;
-        left: 2%;
+        left: 0;
         appearance: none;
-        box-sizing: border-box;
+        margin: 0;
         border-radius: $radius-small;
-        width: 96%;
+        box-sizing: border-box;
+        width: 100%;
         height: $height-range;
         outline: none;
         background: $color-primary-light no-repeat center;
@@ -37,6 +38,6 @@
     }
     &__max {
         background-color: transparent;
-        border: 0;
+        border-color: transparent;
     }
 }
