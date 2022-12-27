@@ -5,11 +5,11 @@ export class DualSlider {
     protected _inputMax: number;
     protected container: HTMLElement;
 
-    constructor(min: number, max: number) {
-        this._minScale = min;
-        this._maxScale = max;
-        this._inputMin = min;
-        this._inputMax = max;
+    constructor(minScale: number, maxScale: number, inputMin = minScale, inputMax = maxScale) {
+        this._minScale = minScale;
+        this._maxScale = maxScale;
+        this._inputMin = inputMin;
+        this._inputMax = inputMax;
         this.container = document.createElement('div');
         this.container.className = 'dual-slider';
     }
@@ -56,13 +56,10 @@ export class DualSlider {
         if (event.currentTarget instanceof HTMLInputElement) {
             if (event.currentTarget.id === 'dual-slider-max') {
                 this.inputMax = +event.currentTarget.value;
-                this.inputMin = Math.min(this.inputMin, this.inputMax);
             }
             if (event.currentTarget.id === 'dual-slider-min') {
                 this.inputMin = +event.currentTarget.value;
-                this.inputMax = Math.max(this.inputMin, this.inputMax);
             }
-            this.updateSlider();
         }
     }
     set minScale(newMin: number) {
@@ -81,12 +78,16 @@ export class DualSlider {
     }
     set inputMin(newMin: number) {
         this._inputMin = newMin;
+        this._inputMax = Math.max(this.inputMin, this.inputMax);
+        this.updateSlider();
     }
     get inputMin(): number {
         return this._inputMin;
     }
     set inputMax(newMax: number) {
         this._inputMax = newMax;
+        this._inputMin = Math.min(this.inputMin, this.inputMax);
+        this.updateSlider();
     }
     get inputMax(): number {
         return this._inputMax;

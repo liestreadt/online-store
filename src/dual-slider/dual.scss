@@ -26,6 +26,7 @@
         pointer-events: none;
 
         &::-webkit-slider-thumb {
+            @extend %transition-fast;
             -webkit-appearance: none;
             pointer-events: all;
             width: $width-range-thumb;
@@ -34,10 +35,17 @@
             border: $border-small-focus;
             border-radius: $radius-small;
             cursor: pointer;
+
+            &:hover {
+                @extend %transform-hover;
+            }
         }
     }
     &__max {
         background-color: transparent;
         border-color: transparent;
+        &::-webkit-slider-thumb {
+            background-color: $color-sand-gradient;
+        }
     }
 }
