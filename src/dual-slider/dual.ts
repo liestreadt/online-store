@@ -1,3 +1,5 @@
+import { SLIDER_MAX_ID, SLIDER_MIN_ID } from '../app/constants/constants';
+
 export class DualSlider {
     protected _minScale: number;
     protected _maxScale: number;
@@ -23,7 +25,7 @@ export class DualSlider {
 <div class="dual-slider__inputs">
     <input
         type="range"
-        id="dual-slider-min"
+        id="${SLIDER_MIN_ID}"
         class="dual-slider__input"
         min="${this._minScale}"
         max="${this.maxScale}"
@@ -31,7 +33,7 @@ export class DualSlider {
         >
     <input
         type="range"
-        id="dual-slider-max"
+        id="${SLIDER_MAX_ID}"
         class="dual-slider__input dual-slider__max"
         min="${this._minScale}"
         max="${this.maxScale}"
@@ -43,9 +45,9 @@ export class DualSlider {
         return this.container;
     }
     private addListeners() {
-        const elementMax = this.container.querySelector('#dual-slider-max');
+        const elementMax = this.container.querySelector('#' + SLIDER_MAX_ID);
         elementMax?.addEventListener('change', this);
-        const elementMin = this.container.querySelector('#dual-slider-min');
+        const elementMin = this.container.querySelector('#' + SLIDER_MIN_ID);
         elementMin?.addEventListener('change', this);
     }
     insertSlider(parent: HTMLElement) {
@@ -54,10 +56,10 @@ export class DualSlider {
     }
     handleEvent(event: Event) {
         if (event.currentTarget instanceof HTMLInputElement) {
-            if (event.currentTarget.id === 'dual-slider-max') {
+            if (event.currentTarget.id === SLIDER_MAX_ID) {
                 this.inputMax = +event.currentTarget.value;
             }
-            if (event.currentTarget.id === 'dual-slider-min') {
+            if (event.currentTarget.id === SLIDER_MIN_ID) {
                 this.inputMin = +event.currentTarget.value;
             }
         }
@@ -96,6 +98,6 @@ export class DualSlider {
 //import { DualSlider } from './dual-slider/dual';
 // const dualSlider = new DualSlider(0, 500);
 // const main = document.querySelector('main');
-// if (main !== null) {
+// if (main) {
 //     dualSlider.insertSlider(main);
 // }
