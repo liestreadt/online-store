@@ -1,31 +1,31 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: $padding-tiny $padding-small;
-  @extend %border;
-  border-radius: 0 0 $radius-small $radius-small;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @extend %border;
+    border-radius: 0 0 $radius-small $radius-small;
+    padding: $padding-tiny $padding-small;
 }
 .header__logo {
-  font-size: 6rem;
-  text-decoration: none;
-  display: flex;
+    display: flex;
+    text-decoration: none;
+    font-size: 6rem;
 }
 .header__logo-bag {
-  color: $color-bag;
+    color: $color-bag;
 }
 .header__store-name {
-  font-size: 2rem;
-  align-self: center;
+    align-self: center;
+    font-size: 2rem;
 }
 .header__total {
-  font-size: 1.8rem;
+    font-size: 1.8rem;
 }
 .header__goods-number {
-  font-size: 1.6rem;
-  font-weight: 700;
-  text-decoration: none;
-  &:after {
-    content: ' 🛒';
-  }
+    text-decoration: none;
+    font-size: 1.6rem;
+    font-weight: 700;
+    &:after {
+        content: ' 🛒';
+    }
 }

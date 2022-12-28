@@ -1,0 +1,85 @@
+.modal {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $color-modal-bkg;
+    width: 100vw;
+    height: 100vh;
+
+    &__window {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        @extend %border;
+        padding: $padding-medium;
+        @extend %body-gradient;
+    }
+
+    &__header {
+        margin: $margin-small;
+        text-align: center;
+        font-size: $font-header;
+    }
+
+    &__name,
+    &__number,
+    &__address,
+    &__e-mail {
+        margin-bottom: $margin-medium;
+        width: 600px;
+        height: 25px;
+    }
+
+    &__name-input,
+    &__number-input,
+    &__address-input,
+    &__e-mail-input {
+        @include modal-input;
+    }
+
+    &__debit-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 40%;
+
+        &-data {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            @extend %border;
+            width: 450px;
+            height: 200px;
+        }
+
+        &-number {
+            width: 90%;
+            height: 25px;
+
+            &-input {
+                @include modal-input;
+            }
+        }
+
+        &-other {
+            display: flex;
+            justify-content: space-between;
+            width: 95%;
+        }
+
+        &-valid-to-input,
+        &-cvc-input {
+            height: 80%;
+            width: 100px;
+        }
+    }
+
+    &__btn-confirm {
+        margin: $margin-small 0;
+    }
+}
