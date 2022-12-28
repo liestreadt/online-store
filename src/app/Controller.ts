@@ -19,8 +19,12 @@ export class Controller {
     view: View;
     constructor() {
         this.model = new Model(document.location.href);
-        this.model.loadProducts();
         this.view = new View(this.model.modelData);
+        (async () => {
+            this.model = new Model(document.location.href);
+            await this.model.loadProducts();
+            this.view = new View(this.model.modelData);
+        })();
         this.addListeners();
     }
     initViewAndListeners(): void {
