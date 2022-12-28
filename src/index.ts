@@ -1,4 +1,5 @@
+import Model from './app/Model';
 import './sass/style.scss';
 
-console.log('line');
-console.log('another line');
+const model = new Model(window.location.href);
+model.loadProducts();

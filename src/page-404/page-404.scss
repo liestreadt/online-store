@@ -2,11 +2,9 @@
     display: flex;
     justify-content: center;
     margin: 0 auto;
-    border-radius: $radius-small;
+    @extend %border;
     padding: $padding-small;
     width: fit-content;
-
-    @extend %border;
 }
 
 .not-found__text {
