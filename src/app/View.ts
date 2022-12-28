@@ -1,17 +1,18 @@
 import {
-    productDetail,
-    dummyJSON,
-    FilterParamsArray,
-    FilterParamsFromArray,
-    FilterParams,
+    ProductDetail,
+    DummyJSON,
+    FilterParamsValues,
+    filterParamsKeys,
     InitialFilterValues,
     ModelData,
+    ElementsToListenStore,
 } from './intefaces/types';
 
 class View {
     modelData: Partial<ModelData>;
-    constructor(modelData: Partial<ModelData>) {
-        this.modelData = modelData;
+    constructor(ModelData: Partial<ModelData>) {
+        this.modelData = ModelData;
+        console.log(this.modelData.allBrands);
         this.renderPage();
     }
     renderPage() {
@@ -33,14 +34,19 @@ class View {
                     this.renderCartPage();
                 }
                 break;
+            default:
+                {
+                    this.renderStorePage();
+                }
+                break;
         }
         this.renderFooter();
         this.renderModal();
     }
     renderStorePage() {
-        const main = document.querySelector('main');
-        if (main) {
-            main.outerHTML = `
+        const containerMain = document.querySelector('main');
+        if (containerMain) {
+            containerMain.outerHTML = `
                 <main class="main-store">
                     ${this.getStoreFilters()}
                     ${this.getSortingSection()}
@@ -49,9 +55,9 @@ class View {
         }
     }
     renderProdDetailsPage() {
-        const main = document.querySelector('main');
-        if (main) {
-            main.outerHTML = `
+        const containerMain = document.querySelector('main');
+        if (containerMain) {
+            containerMain.outerHTML = `
                 <main class="main-details">
                     ${this.getProdDetailsContainer()}
                 </main>
@@ -59,9 +65,9 @@ class View {
         }
     }
     renderCartPage() {
-        const main = document.querySelector('main');
-        if (main) {
-            main.outerHTML = `
+        const containerMain = document.querySelector('main');
+        if (containerMain) {
+            containerMain.outerHTML = `
                 <main class="main-cart">
                     ${this.getCartContainer()}
                     ${this.getCartSummary()}
@@ -164,64 +170,52 @@ class View {
                 </div>
                 <div class="side-filter__field">
                     <h2 class="side-filter__filter-header header_small">
-                        Category
+                        Categories
                     </h2>
                     <div class="side-filter__items-container">
-                        <div class="category-item">
-                            <input
-                                type="checkbox"
-                                id="input-smartphones"
-                                class="filter-item__checkbox">
-                            <label
-                                for="input-smartphones"
-                                class="filter-item__label">
-                                smartphones
-                            </label>
-                            <span class="filter-item__amount">(5/5)</span>
-                        </div>
-                        <div class="category-item">
-                            <input
-                                type="checkbox"
-                                id="input-skincare">
-                            <label
-                                for="input-skincare"
-                                class="filter-item__label">
-                                skincare
-                            </label>
-                            <span class="filter-item__amount">(5/5)</span>
-                        </div>
+                        ${this.modelData.allCategories
+                            ?.map((i) => {
+                                return `
+                                    <div class="category-item">
+                                        <input
+                                            type="checkbox"
+                                            id="input-${i}"
+                                            class="filter-item__checkbox">
+                                        <label
+                                            for="input-${i}"
+                                            class="filter-item__label">
+                                            ${i}
+                                        </label>
+                                        <span class="filter-item__amount">(5/5)</span>
+                                    </div>
+                                `;
+                            })
+                            .join('')}
                     </div>
                 </div>
                 <div class="side-filter__field">
                     <h2 class="side-filter__filter-header header_small">
-                        Brand
+                        Brands
                     </h2>
                     <div class="side-filter__items-container">
-                        <div class="brand-item">
-                            <input
-                                type="checkbox"
-                                id="input-apple"
-                                class="filter-item__checkbox">
-                            <label
-                                for="input-apple"
-                                class="filter-item__label">
-                                apple
-                            </label>
-                            <span class="filter-item__amount">(5/5)</span>
-                        </div>
-                        <div class="brand-item">
-                            <input
-                                type="checkbox"
-                                id="input-samsung">
-                            <label
-                                for="input-samsung"
-                                class="filter-item__label">
-                                samsung
-                            </label>
-                            <span class="filter-item__amount">
-                                (0/2)
-                            </span>
-                        </div>
+                        ${this.modelData.allBrands
+                            ?.map((i) => {
+                                return `
+                                    <div class="brand-item">
+                                        <input
+                                            type="checkbox"
+                                            id="input-${i}"
+                                            class="filter-item__checkbox">
+                                        <label
+                                            for="input-${i}"
+                                            class="filter-item__label">
+                                            ${i}
+                                        </label>
+                                        <span class="filter-item__amount">(5/5)</span>
+                                    </div>
+                                `;
+                            })
+                            .join('')}
                     </div>
                 </div>
                 <div class="side-filter__field">
@@ -257,7 +251,7 @@ class View {
                         <option value="descending-rating" class="sorting-option">Sort by rating (descending)</option>
                     </select>
                     <div class="sorting__total-found">
-                        Found: <span class="sorting__amount">5</span>
+                        Found: <span class="sorting__amount">${this.modelData.filteredProducts?.length}</span>
                     </div>
                     <input
                         type="text"
@@ -271,29 +265,16 @@ class View {
                     </div>
                 </div>
                 <div class="sorting__card-container sorting__card-container_small">
-                    ${this.getCard()}
+                    ${this.modelData.filteredProducts?.map((i) => this.getCard(i)).join('')}
                 </div>
             </section>
         `;
     }
-    getCard(
-        obj: productDetail = {
-            id: 1,
-            title: 'title',
-            description: 'desc',
-            price: 123,
-            discountPercentage: 15,
-            brand: 'brand',
-            category: 'category',
-            images: ['asd', 'sda'],
-            rating: 4.5,
-            stock: 55,
-        }
-    ) {
+    getCard(obj: ProductDetail) {
         return `
             <div class="product-card">
                 <h2 class="product-card__header header_small">
-                    MacBookPro
+                    ${obj.title}
                 </h2>
                 <div class="product-card__body">
                     <div class="product-card__info">
@@ -329,7 +310,7 @@ class View {
         `;
     }
     getProdDetailsContainer(
-        obj: productDetail = {
+        obj: ProductDetail = {
             id: 1,
             title: 'title',
             description: 'desc',
@@ -463,7 +444,7 @@ class View {
         `;
     }
     getCartItem(
-        obj: productDetail = {
+        obj: ProductDetail = {
             id: 1,
             title: 'title',
             description: 'desc',
@@ -553,7 +534,7 @@ class View {
         `;
     }
     getButtonsArray() {
-        return Array.from(document.body.querySelectorAll('button'));
+        return [...document.body.querySelectorAll('button')];
     }
     copyURLtoClipboard() {
         console.log('copy url');

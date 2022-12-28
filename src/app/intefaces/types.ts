@@ -10,6 +10,7 @@ export interface ProductDetail {
     rating: number;
     stock: number;
 }
+
 export interface DummyJSON {
     products: Array<ProductDetail>;
     limit: number;
