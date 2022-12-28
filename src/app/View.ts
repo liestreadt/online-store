@@ -276,7 +276,17 @@ class View {
                 <h2 class="product-card__header header_small">
                     ${obj.title}
                 </h2>
-                <div class="product-card__body">
+                <div
+                    class="product-card__body"
+                    style="
+                        background: url('${
+                            obj.images.filter((i) => i.match(/thumbnail/)).length
+                                ? obj.images.filter((i) => i.match(/thumbnail/))
+                                : obj.images[0]
+                        }');
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: cover;">
                     <div class="product-card__info">
                         <div class="product-card__info-item">
                             Category: <span class="product-card__category-text">${obj.category}</span>
