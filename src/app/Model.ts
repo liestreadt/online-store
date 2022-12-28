@@ -1,19 +1,12 @@
 import Cart from './Cart';
 import {
-    productDetail,
-    dummyJSON,
-    FilterParamsArray,
-    FilterParamsFromArray,
-    FilterParams,
+    ProductDetail,
+    DummyJSON,
+    filterParamsKeys,
+    FilterParamsValues,
     InitialFilterValues,
     ModelData,
 } from './intefaces/types';
-
-// type FilterAmounts = {
-//     brandOrCategory: string;
-//     totalAmount: number;
-// };
-// type FilterParameter = typeof FilterParams[keyof typeof FilterParams];
 
 function increaseValueInMap(myMap: Map<string, number>, value: string): void {
     if (!myMap.has(value)) {
@@ -23,18 +16,35 @@ function increaseValueInMap(myMap: Map<string, number>, value: string): void {
         myMap.set(value, previousValue + 1);
     }
 }
+
+type Filter = typeof filterParamsKeys[number];
+
 class Model {
     queryParams: URLSearchParams;
     cart: Cart;
-    productJSON: Partial<dummyJSON>;
-    modelData: Partial<ModelData>;
+    productJSON: DummyJSON | null;
+    modelData: ModelData;
 
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
         this.cart = new Cart();
-        this.productJSON = {};
-        this.modelData = {};
+        this.productJSON = null;
+        this.modelData = {
+            activeFilters: {},
+            initialFilterValues: {
+                minPrice: Infinity,
+                maxPrice: 0,
+                minStock: Infinity,
+                maxStock: 0,
+                categories: new Map(),
+                brands: new Map(),
+            },
+            allBrands: [],
+            allCategories: [],
+            filteredProducts: null,
+            page: '',
+        };
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
         try {
@@ -43,19 +53,19 @@ class Model {
             this.productJSON = data;
             this.readParamsFromURL();
             this.findInitialFilterValues();
+            this.applyQueryParam();
             console.log(this.modelData);
         } catch {
             throw new Error('Fail to connect dummy json');
         }
     }
-    readParamsFromURL(): Partial<FilterParamsFromArray> {
-        const activeFilters: Partial<FilterParamsFromArray> = {};
+    readParamsFromURL(): Partial<FilterParamsValues> {
+        const activeFilters: Partial<FilterParamsValues> = {};
 
         for (const key of this.queryParams.keys()) {
-            if (Object.keys(FilterParams).includes(key)) {
+            if (filterParamsKeys.includes(key as Filter)) {
                 const filter = key;
                 activeFilters[filter as keyof typeof activeFilters] = this.queryParams.getAll(key);
-                console.log(key);
             } else {
                 console.log(`${key} is not a key!`);
             }
@@ -64,19 +74,18 @@ class Model {
         return activeFilters;
     }
     findInitialFilterValues() {
-        console.log('this.productJSON and products', this.productJSON);
-        if (this.productJSON.products) {
-            const allProducts: Array<productDetail> = this.productJSON.products;
+        if (this.productJSON && this.productJSON.products) {
+            const allProducts: Array<ProductDetail> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info: InitialFilterValues, product: productDetail) => {
-                    info.minPrice = info.minPrice < product.price ? info.minPrice : product.price;
-                    info.maxPrice = info.maxPrice > product.price ? info.maxPrice : product.price;
+                (info: InitialFilterValues, product: ProductDetail) => {
+                    info.minPrice = Math.min(info.minPrice, product.price);
+                    info.maxPrice = Math.max(info.maxPrice, product.price);
 
-                    info.minStock = info.minStock < product.stock ? info.minStock : product.stock;
-                    info.maxStock = info.maxStock > product.stock ? info.maxStock : product.stock;
+                    info.minStock = Math.min(info.minStock, product.stock);
+                    info.maxStock = Math.max(info.maxStock, product.stock);
 
                     allCategories.push(product.category);
                     allBrands.push(product.brand);
@@ -100,6 +109,10 @@ class Model {
             this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
+    }
+    applyQueryParam() {
+        console.log('apply filters to product list');
+        this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
     }
 }
 

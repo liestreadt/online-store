@@ -1,0 +1,49 @@
+.sorting-box {
+    display: flex;
+}
+
+.sorting-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: $padding-tiny  $padding-small;
+}
+
+.sorting-option {
+    font-family: inherit;
+}
+
+.sorting {
+    margin: 0 $margin-tiny;
+    @extend %border;
+    width: 100%;
+
+    &__menu {
+        border-radius: $radius-small;
+        outline-color: transparent;
+        background-color: $color-primary-light;
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    &__search {
+        border-radius: $radius-small;
+        text-align: center;
+        font-family: inherit;
+    }
+
+    &__card-container {
+        justify-content: center;
+        display: grid;
+        grid-gap: $padding-small;
+        padding: $padding-small;
+    }
+
+    &__card-container_small {
+        grid-template-columns: repeat(auto-fill, $width-card-small);
+    }
+
+    &__card-container_tiny {
+        grid-template-columns: repeat(auto-fill, $width-card-tiny);
+    }
+}

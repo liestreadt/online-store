@@ -7,7 +7,11 @@
 @import "layout/header";
 @import "layout/footer";
 
+@import "../page-store/page-store.scss";
+@import "../page-store/side-filter/side-filter.scss";
+@import "../page-store/sorting-section/sorting-section.scss";
+@import "../page-store/product-card/product-card.scss";
 @import "../page-cart/page-cart.scss";
-@import "../page-404/page-404.scss";
 @import "../page-prod-details/prod-details.scss";
-@import "../side-filter/side-filter.scss";
+@import "../page-404/page-404.scss";
+@import "../modal/modal.scss";

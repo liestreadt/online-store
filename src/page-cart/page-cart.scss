@@ -8,18 +8,14 @@
     display: flex;
     flex-direction: column;
     margin: $margin-medium auto;
-    border-radius: $radius-small;
-    padding: $padding-tiny 0;
+    @extend %border;
+    padding-bottom: $padding-tiny;
     width: 80%;
     height: fit-content;
-
-    @extend %border;
 
     &__header {
         display: flex;
         justify-content: space-around;
-        border-bottom: $border;
-        padding-bottom: $padding-tiny;
         font-size: $font-header;
     }
 
@@ -29,7 +25,8 @@
         .pagination-left,
         .pagination-right {
             @include button;
-            color: $color-bag;
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         & div:nth-child(n) {
@@ -51,6 +48,7 @@
     border-top: $border;
     border-bottom: $border;
     padding: $padding-tiny;
+    min-height: 8rem;
     font-size: $font-body;
 
     &__num {
@@ -90,6 +88,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        min-width: 9rem;
     }
 
     &__amount {
@@ -104,9 +103,9 @@
 
             &-increase,
             &-decrease {
-                @include button;
-                width: 4rem;
-                font-size: 3rem;
+                padding: 0;
+                width: 3rem;
+                font-size: 2rem;
             }
 
             &-count {
@@ -114,10 +113,7 @@
                 align-items: center;
                 margin: 0 $margin-tiny;
             }
-
         }
-
-
     }
 
     &__price {
@@ -130,10 +126,9 @@
     flex-direction: column;
     align-items: center;
     margin: $margin-medium auto;
-    border: $border;
-    border-radius: $radius-small;
-    padding: $padding-small;
-    width: 60%;
+    @extend %border;
+    padding: $padding-small $padding-medium;
+    width: fit-content;
     font-size: $font-body;
 
     &__header {
@@ -166,32 +161,16 @@
     }
 
     &__promo-input {
-        border: $border-small;
         border-radius: $radius-big;
         padding: $padding-small;
         background-color: $color-blue-gradient;
         font-size: inherit;
-
-        &:focus {
-            outline: none;
-            border: $border-small-focus;
-        }
-
-        &::placeholder {
-            text-align: center;
-        }
-
-        &::-webkit-search-cancel-button {
-            -webkit-appearance: none;
-            appearance: none;
-        }
     }
 
     &__btn-buy {
-        @include button;
         grid-column: 1 / span 2;
         margin: auto;
-        height: 80%;
-        width: 50%;
+        height: 50%;
+        width: 40%;
     }
 }
