@@ -29,6 +29,7 @@ class View {
             case 'store':
                 {
                     this.renderStorePage();
+                    this.getDualSlider();
                 }
                 break;
             case 'details':
@@ -44,10 +45,10 @@ class View {
             default:
                 {
                     this.renderStorePage();
+                    this.getDualSlider();
                 }
                 break;
         }
-        this.getDualSlider();
         this.renderFooter();
         this.renderModal();
     }
