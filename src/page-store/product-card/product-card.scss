@@ -21,11 +21,11 @@
     }
 
     &__info {
-        border-bottom: $border;
         border-right: $border;
+        border-bottom: $border;
         padding: $padding-tiny;
         border-bottom-right-radius: $radius-small;
-        background-color: $color-minor-light;
+        background-color: $color-cards-info;
         width: 70%;
         height: fit-content;
     }
