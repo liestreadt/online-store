@@ -1,3 +1,5 @@
+import { DualSlider } from '../dual-slider/dual';
+
 import {
     ProductDetail,
     DummyJSON,
@@ -5,14 +7,14 @@ import {
     filterParamsKeys,
     InitialFilterValues,
     ModelData,
-    ElementsToListenStore,
+    ElementsToListen,
+    EventTargetsIDEnum,
 } from './intefaces/types';
 
 class View {
     modelData: Partial<ModelData>;
     constructor(ModelData: Partial<ModelData>) {
         this.modelData = ModelData;
-        console.log(this.modelData.allBrands);
         this.renderPage();
     }
     renderPage() {
@@ -40,6 +42,7 @@ class View {
                 }
                 break;
         }
+        this.getDualSlider();
         this.renderFooter();
         this.renderModal();
     }
@@ -161,10 +164,10 @@ class View {
         return `
             <section class="side-filter">
                 <div class="side-filter__control-buttons">
-                    <button class="side-filter__reset">
+                    <button id="${EventTargetsIDEnum.reset}" class="side-filter__reset">
                         Reset Filters
                     </button>
-                    <button class="side-filter__copy">
+                    <button id="${EventTargetsIDEnum.copy}" class="side-filter__copy">
                         Copy Link
                     </button>
                 </div>
@@ -172,7 +175,7 @@ class View {
                     <h2 class="side-filter__filter-header header_small">
                         Categories
                     </h2>
-                    <div class="side-filter__items-container">
+                    <div id="${EventTargetsIDEnum.category}" class="side-filter__items-container">
                         ${this.modelData.allCategories
                             ?.map((i) => {
                                 return `
@@ -197,7 +200,7 @@ class View {
                     <h2 class="side-filter__filter-header header_small">
                         Brands
                     </h2>
-                    <div class="side-filter__items-container">
+                    <div id="${EventTargetsIDEnum.brand}" class="side-filter__items-container">
                         ${this.modelData.allBrands
                             ?.map((i) => {
                                 return `
@@ -218,32 +221,32 @@ class View {
                             .join('')}
                     </div>
                 </div>
-                <div class="side-filter__field">
+                <div id="${EventTargetsIDEnum.price}" class="side-filter__field">
                     <h2 class="side-filter__filter-header header_small">
                         Price
                     </h2>
-                    <input
-                        type="range"
-                        id="input-price"
-                        class="filter-item__dual-range">
                 </div>
-                <div class="side-filter__field">
+                <div id="${EventTargetsIDEnum.stock}" class="side-filter__field">
                     <h2 class="side-filter__filter-header header_small">
                         Stock
                     </h2>
-                    <input
-                        type="range"
-                        id="input-stock"
-                        class="filter-item__dual-range">
                 </div>
             </section>
         `;
+    }
+    getDualSlider() {
+        const sliderContainerPrice = document.querySelector(`#${EventTargetsIDEnum.price}`) as HTMLElement;
+        const sliderContainerStock = document.querySelector(`#${EventTargetsIDEnum.stock}`) as HTMLElement;
+        const dualSliderPrice = new DualSlider(0, 500);
+        const dualSliderStock = new DualSlider(0, 500);
+        if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
+        if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
     getSortingSection() {
         return `
             <section class="sorting">
                 <div class="sorting-header">
-                    <select name="" id="sorting-menu" class="sorting__menu">
+                    <select name="" id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
                         <option value="default-sort" class="sorting-option" selected>Sort default</option>
                         <option value="ascending-price" class="sorting-option">Sort by price (ascending)</option>
                         <option value="desending-price" class="sorting-option">Sort by price (descending)</option>
@@ -256,10 +259,10 @@ class View {
                     <input
                         type="text"
                         name=""
-                        id="sorting-search"
+                        id="${EventTargetsIDEnum.searching}"
                         class="sorting__search"
                         placeholder="Search product">
-                    <div class="sorting__view-buttons">
+                    <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
                         Choose view: <button class="sorting__tiny-view">📱</button>
                         <button class="sorting__small-view">💻</button>
                     </div>
@@ -549,8 +552,20 @@ class View {
     copyURLtoClipboard() {
         console.log('copy url');
     }
-    getElementsForEvents() {
-        console.log('get elements to add to listeners');
+    getElementsForEvents(): ElementsToListen {
+        return {
+            store: {
+                reset: document.body.querySelector(`#${EventTargetsIDEnum.reset}`),
+                copy: document.body.querySelector(`#${EventTargetsIDEnum.copy}`),
+                category: document.querySelector(`#${EventTargetsIDEnum.category}`),
+                brand: document.querySelector(`#${EventTargetsIDEnum.brand}`),
+                price: document.querySelector(`#${EventTargetsIDEnum.price}`),
+                stock: document.querySelector(`#${EventTargetsIDEnum.stock}`),
+                sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
+                searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
+                viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+            },
+        };
     }
 }
 

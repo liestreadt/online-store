@@ -59,8 +59,8 @@ export enum EventTargetsIDEnum {
     copy = 'button-copy',
     category = 'category-container',
     brand = 'brand-container',
-    price = '', // element id which contains price input
-    stock = '', // element id which contains stock input
+    price = 'side-filter-price', // element id which contains price input
+    stock = 'side-filter-stock', // element id which contains stock input
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
