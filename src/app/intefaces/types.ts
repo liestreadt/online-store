@@ -19,7 +19,9 @@ export interface DummyJSON {
 
 export const filterParamsKeys = ['category', 'brand', 'priceMin', 'priceMax', 'stockMin', 'stockMax'] as const;
 
-export type FilterParamsValues = Record<typeof filterParamsKeys[number], string[]>;
+export type FilterKeys = typeof filterParamsKeys[number];
+
+export type FilterParamsValues = Record<FilterKeys, string[]>;
 
 export interface InitialFilterValues {
     minPrice: number;

@@ -3,6 +3,7 @@ import {
     ProductDetail,
     DummyJSON,
     filterParamsKeys,
+    FilterKeys,
     FilterParamsValues,
     InitialFilterValues,
     ModelData,
@@ -16,8 +17,6 @@ function increaseValueInMap(myMap: Map<string, number>, value: string): void {
         myMap.set(value, previousValue + 1);
     }
 }
-
-type Filter = typeof filterParamsKeys[number];
 
 class Model {
     queryParams: URLSearchParams;
@@ -63,7 +62,7 @@ class Model {
         const activeFilters: Partial<FilterParamsValues> = {};
 
         for (const key of this.queryParams.keys()) {
-            if (filterParamsKeys.includes(key as Filter)) {
+            if (filterParamsKeys.includes(key as FilterKeys)) {
                 const filter = key;
                 activeFilters[filter as keyof typeof activeFilters] = this.queryParams.getAll(key);
             } else {
