@@ -1,22 +1,12 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListenStore } from './intefaces/types';
-
-const eventTargetsID = {
-    reset: 'button-reset',
-    copy: 'button-copy',
-    category: 'category-container',
-    brand: 'brand-container',
-    price: '', // element id which contains price input
-    stock: '', // element id which contains stock input
-    sorting: 'sorting-options',
-    searching: 'searching-field',
-    viewButtons: 'view-buttons-container',
-};
+import { ElementsToListen } from './intefaces/types';
+import { EventTargetsIDEnum } from './intefaces/types';
 
 export class Controller {
     model: Model;
     view: View;
+
     constructor() {
         this.model = new Model(document.location.href);
         this.view = new View(this.model.modelData);
@@ -35,19 +25,10 @@ export class Controller {
         window.addEventListener('hashchange', this);
         switch (this.model.modelData.page) {
             case 'store': {
-                const elementsToListen: ElementsToListenStore = {
-                    reset: null,
-                    copy: null,
-                    category: null,
-                    brand: null,
-                    price: null, // double-input element
-                    stock: null, // double-input element
-                    sorting: null,
-                    searching: null,
-                    viewButtons: null,
-                };
-                // replace with
-                // const elementsToListen: Partial<ElementsToListenStore> = this.view.getElementsForEvents();
+                //type Keys = keyof ElementsToListenStore;
+                //type Values = ElementsToListenStore[Keys];
+                //const elementsToListen: Values = this.view.getElementsForEvents();
+                const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
 
                 elementsToListen.reset?.addEventListener('click', this);
                 elementsToListen.copy?.addEventListener('click', this);
@@ -61,63 +42,39 @@ export class Controller {
             }
         }
     }
+
     handleEvent(event: Event): void {
-        if (event.target instanceof HTMLElement) {
-            switch (event.target.id) {
-                case eventTargetsID.reset: {
-                    this.resetEvent();
-                    break;
-                }
-                case eventTargetsID.copy: {
-                    this.copyEvent();
-                    break;
-                }
-                case eventTargetsID.category: {
-                    this.categoryEvent(event);
-                    break;
-                }
-                case eventTargetsID.brand: {
-                    this.brandEvent(event);
-                    break;
-                }
-                case eventTargetsID.price: {
-                    this.priceEvent(event);
-                    break;
-                }
-                case eventTargetsID.stock: {
-                    this.stockEvent(event);
-                    break;
-                }
-                case eventTargetsID.sorting: {
-                    this.sortingEvent(event);
-                    break;
-                }
-                case eventTargetsID.searching: {
-                    this.searchingEvent(event);
-                    break;
-                }
-                case eventTargetsID.viewButtons: {
-                    this.viewButtonsEvent(event);
-                    break;
-                }
-            }
-        } else {
-            if (event.type === 'hashchange') {
-                console.log('handle for hash change');
-                console.log(`
-                this.model.changePage(event.currentTarget.href);
-                this.initViewAndListeners();
-                `);
-            } else {
-                throw new Error(`No event handler for ${event.type} and ${event.target}`);
-            }
+        const handlers = {
+            [EventTargetsIDEnum.reset]: this.resetEvent,
+            [EventTargetsIDEnum.copy]: this.copyEvent,
+            [EventTargetsIDEnum.category]: this.categoryEvent,
+            [EventTargetsIDEnum.brand]: this.brandEvent,
+            [EventTargetsIDEnum.price]: this.priceEvent,
+            [EventTargetsIDEnum.stock]: this.stockEvent,
+            [EventTargetsIDEnum.sorting]: this.sortingEvent,
+            [EventTargetsIDEnum.searching]: this.searchingEvent,
+            [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+        };
+        if (event.type === 'hashchange') {
+            console.log('handle for hash change');
+            console.log(`
+            this.model.changePage(event.currentTarget.href);
+            this.initViewAndListeners();
+            `);
+            return;
         }
+        if (event.target instanceof HTMLElement) {
+            const currentID = event.target.id as EventTargetsIDEnum;
+            handlers[currentID](event);
+            return;
+        }
+        console.log(`No event handler for ${event.type} and ${event.target}`);
     }
-    private resetEvent(): void {
+    private resetEvent(event: Event): void {
         console.log('this.model.resetFilters()');
         this.initViewAndListeners();
     }
-    private copyEvent(): void {
+    private copyEvent(event: Event): void {
         console.log('this.view.copyURLtoClipboard()');
     }
     private categoryEvent(event: Event): void {

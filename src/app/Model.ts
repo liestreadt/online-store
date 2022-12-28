@@ -3,6 +3,7 @@ import {
     ProductDetail,
     DummyJSON,
     filterParamsKeys,
+    FilterKeys,
     FilterParamsValues,
     InitialFilterValues,
     ModelData,
@@ -16,6 +17,7 @@ function increaseValueInMap(myMap: Map<string, number>, value: string): void {
         myMap.set(value, previousValue + 1);
     }
 }
+
 class Model {
     queryParams: URLSearchParams;
     cart: Cart;
@@ -50,7 +52,7 @@ class Model {
             this.productJSON = data;
             this.readParamsFromURL();
             this.findInitialFilterValues();
-            this.applyFilters();
+            this.applyQueryParam();
             console.log(this.modelData);
         } catch {
             throw new Error('Fail to connect dummy json');
@@ -60,7 +62,7 @@ class Model {
         const activeFilters: Partial<FilterParamsValues> = {};
 
         for (const key of this.queryParams.keys()) {
-            if (filterParamsKeys.includes(key)) {
+            if (filterParamsKeys.includes(key as FilterKeys)) {
                 const filter = key;
                 activeFilters[filter as keyof typeof activeFilters] = this.queryParams.getAll(key);
             } else {
@@ -107,7 +109,7 @@ class Model {
             return productsSummaryInfo;
         }
     }
-    applyFilters() {
+    applyQueryParam() {
         console.log('apply filters to product list');
         this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
     }
