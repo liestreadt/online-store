@@ -1,5 +1,5 @@
-import { EventTargetsIDEnum } from '../intefaces/types';
-import { ModelData } from '../intefaces/types';
+import { EventTargetsIDEnum } from '../../intefaces/types';
+import { ModelData } from '../../intefaces/types';
 import createSroreCard from './createStoreCard';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {

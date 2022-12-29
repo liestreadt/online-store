@@ -1,5 +1,5 @@
-import { EventTargetsIDEnum } from '../intefaces/types';
-import { ModelData } from '../intefaces/types';
+import { EventTargetsIDEnum } from '../../intefaces/types';
+import { ModelData } from '../../intefaces/types';
 
 export default function getStoreFilters(modelData: Partial<ModelData>): string {
     return `

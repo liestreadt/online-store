@@ -1,4 +1,4 @@
-import { ProductDetail } from '../intefaces/types';
+import { ProductDetail } from '../../intefaces/types';
 
 export default function createSroreCard(obj: ProductDetail) {
     return `
