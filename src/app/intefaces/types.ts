@@ -18,7 +18,15 @@ export interface DummyJSON {
     skip: number;
 }
 
-export const filterParamsKeys = ['category', 'brand', 'priceMin', 'priceMax', 'stockMin', 'stockMax'] as const;
+export const filterParamsKeys = [
+    'category',
+    'brand',
+    'sorting',
+    'priceMin',
+    'priceMax',
+    'stockMin',
+    'stockMax',
+] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];
 
@@ -64,4 +72,13 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+}
+
+// TODO: view should take options values from this enum
+export enum sortVariantsEnum {
+    byDefault = 'default-sort',
+    byPriceAscending = 'ascending-price',
+    byPriceDescending = 'descending-price',
+    byRatingDescending = 'descending-rating',
+    byRatingAscending = 'ascending-rating',
 }

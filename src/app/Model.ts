@@ -7,6 +7,7 @@ import {
     FilterParamsValues,
     InitialFilterValues,
     ModelData,
+    sortVariantsEnum,
 } from './intefaces/types';
 
 function increaseValueInMap(myMap: Map<string, number>, value: string): void {
@@ -109,9 +110,20 @@ class Model {
             return productsSummaryInfo;
         }
     }
+    createQueryParamFromEvent(key: FilterKeys, value: string) {
+        switch (key) {
+            case 'sorting': {
+                // TODO: create url with added new sorting params
+            }
+        }
+    }
     applyQueryParam() {
         console.log('apply filters to product list');
         this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
+    }
+    sortProducts(sortVariant: sortVariantsEnum) {
+        // TODO: implemet sorting by option
+        // this.modelData.filteredProducts?.sort()
     }
 }
 
