@@ -18,17 +18,17 @@ export default function getStoreFilters(modelData: Partial<ModelData>): string {
                 </h2>
                 <div id="${EventTargetsIDEnum.category}" class="side-filter__items-container">
                     ${modelData.allCategories
-                        ?.map((i) => {
+                        ?.map((item) => {
                             return `
                                 <div class="category-item">
                                     <input
                                         type="checkbox"
-                                        id="input-${i}"
+                                        id="input-${item}"
                                         class="filter-item__checkbox">
                                     <label
-                                        for="input-${i}"
+                                        for="input-${item}"
                                         class="filter-item__label">
-                                        ${i}
+                                        ${item}
                                     </label>
                                     <span class="filter-item__amount">(5/5)</span>
                                 </div>
@@ -43,17 +43,17 @@ export default function getStoreFilters(modelData: Partial<ModelData>): string {
                 </h2>
                 <div id="${EventTargetsIDEnum.brand}" class="side-filter__items-container">
                     ${modelData.allBrands
-                        ?.map((i) => {
+                        ?.map((item) => {
                             return `
                                 <div class="brand-item">
                                     <input
                                         type="checkbox"
-                                        id="input-${i}"
+                                        id="input-${item}"
                                         class="filter-item__checkbox">
                                     <label
-                                        for="input-${i}"
+                                        for="input-${item}"
                                         class="filter-item__label">
-                                        ${i}
+                                        ${item}
                                     </label>
                                     <span class="filter-item__amount">(5/5)</span>
                                 </div>
