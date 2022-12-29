@@ -12,21 +12,20 @@
     @extend %border;
     width: $width-card-small;
     height: $height-card-small;
+    overflow: hidden;
 
     &__body {
         display: flex;
         flex-direction: column;
-        background: url('https://i.dummyjson.com/data/products/6/thumbnail.png') center;
-        background-size: cover;
         height: 100%;
     }
 
     &__info {
-        border-bottom: $border-small;
-        border-right: $border-small;
+        border-right: $border;
+        border-bottom: $border;
         padding: $padding-tiny;
         border-bottom-right-radius: $radius-small;
-        background-color: $color-minor-light;
+        background-color: $color-cards-info;
         width: 70%;
         height: fit-content;
     }
