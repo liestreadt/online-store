@@ -61,9 +61,9 @@ export class Controller {
             `);
             return;
         }
-        if (event.target instanceof HTMLElement) {
-            const currentID = event.target.id as EventTargetsIDEnum;
-            handlers[currentID](event);
+        if (event.currentTarget instanceof HTMLElement) {
+            const currentID = event.currentTarget.id as EventTargetsIDEnum;
+            handlers[currentID].call(this, event);
             return;
         }
         console.log(`No event handler for ${event.type} and ${event.target}`);
