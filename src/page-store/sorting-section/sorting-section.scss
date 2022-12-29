@@ -26,6 +26,10 @@
         font-family: inherit;
     }
 
+    &__total-found {
+        margin: auto 0;
+    }
+
     &__search {
         border-radius: $radius-small;
         text-align: center;

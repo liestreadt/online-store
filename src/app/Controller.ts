@@ -6,12 +6,12 @@ import { EventTargetsIDEnum } from './intefaces/types';
 export class Controller {
     model: Model;
     view: View;
-
     constructor() {
         this.model = new Model(document.location.href);
-        this.model.loadProducts();
         this.view = new View(this.model.modelData);
-        this.addListeners();
+        this.model.loadProducts().then(() => {
+            this.initViewAndListeners();
+        });
     }
     initViewAndListeners(): void {
         this.view = new View(this.model.modelData);
@@ -20,22 +20,24 @@ export class Controller {
     addListeners(): void {
         window.addEventListener('hashchange', this);
         switch (this.model.modelData.page) {
-            case 'store': {
-                //type Keys = keyof ElementsToListenStore;
-                //type Values = ElementsToListenStore[Keys];
-                //const elementsToListen: Values = this.view.getElementsForEvents();
-                const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+            default:
+                {
+                    //type Keys = keyof ElementsToListenStore;
+                    //type Values = ElementsToListenStore[Keys];
+                    //const elementsToListen: Values = this.view.getElementsForEvents();
+                    const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
 
-                elementsToListen.reset?.addEventListener('click', this);
-                elementsToListen.copy?.addEventListener('click', this);
-                elementsToListen.category?.addEventListener('click', this);
-                elementsToListen.brand?.addEventListener('click', this);
-                elementsToListen.price?.addEventListener('change', this);
-                elementsToListen.stock?.addEventListener('change', this);
-                elementsToListen.sorting?.addEventListener('change', this);
-                elementsToListen.searching?.addEventListener('input', this);
-                elementsToListen.viewButtons?.addEventListener('click', this);
-            }
+                    elementsToListen.reset?.addEventListener('click', this);
+                    elementsToListen.copy?.addEventListener('click', this);
+                    elementsToListen.category?.addEventListener('click', this);
+                    elementsToListen.brand?.addEventListener('click', this);
+                    elementsToListen.price?.addEventListener('change', this);
+                    elementsToListen.stock?.addEventListener('change', this);
+                    elementsToListen.sorting?.addEventListener('change', this);
+                    elementsToListen.searching?.addEventListener('input', this);
+                    elementsToListen.viewButtons?.addEventListener('click', this);
+                }
+                break;
         }
     }
 
@@ -59,9 +61,9 @@ export class Controller {
             `);
             return;
         }
-        if (event.target instanceof HTMLElement) {
-            const currentID = event.target.id as EventTargetsIDEnum;
-            handlers[currentID](event);
+        if (event.currentTarget instanceof HTMLElement) {
+            const currentID = event.currentTarget.id as EventTargetsIDEnum;
+            handlers[currentID].call(this, event);
             return;
         }
         console.log(`No event handler for ${event.type} and ${event.target}`);
