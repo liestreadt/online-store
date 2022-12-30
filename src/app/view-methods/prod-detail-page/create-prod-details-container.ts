@@ -1,23 +1,23 @@
 import { ProductDetail } from '../../intefaces/types';
 
-export default function createProdDetailsContainer(obj: ProductDetail): string {
+export default function createProdDetailsContainer(product: ProductDetail): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>
             ⇨
-            <span class="breadcrumbs__item">${obj.category}</span>
+            <span class="breadcrumbs__item">${product.category}</span>
             ⇨
-            <span class="breadcrumbs__item">${obj.brand}</span>
+            <span class="breadcrumbs__item">${product.brand}</span>
             ⇨
-            <span class="breadcrumbs__item">${obj.title}</span>
+            <span class="breadcrumbs__item">${product.title}</span>
         </section>
         <section class="details">
             <h2 class="details__header header_medium">
-                <span class="details__header-text">${obj.title}</span>
+                <span class="details__header-text">${product.title}</span>
             </h2>
             <div class="details__body">
                 <div class="details__aside-slides">
-                    ${obj.images
+                    ${product.images
                         .map((item) => {
                             return `<img src="${item}" alt="macbook">`;
                         })
@@ -32,7 +32,7 @@ export default function createProdDetailsContainer(obj: ProductDetail): string {
                             Description:
                         </h2>
                         <div class="details__description-text details-item__body">
-                            ${obj.description}
+                            ${product.description}
                         </div>
                     </div>
                     <div class="details__discount details-item">
@@ -40,7 +40,7 @@ export default function createProdDetailsContainer(obj: ProductDetail): string {
                             Discount Percentage:
                         </h2>
                         <div class="details__discount-text details-item__body">
-                            ${obj.discountPercentage} %
+                            ${product.discountPercentage} %
                         </div>
                     </div>
                     <div class="details__rating details-item">
@@ -48,7 +48,7 @@ export default function createProdDetailsContainer(obj: ProductDetail): string {
                             Rating:
                         </h2>
                         <div class="details__rating-text details-item__body">
-                            ${obj.rating}
+                            ${product.rating}
                         </div>
                     </div>
                     <div class="details__stock details-item">
@@ -56,7 +56,7 @@ export default function createProdDetailsContainer(obj: ProductDetail): string {
                             Stock:
                         </h2>
                         <div class="details__stock-text details-item__body">
-                            ${obj.stock}
+                            ${product.stock}
                         </div>
                     </div>
                     <div class="details__brand details-item">
@@ -64,7 +64,7 @@ export default function createProdDetailsContainer(obj: ProductDetail): string {
                             Brand:
                         </h2>
                         <div class="details__brand-text details-item__body">
-                            ${obj.brand}
+                            ${product.brand}
                         </div>
                     </div>
                     <div class="details__category details-item">
@@ -72,7 +72,7 @@ export default function createProdDetailsContainer(obj: ProductDetail): string {
                             Category:
                         </h2>
                         <div class="details__category-text details-item__body">
-                            ${obj.category}
+                            ${product.category}
                         </div>
                     </div>
                 </div>

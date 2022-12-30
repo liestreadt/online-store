@@ -1,6 +1,6 @@
 import { ProductDetail } from '../../intefaces/types';
 
-export default function createCartItem(obj: ProductDetail): string {
+export default function createCartItem(product: ProductDetail): string {
     return `
         <div class="cart-item">
             <div class="cart-item__num">
@@ -9,9 +9,9 @@ export default function createCartItem(obj: ProductDetail): string {
             <div class="cart-item__pic"
                 style="
                 background: url(${
-                    obj.images.filter((i) => i.match(/thumbnail/)).length
-                        ? obj.images.filter((i) => i.match(/thumbnail/))
-                        : obj.images[0]
+                    product.images.filter((i) => i.match(/thumbnail/)).length
+                        ? product.images.filter((i) => i.match(/thumbnail/))
+                        : product.images[0]
                 });
                 background-position: center;
                 background-size: cover;
@@ -20,19 +20,19 @@ export default function createCartItem(obj: ProductDetail): string {
             </div>
             <div class="cart-item__info">
                 <div class="cart-item__title">
-                    ${obj.title}
+                    ${product.title}
                 </div>
                 <div class="cart-item__description">
-                    ${obj.description}
+                    ${product.description}
                 </div>
                 <div class="cart-item__metrics">
-                    <span class="cart-item__rating">Rating: ${obj.rating}</span>
-                    <span class="cart-item__discount">Discount: ${obj.discountPercentage}%</span>
+                    <span class="cart-item__rating">Rating: ${product.rating}</span>
+                    <span class="cart-item__discount">Discount: ${product.discountPercentage}%</span>
                 </div>
             </div>
             <div class="cart-item__manage">
                 <div class="cart-item__amount">
-                    Stock: <span class="amount-in-stock">${obj.stock}</span>
+                    Stock: <span class="amount-in-stock">${product.stock}</span>
                 </div>
                 <div class="cart-item__controls">
                     <button class="controls-increase">
