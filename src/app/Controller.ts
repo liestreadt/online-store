@@ -28,6 +28,7 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
+        window.addEventListener('popstate', this);
         switch (this.model.modelData.page) {
             default:
                 {
@@ -62,7 +63,7 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
         };
-        if (event.type === 'hashchange') {
+        if (event.type === 'hashchange' || event.type === 'popstate') {
             console.log('handle for hash change');
             console.log(`
             this.model.changePage(event.currentTarget.href);
@@ -85,12 +86,12 @@ export class Controller {
         console.log('this.view.copyURLtoClipboard()');
     }
     private categoryEvent(event: Event): void {
-        console.log('be prepared to handle both input or label click');
         if (event.target instanceof HTMLElement) {
             const inputID = getIDfromLabelInput(event.target);
-            console.log('CATEGORY EVENT, id is ', inputID);
+            //console.log('CATEGORY EVENT, id is ', inputID);
             if (inputID) {
-                this.model.createQueryParamFromEvent('category', inputID);
+                const cutLength = 'input-'.length;
+                this.model.createQueryParamFromEvent('category', inputID.slice(cutLength));
             }
             this.initViewAndListeners();
         }

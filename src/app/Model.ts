@@ -60,6 +60,7 @@ class Model {
     }
     readParamsFromURL(): Partial<FilterParamsValues> {
         const activeFilters: Partial<FilterParamsValues> = {};
+        this.queryParams = new URL(window.location.href).searchParams;
 
         for (const key of this.queryParams.keys()) {
             if (filterParamsKeys.includes(key as FilterKeys)) {
@@ -70,10 +71,13 @@ class Model {
             }
         }
         this.modelData.activeFilters = activeFilters;
+        console.log('ACTIVE FILTER are read from', window.location.href, '\n and are equal to', activeFilters);
+        this.modelData.activeFilters = activeFilters;
         return activeFilters;
     }
     applyQueryParamsToFilter(): void {
         const active = this.modelData.activeFilters;
+        this.filterCalculator = new FilterCalculator();
         active.brand?.map((brand) => {
             this.filterCalculator.addBrand(brand);
         });
@@ -143,7 +147,14 @@ class Model {
                 break;
             }
             case 'category': {
-                this.appendQueryToURL('category', value);
+                if (this.filterCalculator.categories.has(value)) {
+                    console.log('deleteParamFromURL', this.filterCalculator.categories);
+                    this.deleteParamFromURL('category', value);
+                } else {
+                    console.log('addParamFromURL', this.filterCalculator.categories);
+                    this.appendParamToURL('category', value);
+                }
+                this.reInit();
                 break;
             }
         }
@@ -156,8 +167,33 @@ class Model {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
     }
-    appendQueryToURL(key: FilterKeys, value: string) {
-        console.log('add category to url querys');
+    appendParamToURL(key: FilterKeys, value: string) {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        urlSearch.append(key, value);
+        url.search = urlSearch.toString();
+
+        history.pushState({ key, value }, '', url.toString());
+        console.log('add category to url search params');
+    }
+    deleteParamFromURL(key: FilterKeys, param: string) {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        let values = urlSearch.getAll(key);
+        values = values.filter((value) => value !== param);
+        urlSearch.delete(key);
+        values.map((value) => {
+            urlSearch.append(key, value);
+        });
+        url.search = urlSearch.toString();
+
+        history.pushState({ key, values }, '', url.toString());
+        console.log('delete category from url search params');
+    }
+    reInit() {
+        this.readParamsFromURL();
+        this.applyQueryParamsToFilter();
+        this.applyQueryParam();
     }
 }
 
