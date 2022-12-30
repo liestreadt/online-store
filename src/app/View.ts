@@ -1,11 +1,11 @@
 import { DualSlider } from '../dual-slider/dual';
-import createModal from './view-methods/store-page/createModal';
-import createFooter from './view-methods/store-page/createFooter';
-import createHeader from './view-methods/store-page/createHeader';
-import createStoreFilters from './view-methods/store-page/createStoreFilters';
-import createSortingSection from './view-methods/store-page/createSortingSection';
-import createProdDetailsContainer from './view-methods/prod-detail-page/createProdDetailsContainer';
-import createCartSummary from './view-methods/cart-page/createCartSummary';
+import createModal from './view-methods/store-page/create-modal';
+import createFooter from './view-methods/store-page/create-footer';
+import createHeader from './view-methods/store-page/create-header';
+import createStoreFilters from './view-methods/store-page/create-store-filters';
+import createSortingSection from './view-methods/store-page/create-sorting-section';
+import createProdDetailsContainer from './view-methods/prod-detail-page/create-prod-details-container';
+import createCartSummary from './view-methods/cart-page/create-cart-summary';
 
 import {
     ProductDetail,
@@ -17,8 +17,8 @@ import {
     ElementsToListen,
     EventTargetsIDEnum,
 } from './intefaces/types';
-import createCartItem from './view-methods/cart-page/createCartItem';
-import createCartContainer from './view-methods/cart-page/createCartContainer';
+import createCartItem from './view-methods/cart-page/create-cart-item';
+import createCartContainer from './view-methods/cart-page/create-cart-container';
 
 class View {
     modelData: Partial<ModelData>;

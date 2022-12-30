@@ -1,5 +1,5 @@
 import { ProductDetail } from '../../intefaces/types';
-import createCartItem from './createCartItem';
+import createCartItem from './create-cart-item';
 
 export default function createCartContainer(data: ProductDetail): string {
     return `
