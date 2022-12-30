@@ -8,7 +8,7 @@ export class FilterCalculator {
     maxUserStock: number;
     categories: Set<string>;
     brands: Set<string>;
-    searchName: '';
+    searchName: string;
 
     constructor() {
         this.minUserPrice = 0;
@@ -37,6 +37,15 @@ export class FilterCalculator {
     updateMaxUserPrice(newMaxPrice: number) {
         this.maxUserPrice = newMaxPrice;
     }
+    updateMinUserStock(newMinStock: number) {
+        this.minUserStock = newMinStock;
+    }
+    updateMaxUserStock(newMaxStock: number) {
+        this.maxUserStock = newMaxStock;
+    }
+    updateSearchName(newSearchName: string) {
+        this.searchName = newSearchName.toLowerCase();
+    }
     checkProductPassFilters(product: ProductDetail): boolean {
         if (this.categories.size > 0 && !this.categories.has(product.category)) {
             return false;
@@ -50,12 +59,12 @@ export class FilterCalculator {
         if (this.minUserStock > product.stock || this.maxUserStock < product.stock) {
             return false;
         }
-        if (!product.title.toLowerCase().includes(this.searchName.toLowerCase())) {
+        if (!product.title.toLowerCase().includes(this.searchName)) {
             return false;
         }
         return true;
     }
-    recalculate(allProducts: Array<ProductDetail>): ShownProductInfo {
+    recalculate(allProducts: Array<ProductDetail> | null): ShownProductInfo | null {
         let minPrice = Infinity;
         let maxPrice = 0;
         let minStock = Infinity;
@@ -64,7 +73,9 @@ export class FilterCalculator {
         const brands = new Map();
         const shownProducts: Array<ProductDetail> = [];
 
-        console.log('before filter cycle');
+        if (!allProducts) {
+            return null;
+        }
         for (const product of allProducts) {
             if (this.checkProductPassFilters(product)) {
                 minPrice = Math.min(minPrice, product.price);

@@ -35,6 +35,7 @@ export const filterParamsKeys = [
     'priceMax',
     'stockMin',
     'stockMax',
+    'searching',
 ] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];

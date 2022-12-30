@@ -18,11 +18,14 @@ class Model {
     cart: Cart;
     productJSON: DummyJSON | null;
     modelData: ModelData;
+    filterCalculator: FilterCalculator;
+    shownProductInfo: ShownProductInfo | null;
 
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
         this.cart = new Cart();
+        this.filterCalculator = new FilterCalculator();
         this.productJSON = null;
         this.modelData = {
             activeFilters: {},
@@ -39,6 +42,7 @@ class Model {
             filteredProducts: null,
             page: '',
         };
+        this.shownProductInfo = null;
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
         try {
@@ -47,19 +51,9 @@ class Model {
             this.productJSON = data;
             this.readParamsFromURL();
             this.findInitialFilterValues();
+            this.applyQueryParamsToFilter();
             this.applyQueryParam();
-            console.log(this.modelData);
-            {
-                // Delete this block after demonstration of the filter
-                const filter = new FilterCalculator();
-                filter.addCategory('smartphones');
-                filter.addCategory('laptops');
-                filter.addCategory('skincare');
-                filter.updateMaxUserPrice(499);
-                if (this.productJSON?.products) {
-                    console.log('FILTER', filter.recalculate(this.productJSON.products));
-                }
-            }
+            console.log('END of loadproducts', this.modelData);
         } catch {
             throw new Error('Fail to connect dummy json');
         }
@@ -77,6 +71,33 @@ class Model {
         }
         this.modelData.activeFilters = activeFilters;
         return activeFilters;
+    }
+    applyQueryParamsToFilter(): void {
+        const active = this.modelData.activeFilters;
+        active.brand?.map((brand) => {
+            this.filterCalculator.addBrand(brand);
+        });
+        active.category?.map((category) => {
+            this.filterCalculator.addCategory(category);
+        });
+        if (active.priceMax) {
+            this.filterCalculator.updateMaxUserPrice(+active.priceMax[0]);
+        }
+        if (active.priceMin) {
+            this.filterCalculator.updateMinUserPrice(+active.priceMin[0]);
+        }
+        if (active.stockMax) {
+            this.filterCalculator.updateMaxUserStock(+active.stockMax[0]);
+        }
+        if (active.stockMin) {
+            this.filterCalculator.updateMinUserStock(+active.stockMin[0]);
+        }
+        if (active.searching) {
+            this.filterCalculator.updateSearchName(active.searching[0]);
+        }
+        this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
+        console.log('PRODUCT INFO', this.shownProductInfo);
+        console.log('FILTER input INFO', this.filterCalculator);
     }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
@@ -124,7 +145,7 @@ class Model {
     }
     applyQueryParam() {
         console.log('apply filters to product list');
-        this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
+        this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
     }
     sortProducts(sortVariant: sortVariantsEnum) {
         // TODO: implemet sorting by option
