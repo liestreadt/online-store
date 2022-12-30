@@ -27,34 +27,46 @@ class View {
         this.renderPage();
     }
     renderPage() {
-        this.renderHeader();
-        this.renderMain();
-        switch (this.modelData.page) {
-            case 'store':
-                {
-                    this.renderStorePage();
-                    this.getDualSlider();
-                }
-                break;
-            case 'details':
-                {
-                    this.renderProdDetailsPage();
-                }
-                break;
-            case 'cart':
-                {
-                    this.renderCartPage();
-                }
-                break;
-            default:
-                {
-                    this.renderStorePage();
-                    this.getDualSlider();
-                }
-                break;
+        if (!this.modelData.filteredProducts) {
+            this.renderLoadingPage();
+        } else {
+            this.renderHeader();
+            this.renderMain();
+            switch (this.modelData.page) {
+                case 'store':
+                    {
+                        this.renderStorePage();
+                        this.getDualSlider();
+                    }
+                    break;
+                case 'details':
+                    {
+                        this.renderProdDetailsPage();
+                    }
+                    break;
+                case 'cart':
+                    {
+                        this.renderCartPage();
+                    }
+                    break;
+                default:
+                    {
+                        this.renderStorePage();
+                        this.getDualSlider();
+                    }
+                    break;
+            }
+            this.renderFooter();
+            this.renderModal();
         }
-        this.renderFooter();
-        this.renderModal();
+    }
+    renderLoadingPage() {
+        document.body.innerHTML = `
+            <main class="main-loading">
+                <h1 class="loading">Loading</h1>
+                <div class="loading__spinner"></div>
+            </main>
+        `;
     }
     renderStorePage() {
         const containerMain = document.querySelector('main');
