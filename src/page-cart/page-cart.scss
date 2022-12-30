@@ -63,6 +63,8 @@
     }
 
     &__pic {
+        border: $border;
+        border-radius: $radius-small;
         width: 120px;
     }
 
