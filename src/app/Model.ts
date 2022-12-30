@@ -55,6 +55,7 @@ class Model {
                 filter.addCategory('smartphones');
                 filter.addCategory('laptops');
                 filter.addCategory('skincare');
+                filter.updateMaxUserPrice(499);
                 if (this.productJSON?.products) {
                     console.log('FILTER', filter.recalculate(this.productJSON.products));
                 }

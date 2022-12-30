@@ -34,6 +34,9 @@ export class FilterCalculator {
     updateMinUserPrice(newMinPrice: number) {
         this.minUserPrice = newMinPrice;
     }
+    updateMaxUserPrice(newMaxPrice: number) {
+        this.maxUserPrice = newMaxPrice;
+    }
     checkProductPassFilters(product: ProductDetail): boolean {
         if (this.categories.size > 0 && !this.categories.has(product.category)) {
             return false;
@@ -47,7 +50,7 @@ export class FilterCalculator {
         if (this.minUserStock > product.stock || this.maxUserStock < product.stock) {
             return false;
         }
-        if (!product.title.includes(this.searchName)) {
+        if (!product.title.toLowerCase().includes(this.searchName.toLowerCase())) {
             return false;
         }
         return true;
