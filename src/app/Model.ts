@@ -1,4 +1,6 @@
 import Cart from './Cart';
+import increaseValueInMap from './tools/Functions';
+import { FilterCalculator } from './FilterCalculator';
 import {
     ProductDetail,
     DummyJSON,
@@ -10,99 +12,6 @@ import {
     ModelData,
     sortVariantsEnum,
 } from './intefaces/types';
-
-function increaseValueInMap(myMap: Map<string, number>, value: string): void {
-    if (!myMap.has(value)) {
-        myMap.set(value, 1);
-    } else {
-        const previousValue = myMap.get(value) as number;
-        myMap.set(value, previousValue + 1);
-    }
-}
-
-class FilterCalculator {
-    minUserPrice: number;
-    maxUserPrice: number;
-    minUserStock: number;
-    maxUserStock: number;
-    categories: Set<string>;
-    brands: Set<string>;
-    searchName: '';
-
-    constructor() {
-        this.minUserPrice = Infinity;
-        this.maxUserPrice = 0;
-        this.minUserStock = Infinity;
-        this.maxUserStock = 0;
-        this.categories = new Set();
-        this.brands = new Set();
-        this.searchName = '';
-    }
-    addCategory(category: string): void {
-        this.categories.add(category);
-    }
-    deleteCategory(category: string): void {
-        this.categories.delete(category);
-    }
-    addBrand(brand: string): void {
-        this.brands.add(brand);
-    }
-    deleteBrand(brand: string): void {
-        this.brands.delete(brand);
-    }
-    updateMinUserPrice(newMinPrice: number) {
-        this.minUserPrice = newMinPrice;
-    }
-    checkProductPassFilters(product: ProductDetail): boolean {
-        if (this.categories.size > 0 && !this.categories.has(product.category)) {
-            return false;
-        }
-        if (this.brands.size > 0 && !this.brands.has(product.brand)) {
-            return false;
-        }
-        if (this.minUserPrice > product.price || this.maxUserPrice < product.price) {
-            return false;
-        }
-        if (this.minUserStock > product.stock || this.maxUserStock < product.stock) {
-            return false;
-        }
-        if (!product.title.includes(this.searchName)) {
-            return false;
-        }
-        return true;
-    }
-    recalculate(allProducts: Array<ProductDetail>): ShownProductInfo {
-        let minPrice = Infinity;
-        let maxPrice = 0;
-        let minStock = Infinity;
-        let maxStock = 0;
-        const categories = new Map();
-        const brands = new Map();
-        const shownProducts: Array<ProductDetail> = [];
-
-        for (const product of allProducts) {
-            if (this.checkProductPassFilters(product)) {
-                minPrice = Math.min(minPrice, product.price);
-                maxPrice = Math.max(maxPrice, product.price);
-                minStock = Math.min(minStock, product.stock);
-                maxStock = Math.max(maxStock, product.stock);
-
-                increaseValueInMap(categories, product.category);
-                increaseValueInMap(brands, product.brand);
-                shownProducts.push(product);
-            }
-        }
-        return {
-            minPrice,
-            maxPrice,
-            minStock,
-            maxStock,
-            categories,
-            brands,
-            shownProducts,
-        };
-    }
-}
 
 class Model {
     queryParams: URLSearchParams;
@@ -140,6 +49,16 @@ class Model {
             this.findInitialFilterValues();
             this.applyQueryParam();
             console.log(this.modelData);
+            {
+                // Delete this block after demonstration of the filter
+                const filter = new FilterCalculator();
+                filter.addCategory('smartphones');
+                filter.addCategory('laptops');
+                filter.addCategory('skincare');
+                if (this.productJSON?.products) {
+                    console.log('FILTER', filter.recalculate(this.productJSON.products));
+                }
+            }
         } catch {
             throw new Error('Fail to connect dummy json');
         }
