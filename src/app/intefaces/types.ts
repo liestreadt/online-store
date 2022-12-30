@@ -17,6 +17,15 @@ export interface DummyJSON {
     total: number;
     skip: number;
 }
+export interface ShownProductInfo {
+    minPrice: number;
+    maxPrice: number;
+    minStock: number;
+    maxStock: number;
+    categories: Map<string, number>;
+    brands: Map<string, number>;
+    shownProducts: ProductDetail[];
+}
 
 export const filterParamsKeys = [
     'category',
