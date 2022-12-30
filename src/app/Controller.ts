@@ -3,6 +3,15 @@ import Model from './Model';
 import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
 
+function getIDfromLabelInput(element: HTMLElement | null): string | null {
+    if (element instanceof HTMLInputElement) {
+        return element.id;
+    }
+    if (element instanceof HTMLLabelElement) {
+        return element.htmlFor;
+    }
+    return null;
+}
 export class Controller {
     model: Model;
     view: View;
@@ -77,10 +86,12 @@ export class Controller {
     }
     private categoryEvent(event: Event): void {
         console.log('be prepared to handle both input or label click');
-        if (event.currentTarget instanceof HTMLElement) {
-            console.log(`
-                this.model.applyQueryParam(event.currentTarget);
-            `);
+        if (event.target instanceof HTMLElement) {
+            const inputID = getIDfromLabelInput(event.target);
+            console.log('CATEGORY EVENT, id is ', inputID);
+            if (inputID) {
+                this.model.createQueryParamFromEvent('category', inputID);
+            }
             this.initViewAndListeners();
         }
     }

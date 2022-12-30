@@ -140,6 +140,11 @@ class Model {
         switch (key) {
             case 'sorting': {
                 // TODO: create url with added new sorting params
+                break;
+            }
+            case 'category': {
+                this.appendQueryToURL('category', value);
+                break;
             }
         }
     }
@@ -150,6 +155,9 @@ class Model {
     sortProducts(sortVariant: sortVariantsEnum) {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
+    }
+    appendQueryToURL(key: FilterKeys, value: string) {
+        console.log('add category to url querys');
     }
 }
 
