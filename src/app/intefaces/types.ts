@@ -1,3 +1,5 @@
+import { FilterCalculator } from '../FilterCalculator';
+
 export interface ProductDetail {
     id: number;
     title: string;
@@ -17,6 +19,15 @@ export interface DummyJSON {
     total: number;
     skip: number;
 }
+export interface ShownProductInfo {
+    minPrice: number;
+    maxPrice: number;
+    minStock: number;
+    maxStock: number;
+    categories: Map<string, number>;
+    brands: Map<string, number>;
+    shownProducts: ProductDetail[];
+}
 
 export const filterParamsKeys = [
     'category',
@@ -26,6 +37,7 @@ export const filterParamsKeys = [
     'priceMax',
     'stockMin',
     'stockMax',
+    'searching',
 ] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];
@@ -47,6 +59,8 @@ export interface ModelData {
     allCategories: string[];
     filteredProducts: Array<ProductDetail> | null;
     page: string;
+    shownProductInfo: ShownProductInfo | null;
+    calculatedFilters: FilterCalculator | null;
 }
 export interface ElementsToListen {
     store: {

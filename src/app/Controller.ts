@@ -3,6 +3,15 @@ import Model from './Model';
 import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
 
+function getIDfromLabelInput(element: HTMLElement | null): string | null {
+    if (element instanceof HTMLInputElement) {
+        return element.id;
+    }
+    if (element instanceof HTMLLabelElement) {
+        return element.htmlFor;
+    }
+    return null;
+}
 export class Controller {
     model: Model;
     view: View;
@@ -19,6 +28,7 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
+        window.addEventListener('popstate', this);
         switch (this.model.modelData.page) {
             default:
                 {
@@ -53,7 +63,7 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
         };
-        if (event.type === 'hashchange') {
+        if (event.type === 'hashchange' || event.type === 'popstate') {
             console.log('handle for hash change');
             console.log(`
             this.model.changePage(event.currentTarget.href);
@@ -76,20 +86,22 @@ export class Controller {
         console.log('this.view.copyURLtoClipboard()');
     }
     private categoryEvent(event: Event): void {
-        console.log('be prepared to handle both input or label click');
-        if (event.currentTarget instanceof HTMLElement) {
-            console.log(`
-                this.model.applyQueryParam(event.currentTarget);
-            `);
+        if (event.target instanceof HTMLElement) {
+            const inputID = getIDfromLabelInput(event.target);
+            if (inputID) {
+                const cutLength = 'input-'.length;
+                this.model.createQueryParamFromEvent('category', inputID.slice(cutLength));
+            }
             this.initViewAndListeners();
         }
     }
     private brandEvent(event: Event): void {
-        console.log('be prepared to handle both input or label click');
-        if (event.currentTarget instanceof HTMLElement) {
-            console.log(`
-                this.model.applyQueryParam(event.currentTarget);
-            `);
+        if (event.target instanceof HTMLElement) {
+            const inputID = getIDfromLabelInput(event.target);
+            if (inputID) {
+                const cutLength = 'input-'.length;
+                this.model.createQueryParamFromEvent('brand', inputID.slice(cutLength));
+            }
             this.initViewAndListeners();
         }
     }

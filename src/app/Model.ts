@@ -1,7 +1,10 @@
 import Cart from './Cart';
+import increaseValueInMap from './tools/Functions';
+import { FilterCalculator } from './FilterCalculator';
 import {
     ProductDetail,
     DummyJSON,
+    ShownProductInfo,
     filterParamsKeys,
     FilterKeys,
     FilterParamsValues,
@@ -10,25 +13,19 @@ import {
     sortVariantsEnum,
 } from './intefaces/types';
 
-function increaseValueInMap(myMap: Map<string, number>, value: string): void {
-    if (!myMap.has(value)) {
-        myMap.set(value, 1);
-    } else {
-        const previousValue = myMap.get(value) as number;
-        myMap.set(value, previousValue + 1);
-    }
-}
-
 class Model {
     queryParams: URLSearchParams;
     cart: Cart;
     productJSON: DummyJSON | null;
     modelData: ModelData;
+    filterCalculator: FilterCalculator;
+    shownProductInfo: ShownProductInfo | null;
 
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
         this.cart = new Cart();
+        this.filterCalculator = new FilterCalculator();
         this.productJSON = null;
         this.modelData = {
             activeFilters: {},
@@ -44,7 +41,10 @@ class Model {
             allCategories: [],
             filteredProducts: null,
             page: '',
+            shownProductInfo: null,
+            calculatedFilters: null,
         };
+        this.shownProductInfo = null;
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
         try {
@@ -53,14 +53,16 @@ class Model {
             this.productJSON = data;
             this.readParamsFromURL();
             this.findInitialFilterValues();
+            this.applyQueryParamsToFilter();
             this.applyQueryParam();
-            console.log(this.modelData);
+            console.log('END of loadproducts', this.modelData);
         } catch {
             throw new Error('Fail to connect dummy json');
         }
     }
     readParamsFromURL(): Partial<FilterParamsValues> {
         const activeFilters: Partial<FilterParamsValues> = {};
+        this.queryParams = new URL(window.location.href).searchParams;
 
         for (const key of this.queryParams.keys()) {
             if (filterParamsKeys.includes(key as FilterKeys)) {
@@ -72,6 +74,35 @@ class Model {
         }
         this.modelData.activeFilters = activeFilters;
         return activeFilters;
+    }
+    applyQueryParamsToFilter(): void {
+        const active = this.modelData.activeFilters;
+        this.filterCalculator = new FilterCalculator();
+        active.brand?.map((brand) => {
+            this.filterCalculator.addBrand(brand);
+        });
+        active.category?.map((category) => {
+            this.filterCalculator.addCategory(category);
+        });
+        if (active.priceMax) {
+            this.filterCalculator.updateMaxUserPrice(+active.priceMax[0]);
+        }
+        if (active.priceMin) {
+            this.filterCalculator.updateMinUserPrice(+active.priceMin[0]);
+        }
+        if (active.stockMax) {
+            this.filterCalculator.updateMaxUserStock(+active.stockMax[0]);
+        }
+        if (active.stockMin) {
+            this.filterCalculator.updateMinUserStock(+active.stockMin[0]);
+        }
+        if (active.searching) {
+            this.filterCalculator.updateSearchName(active.searching[0]);
+        }
+        this.modelData.calculatedFilters = this.filterCalculator;
+        this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
+        console.log('PRODUCT INFO', this.shownProductInfo);
+        console.log('FILTER input INFO', this.filterCalculator);
     }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
@@ -114,16 +145,64 @@ class Model {
         switch (key) {
             case 'sorting': {
                 // TODO: create url with added new sorting params
+                break;
+            }
+            case 'category': {
+                if (this.filterCalculator.categories.has(value)) {
+                    this.deleteParamFromURL('category', value);
+                } else {
+                    this.appendParamToURL('category', value);
+                }
+                this.reInit();
+                break;
+            }
+            case 'brand': {
+                if (this.filterCalculator.brands.has(value)) {
+                    this.deleteParamFromURL('brand', value);
+                } else {
+                    this.appendParamToURL('brand', value);
+                }
+                this.reInit();
+                break;
             }
         }
     }
     applyQueryParam() {
         console.log('apply filters to product list');
-        this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
+        this.modelData.shownProductInfo = this.shownProductInfo;
+        this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
     }
     sortProducts(sortVariant: sortVariantsEnum) {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
+    }
+    appendParamToURL(key: FilterKeys, value: string) {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        urlSearch.append(key, value);
+        url.search = urlSearch.toString();
+
+        history.pushState({ key, value }, '', url.toString());
+        console.log('add category to url search params');
+    }
+    deleteParamFromURL(key: FilterKeys, param: string) {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        let values = urlSearch.getAll(key);
+        values = values.filter((value) => value !== param);
+        urlSearch.delete(key);
+        values.map((value) => {
+            urlSearch.append(key, value);
+        });
+        url.search = urlSearch.toString();
+
+        history.pushState({ key, values }, '', url.toString());
+        console.log('delete category from url search params');
+    }
+    reInit() {
+        this.readParamsFromURL();
+        this.applyQueryParamsToFilter();
+        this.applyQueryParam();
     }
 }
 
