@@ -165,6 +165,16 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'priceMin': {
+                this.changeParamInURL('priceMin', value);
+                this.reInit();
+                break;
+            }
+            case 'priceMax': {
+                this.changeParamInURL('priceMax', value);
+                this.reInit();
+                break;
+            }
         }
     }
     applyQueryParam() {
@@ -198,6 +208,14 @@ class Model {
 
         history.pushState({ key, values }, '', url.toString());
         console.log('delete category from url search params');
+    }
+    changeParamInURL(key: FilterKeys, value: string) {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        urlSearch.set(key, value);
+        url.search = urlSearch.toString();
+
+        history.pushState({ key, value }, '', url.toString());
     }
     reInit() {
         this.readParamsFromURL();

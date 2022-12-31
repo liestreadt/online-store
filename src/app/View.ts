@@ -19,6 +19,7 @@ import {
 } from './intefaces/types';
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
+import { CURRENCY_SYMBOL } from './constants/constants';
 
 class View {
     modelData: Partial<ModelData>;
@@ -127,7 +128,13 @@ class View {
     getDualSlider() {
         const sliderContainerPrice = document.querySelector(`#${EventTargetsIDEnum.price}`) as HTMLElement;
         const sliderContainerStock = document.querySelector(`#${EventTargetsIDEnum.stock}`) as HTMLElement;
-        const dualSliderPrice = new DualSlider(0, 500);
+
+        const minPrice = this.modelData.initialFilterValues?.minPrice || 0;
+        const minUserPrice = this.modelData.calculatedFilters?.minUserPrice || 0;
+        const maxPrice = this.modelData.initialFilterValues?.maxPrice || 10000;
+        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || 10000;
+
+        const dualSliderPrice = new DualSlider(minPrice, maxPrice, minUserPrice, maxUserPrice, CURRENCY_SYMBOL);
         const dualSliderStock = new DualSlider(0, 500);
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);

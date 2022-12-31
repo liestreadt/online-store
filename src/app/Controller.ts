@@ -2,6 +2,7 @@ import View from './View';
 import Model from './Model';
 import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
+import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
     if (element instanceof HTMLInputElement) {
@@ -106,9 +107,12 @@ export class Controller {
         }
     }
     private priceEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            const inputID = event.target.id;
+            const priceKey = inputID === SLIDER_MAX_ID ? 'priceMax' : 'priceMin';
+
+            this.model.createQueryParamFromEvent(priceKey, event.target.value);
+        }
         this.initViewAndListeners();
     }
     private stockEvent(event: Event): void {

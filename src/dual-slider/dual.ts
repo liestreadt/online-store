@@ -6,21 +6,29 @@ export class DualSlider {
     protected _inputMin: number;
     protected _inputMax: number;
     protected container: HTMLElement;
+    protected units: string;
 
-    constructor(minScale: number, maxScale: number, inputMin = minScale, inputMax = maxScale) {
+    constructor(minScale: number, maxScale: number, inputMin = minScale, inputMax = maxScale, units = '') {
         this._minScale = minScale;
         this._maxScale = maxScale;
         this._inputMin = inputMin;
         this._inputMax = inputMax;
         this.container = document.createElement('div');
         this.container.className = 'dual-slider';
+        this.units = units;
+    }
+    private initialMax() {
+        return Number.isFinite(this.inputMax) ? this.inputMax : this.maxScale;
+    }
+    private initialMin() {
+        return this.inputMin !== 0 ? this.inputMin : this.minScale;
     }
 
     private updateSlider() {
         this.container.innerHTML = `
 <div class="dual-slider__indicators">
-    <div id="dual-slider-label-min" class="dual-slider__label">${this.inputMin}</div>
-    <div for="dual-slider-label-max" class="dual-slider__label">${this.inputMax}</div>
+    <div id="dual-slider-label-min" class="dual-slider__label">${this.units}${this.initialMin()}</div>
+    <div for="dual-slider-label-max" class="dual-slider__label">${this.units}${this.initialMax()}</div>
 </div>
 <div class="dual-slider__inputs">
     <input
@@ -37,7 +45,7 @@ export class DualSlider {
         class="dual-slider__input dual-slider__max"
         min="${this._minScale}"
         max="${this.maxScale}"
-        value="${this.inputMax}"
+        value="${this.initialMax()}"
         >
 </div>
         `;
