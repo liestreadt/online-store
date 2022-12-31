@@ -12,6 +12,15 @@ function checkboxFilterState(key: FilterKeys, modelData: Partial<ModelData>, cat
         return '';
     }
 }
+function getFilterItemAmounts(key: FilterKeys, value: string, modelData: Partial<ModelData>): string {
+    const shownFilterList =
+        key === 'brand' ? modelData.shownProductInfo?.brands : modelData.shownProductInfo?.categories;
+    const allFilterList =
+        key === 'brand' ? modelData.initialFilterValues?.brands : modelData.initialFilterValues?.categories;
+    const filteredAmount = shownFilterList?.get(value) || 0;
+    const totalAmount = allFilterList?.get(value) || 0;
+    return `(${filteredAmount}/${totalAmount})`;
+}
 export default function getStoreFilters(modelData: Partial<ModelData>): string {
     return `
         <section class="side-filter">
@@ -42,7 +51,11 @@ export default function getStoreFilters(modelData: Partial<ModelData>): string {
                                         class="filter-item__label">
                                         ${item}
                                     </label>
-                                    <span class="filter-item__amount">(5/5)</span>
+                                    <span class="filter-item__amount">${getFilterItemAmounts(
+                                        'category',
+                                        item,
+                                        modelData
+                                    )}</span>
                                 </div>
                             `;
                         })
@@ -68,7 +81,9 @@ export default function getStoreFilters(modelData: Partial<ModelData>): string {
                                         class="filter-item__label">
                                         ${item}
                                     </label>
-                                    <span class="filter-item__amount">(5/5)</span>
+                                    <span class="filter-item__amount">
+                                        ${getFilterItemAmounts('brand', item, modelData)}
+                                    </span>
                                 </div>
                             `;
                         })

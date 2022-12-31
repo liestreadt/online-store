@@ -73,8 +73,6 @@ class Model {
             }
         }
         this.modelData.activeFilters = activeFilters;
-        console.log('ACTIVE FILTER are read from', window.location.href, '\n and are equal to', activeFilters);
-        this.modelData.activeFilters = activeFilters;
         return activeFilters;
     }
     applyQueryParamsToFilter(): void {
