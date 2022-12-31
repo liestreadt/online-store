@@ -151,11 +151,18 @@ class Model {
             }
             case 'category': {
                 if (this.filterCalculator.categories.has(value)) {
-                    console.log('deleteParamFromURL', this.filterCalculator.categories);
                     this.deleteParamFromURL('category', value);
                 } else {
-                    console.log('addParamFromURL', this.filterCalculator.categories);
                     this.appendParamToURL('category', value);
+                }
+                this.reInit();
+                break;
+            }
+            case 'brand': {
+                if (this.filterCalculator.brands.has(value)) {
+                    this.deleteParamFromURL('brand', value);
+                } else {
+                    this.appendParamToURL('brand', value);
                 }
                 this.reInit();
                 break;

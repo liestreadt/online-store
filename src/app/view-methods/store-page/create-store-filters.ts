@@ -1,11 +1,12 @@
-import { EventTargetsIDEnum } from '../../intefaces/types';
+import { EventTargetsIDEnum, FilterKeys } from '../../intefaces/types';
 import { ModelData } from '../../intefaces/types';
 
-function categoryState(modelData: Partial<ModelData>, category: string): string {
-    if (modelData.calculatedFilters?.categories.size === 0) {
+function checkboxFilterState(key: FilterKeys, modelData: Partial<ModelData>, category: string): string {
+    const filterList = key === 'brand' ? modelData.calculatedFilters?.brands : modelData.calculatedFilters?.categories;
+    if (filterList && filterList.size === 0) {
         return '';
     }
-    if (modelData.calculatedFilters?.categories.has(category)) {
+    if (filterList && filterList.has(category)) {
         return 'checked';
     } else {
         return '';
@@ -35,7 +36,7 @@ export default function getStoreFilters(modelData: Partial<ModelData>): string {
                                         type="checkbox"
                                         id="input-${item}"
                                         class="filter-item__checkbox"
-                                        ${categoryState(modelData, item)}>
+                                        ${checkboxFilterState('category', modelData, item)}>
                                     <label
                                         for="input-${item}"
                                         class="filter-item__label">
@@ -60,7 +61,8 @@ export default function getStoreFilters(modelData: Partial<ModelData>): string {
                                     <input
                                         type="checkbox"
                                         id="input-${item}"
-                                        class="filter-item__checkbox">
+                                        class="filter-item__checkbox"
+                                        ${checkboxFilterState('brand', modelData, item)}>
                                     <label
                                         for="input-${item}"
                                         class="filter-item__label">

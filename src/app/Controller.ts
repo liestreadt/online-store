@@ -88,7 +88,6 @@ export class Controller {
     private categoryEvent(event: Event): void {
         if (event.target instanceof HTMLElement) {
             const inputID = getIDfromLabelInput(event.target);
-            //console.log('CATEGORY EVENT, id is ', inputID);
             if (inputID) {
                 const cutLength = 'input-'.length;
                 this.model.createQueryParamFromEvent('category', inputID.slice(cutLength));
@@ -97,11 +96,12 @@ export class Controller {
         }
     }
     private brandEvent(event: Event): void {
-        console.log('be prepared to handle both input or label click');
-        if (event.currentTarget instanceof HTMLElement) {
-            console.log(`
-                this.model.applyQueryParam(event.currentTarget);
-            `);
+        if (event.target instanceof HTMLElement) {
+            const inputID = getIDfromLabelInput(event.target);
+            if (inputID) {
+                const cutLength = 'input-'.length;
+                this.model.createQueryParamFromEvent('brand', inputID.slice(cutLength));
+            }
             this.initViewAndListeners();
         }
     }
