@@ -131,11 +131,16 @@ class View {
 
         const minPrice = this.modelData.initialFilterValues?.minPrice || 0;
         const minUserPrice = this.modelData.calculatedFilters?.minUserPrice || 0;
-        const maxPrice = this.modelData.initialFilterValues?.maxPrice || 10000;
-        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || 10000;
+        const maxPrice = this.modelData.initialFilterValues?.maxPrice || Infinity;
+        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || Infinity;
+
+        const minStock = this.modelData.initialFilterValues?.minStock || 0;
+        const minUserStock = this.modelData.calculatedFilters?.minUserStock || 0;
+        const maxStock = this.modelData.initialFilterValues?.maxStock || Infinity;
+        const maxUserStock = this.modelData.calculatedFilters?.maxUserStock || Infinity;
 
         const dualSliderPrice = new DualSlider(minPrice, maxPrice, minUserPrice, maxUserPrice, CURRENCY_SYMBOL);
-        const dualSliderStock = new DualSlider(0, 500);
+        const dualSliderStock = new DualSlider(minStock, maxStock, minUserStock, maxUserStock);
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }

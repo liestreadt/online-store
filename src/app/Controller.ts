@@ -116,9 +116,13 @@ export class Controller {
         this.initViewAndListeners();
     }
     private stockEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            //TODO: generate different id for dual sliders
+            const inputID = event.target.id;
+            const stockKey = inputID === SLIDER_MAX_ID ? 'stockMax' : 'stockMin';
+
+            this.model.createQueryParamFromEvent(stockKey, event.target.value);
+        }
         this.initViewAndListeners();
     }
     private sortingEvent(event: Event): void {

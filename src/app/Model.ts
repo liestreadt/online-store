@@ -175,6 +175,16 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'stockMin': {
+                this.changeParamInURL('stockMin', value);
+                this.reInit();
+                break;
+            }
+            case 'stockMax': {
+                this.changeParamInURL('stockMax', value);
+                this.reInit();
+                break;
+            }
         }
     }
     applyQueryParam() {
