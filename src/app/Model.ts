@@ -41,6 +41,8 @@ class Model {
             allCategories: [],
             filteredProducts: null,
             page: '',
+            shownProductInfo: null,
+            calculatedFilters: null,
         };
         this.shownProductInfo = null;
     }
@@ -99,6 +101,7 @@ class Model {
         if (active.searching) {
             this.filterCalculator.updateSearchName(active.searching[0]);
         }
+        this.modelData.calculatedFilters = this.filterCalculator;
         this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
         console.log('PRODUCT INFO', this.shownProductInfo);
         console.log('FILTER input INFO', this.filterCalculator);
@@ -161,6 +164,7 @@ class Model {
     }
     applyQueryParam() {
         console.log('apply filters to product list');
+        this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
     }
     sortProducts(sortVariant: sortVariantsEnum) {

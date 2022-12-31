@@ -1,3 +1,5 @@
+import { FilterCalculator } from '../FilterCalculator';
+
 export interface ProductDetail {
     id: number;
     title: string;
@@ -57,6 +59,8 @@ export interface ModelData {
     allCategories: string[];
     filteredProducts: Array<ProductDetail> | null;
     page: string;
+    shownProductInfo: ShownProductInfo | null;
+    calculatedFilters: FilterCalculator | null;
 }
 export interface ElementsToListen {
     store: {

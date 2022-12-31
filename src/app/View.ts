@@ -28,6 +28,7 @@ class View {
     }
     renderPage() {
         if (!this.modelData.filteredProducts) {
+            //TODO: if no product is sutable for filters, show empty sorting area
             this.renderLoadingPage();
         } else {
             this.renderHeader();
