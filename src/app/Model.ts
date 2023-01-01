@@ -63,7 +63,7 @@ class Model {
     getPageFromURL(): PageCase {
         const currentHash = window.location.hash;
         const detailLength = PAGES_HASH.details.length;
-        console.log('CURRENT HASH', currentHash);
+
         if (currentHash === PAGES_HASH.store || currentHash === '') {
             return PageCase.store;
         }

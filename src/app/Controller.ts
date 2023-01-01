@@ -19,7 +19,7 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
-        window.addEventListener('popstate', this);
+        //window.addEventListener('popstate', this);
         switch (this.model.modelData.page) {
             default:
                 {
@@ -54,7 +54,8 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
         };
-        if (event.type === 'hashchange' || event.type === 'popstate') {
+        if (event.type === 'hashchange') {
+            // || event.type === 'popstate'
             this.model.updatePage();
             this.initViewAndListeners();
             return;
