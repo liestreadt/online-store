@@ -101,8 +101,8 @@ class Model {
         }
         this.modelData.calculatedFilters = this.filterCalculator;
         this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
-        console.log('PRODUCT INFO', this.shownProductInfo);
-        console.log('FILTER input INFO', this.filterCalculator);
+        //console.log('PRODUCT INFO', this.shownProductInfo);
+        //console.log('FILTER input INFO', this.filterCalculator);
     }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
@@ -185,10 +185,14 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'searching': {
+                this.changeParamInURL('searching', value);
+                this.reInit();
+            }
         }
     }
     applyQueryParam() {
-        console.log('apply filters to product list');
+        //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
     }
@@ -203,7 +207,7 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, value }, '', url.toString());
-        console.log('add category to url search params');
+        //console.log('add category to url search params');
     }
     deleteParamFromURL(key: FilterKeys, param: string) {
         const url: URL = new URL(window.location.href);
@@ -217,7 +221,7 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, values }, '', url.toString());
-        console.log('delete category from url search params');
+        //console.log('delete category from url search params');
     }
     changeParamInURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);

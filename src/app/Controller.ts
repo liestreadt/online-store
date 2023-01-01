@@ -135,9 +135,10 @@ export class Controller {
         this.initViewAndListeners();
     }
     private searchingEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            const text = event.target.value;
+            this.model.createQueryParamFromEvent('searching', text);
+        }
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {

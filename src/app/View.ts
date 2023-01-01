@@ -20,6 +20,7 @@ import {
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL } from './constants/constants';
+import { isSearchFocused } from './tools/Functions';
 
 class View {
     modelData: Partial<ModelData>;
@@ -60,6 +61,7 @@ class View {
             }
             this.renderFooter();
             this.renderModal();
+            this.addFocusToLastUsed();
         }
     }
     renderLoadingPage() {
@@ -176,6 +178,14 @@ class View {
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
             },
         };
+    }
+    addFocusToLastUsed() {
+        const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);
+        if (isSearchFocused() && searchField instanceof HTMLInputElement) {
+            const textLength = searchField.value.length;
+            searchField.focus();
+            searchField.setSelectionRange(textLength, textLength);
+        }
     }
 }
 

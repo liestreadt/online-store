@@ -1,4 +1,4 @@
-import { EventTargetsIDEnum } from '../../intefaces/types';
+import { EventTargetsIDEnum, FilterKeys } from '../../intefaces/types';
 import { ModelData } from '../../intefaces/types';
 import createSroreCard from './create-store-card';
 
@@ -21,6 +21,7 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     name=""
                     id="${EventTargetsIDEnum.searching}"
                     class="sorting__search"
+                    value="${modelData.calculatedFilters?.searchName || ''}"
                     placeholder="Search product">
                 <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
                     Choose view: <button class="sorting__tiny-view">📱</button>
