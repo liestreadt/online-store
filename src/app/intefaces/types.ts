@@ -38,7 +38,7 @@ export interface ModelData {
     allBrands: string[];
     allCategories: string[];
     filteredProducts: Array<ProductDetail> | null;
-    page: string;
+    page: PageCase;
 }
 export interface ElementsToListen {
     store: {
@@ -64,4 +64,10 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+}
+export enum PageCase {
+    store,
+    cart,
+    details,
+    error,
 }
