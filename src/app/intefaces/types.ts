@@ -39,6 +39,7 @@ export interface ModelData {
     allCategories: string[];
     filteredProducts: Array<ProductDetail> | null;
     page: PageCase;
+    detailsID: string;
 }
 export interface ElementsToListen {
     store: {
