@@ -42,8 +42,10 @@ class Model {
             },
             allBrands: [],
             allCategories: [],
+            initialProducts: null,
             filteredProducts: null,
             page: '',
+            currentOption: null,
         };
     }
     async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
@@ -106,6 +108,7 @@ class Model {
             );
             this.modelData.allBrands = [...new Set(allBrands)];
             this.modelData.allCategories = [...new Set(allCategories)];
+            this.modelData.initialProducts = this.productJSON.products;
             this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
@@ -121,9 +124,48 @@ class Model {
         console.log('apply filters to product list');
         this.modelData.filteredProducts = this.productJSON && this.productJSON.products;
     }
-    sortProducts(sortVariant: sortVariantsEnum) {
-        // TODO: implemet sorting by option
-        // this.modelData.filteredProducts?.sort()
+    sortProducts(sortVariant: sortVariantsEnum, currOption: HTMLOptionElement): void {
+        this.modelData.currentOption = currOption;
+        switch (sortVariant) {
+            case sortVariantsEnum.byDefault:
+                {
+                    if (this.modelData.filteredProducts)
+                        this.modelData.filteredProducts = this.modelData.initialProducts;
+                }
+                break;
+            case sortVariantsEnum.byPriceAscending:
+                {
+                    if (this.modelData.filteredProducts)
+                        this.modelData.filteredProducts = this.modelData.filteredProducts?.sort((prev, curr) => {
+                            return prev.price - curr.price;
+                        });
+                }
+                break;
+            case sortVariantsEnum.byPriceDescending:
+                {
+                    if (this.modelData.filteredProducts)
+                        this.modelData.filteredProducts = this.modelData.filteredProducts?.sort((prev, curr) => {
+                            return curr.price - prev.price;
+                        });
+                }
+                break;
+            case sortVariantsEnum.byRatingAscending:
+                {
+                    if (this.modelData.filteredProducts)
+                        this.modelData.filteredProducts = this.modelData.filteredProducts?.sort((prev, curr) => {
+                            return prev.rating - curr.rating;
+                        });
+                }
+                break;
+            case sortVariantsEnum.byRatingDescending:
+                {
+                    if (this.modelData.filteredProducts)
+                        this.modelData.filteredProducts = this.modelData.filteredProducts?.sort((prev, curr) => {
+                            return curr.rating - prev.rating;
+                        });
+                }
+                break;
+        }
     }
 }
 

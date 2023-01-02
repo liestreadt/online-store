@@ -7,9 +7,9 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
         <section class="sorting">
             <div class="sorting-header">
                 <select name="" id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
-                    <option value="default-sort" class="sorting-option" selected>Sort default</option>
+                    <option value="default-sort" class="sorting-option">Sort default</option>
                     <option value="ascending-price" class="sorting-option">Sort by price (ascending)</option>
-                    <option value="desending-price" class="sorting-option">Sort by price (descending)</option>
+                    <option value="descending-price" class="sorting-option">Sort by price (descending)</option>
                     <option value="ascending-rating" class="sorting-option">Sort by rating (ascending)</option>
                     <option value="descending-rating" class="sorting-option">Sort by rating (descending)</option>
                 </select>

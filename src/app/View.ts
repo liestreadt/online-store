@@ -62,6 +62,9 @@ class View {
                 </main>
             `;
         }
+        document
+            .querySelector(`.sorting__menu option[value=${this.modelData.currentOption?.value}]`)
+            ?.setAttribute('selected', '');
     }
     renderProdDetailsPage() {
         const containerMain = document.querySelector('main');
