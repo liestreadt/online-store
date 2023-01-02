@@ -60,6 +60,7 @@ export interface ModelData {
     initialProducts: Array<ProductDetail> | null;
     filteredProducts: Array<ProductDetail> | null;
     page: string;
+    currentOption: HTMLOptionElement | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
 }
