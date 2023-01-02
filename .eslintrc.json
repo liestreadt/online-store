@@ -21,6 +21,7 @@
     "rules": {
         "no-debugger": "off",
         "no-console": 0,
+        "@typescript-eslint/no-unused-vars": "off",
         "class-methods-use-this": "off",
         "@typescript-eslint/no-explicit-any": "error",
         "prettier/prettier": ["error",{
