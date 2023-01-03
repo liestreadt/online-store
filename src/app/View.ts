@@ -16,6 +16,7 @@ import {
     ModelData,
     ElementsToListen,
     EventTargetsIDEnum,
+    PageCase,
 } from './intefaces/types';
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
@@ -33,20 +34,25 @@ class View {
             this.renderHeader();
             this.renderMain();
             switch (this.modelData.page) {
-                case 'store':
+                case PageCase.store:
                     {
                         this.renderStorePage();
                         this.getDualSlider();
                     }
                     break;
-                case 'details':
+                case PageCase.details:
                     {
                         this.renderProdDetailsPage();
                     }
                     break;
-                case 'cart':
+                case PageCase.cart:
                     {
                         this.renderCartPage();
+                    }
+                    break;
+                case PageCase.error:
+                    {
+                        console.log('DRAW ERROR PAGE');
                     }
                     break;
                 default:
