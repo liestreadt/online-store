@@ -1,12 +1,10 @@
 import { EventTargetsIDEnum, FilterKeys } from '../../intefaces/types';
 import { ModelData } from '../../intefaces/types';
 
-function checkboxFilterState(key: FilterKeys, modelData: Partial<ModelData>, category: string): string {
+function checkboxFilterState(key: FilterKeys, modelData: Partial<ModelData>, value: string): string {
     const filterList = key === 'brand' ? modelData.calculatedFilters?.brands : modelData.calculatedFilters?.categories;
-    if (filterList && filterList.size === 0) {
-        return '';
-    }
-    if (filterList && filterList.has(category)) {
+
+    if (filterList && filterList.has(value)) {
         return 'checked';
     } else {
         return '';

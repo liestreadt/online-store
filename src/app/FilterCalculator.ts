@@ -1,4 +1,4 @@
-import { ProductDetail, ShownProductInfo } from './intefaces/types';
+import { FilterKeys, ProductDetail, ShownProductInfo } from './intefaces/types';
 import increaseValueInMap from './tools/Functions';
 
 export class FilterCalculator {
@@ -46,6 +46,23 @@ export class FilterCalculator {
     updateSearchName(newSearchName: string) {
         this.searchName = newSearchName.toLowerCase();
     }
+    checkProductPassSearching(product: ProductDetail): boolean {
+        type productKey = keyof typeof product;
+        const fieldsToSearch: productKey[] = [
+            'title',
+            'description',
+            'price',
+            'discountPercentage',
+            'brand',
+            'category',
+            'rating',
+            'stock',
+        ];
+        const isProductPassSearching = fieldsToSearch.some((key) =>
+            product[key].toString().toLowerCase().includes(this.searchName)
+        );
+        return isProductPassSearching;
+    }
     checkProductPassFilters(product: ProductDetail): boolean {
         if (this.categories.size > 0 && !this.categories.has(product.category)) {
             return false;
@@ -59,7 +76,7 @@ export class FilterCalculator {
         if (this.minUserStock > product.stock || this.maxUserStock < product.stock) {
             return false;
         }
-        if (!product.title.toLowerCase().includes(this.searchName)) {
+        if (!this.checkProductPassSearching(product)) {
             return false;
         }
         return true;

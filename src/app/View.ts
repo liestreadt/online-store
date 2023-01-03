@@ -16,10 +16,12 @@ import {
     ModelData,
     ElementsToListen,
     EventTargetsIDEnum,
+    PageCase,
 } from './intefaces/types';
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL } from './constants/constants';
+import { checkSearchFocused } from './tools/Functions';
 
 class View {
     modelData: Partial<ModelData>;
@@ -35,20 +37,25 @@ class View {
             this.renderHeader();
             this.renderMain();
             switch (this.modelData.page) {
-                case 'store':
+                case PageCase.store:
                     {
                         this.renderStorePage();
                         this.getDualSlider();
                     }
                     break;
-                case 'details':
+                case PageCase.details:
                     {
                         this.renderProdDetailsPage();
                     }
                     break;
-                case 'cart':
+                case PageCase.cart:
                     {
                         this.renderCartPage();
+                    }
+                    break;
+                case PageCase.error:
+                    {
+                        console.log('DRAW ERROR PAGE');
                     }
                     break;
                 default:
@@ -60,6 +67,7 @@ class View {
             }
             this.renderFooter();
             this.renderModal();
+            this.addFocusToLastUsed();
         }
     }
     renderLoadingPage() {
@@ -134,11 +142,16 @@ class View {
 
         const minPrice = this.modelData.initialFilterValues?.minPrice || 0;
         const minUserPrice = this.modelData.calculatedFilters?.minUserPrice || 0;
-        const maxPrice = this.modelData.initialFilterValues?.maxPrice || 10000;
-        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || 10000;
+        const maxPrice = this.modelData.initialFilterValues?.maxPrice || Infinity;
+        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || Infinity;
+
+        const minStock = this.modelData.initialFilterValues?.minStock || 0;
+        const minUserStock = this.modelData.calculatedFilters?.minUserStock || 0;
+        const maxStock = this.modelData.initialFilterValues?.maxStock || Infinity;
+        const maxUserStock = this.modelData.calculatedFilters?.maxUserStock || Infinity;
 
         const dualSliderPrice = new DualSlider(minPrice, maxPrice, minUserPrice, maxUserPrice, CURRENCY_SYMBOL);
-        const dualSliderStock = new DualSlider(0, 500);
+        const dualSliderStock = new DualSlider(minStock, maxStock, minUserStock, maxUserStock);
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
@@ -174,6 +187,16 @@ class View {
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
             },
         };
+    }
+    addFocusToLastUsed() {
+        const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);
+        const isSearchFocused = checkSearchFocused();
+
+        if (isSearchFocused && searchField instanceof HTMLInputElement) {
+            const textLength = searchField.value.length;
+            searchField.focus();
+            searchField.setSelectionRange(textLength, textLength);
+        }
     }
 }
 

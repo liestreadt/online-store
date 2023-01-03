@@ -1,4 +1,5 @@
-import { ProductDetail } from '../../intefaces/types';
+import { PAGES_HASH } from '../../constants/constants';
+import { ModelData, ProductDetail } from '../../intefaces/types';
 
 export default function createSroreCard(product: ProductDetail): string {
     return `
@@ -41,7 +42,7 @@ export default function createSroreCard(product: ProductDetail): string {
                     <button class="product-card__btn-add-to-cart">
                         ADD TO CART
                     </button>
-                    <a href="#!" class="product-card__link-to-details">
+                    <a href="${PAGES_HASH.details}${product.id}" class="product-card__link-to-details">
                         DETAILS
                     </a>
                 </div>

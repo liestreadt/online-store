@@ -59,10 +59,11 @@ export interface ModelData {
     allCategories: string[];
     initialProducts: Array<ProductDetail> | null;
     filteredProducts: Array<ProductDetail> | null;
-    page: string;
     currentOption: HTMLOptionElement | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
+    page: PageCase;
+    detailsID: string;
 }
 export interface ElementsToListen {
     store: {
@@ -96,4 +97,10 @@ export enum SortVariantsEnum {
     PRICE_DESCENDING = 'descending-price',
     RATING_ASCENDING = 'ascending-rating',
     RATING_DESCENDING = 'descending-rating',
+}
+export enum PageCase {
+    store,
+    cart,
+    details,
+    error,
 }

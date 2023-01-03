@@ -29,7 +29,8 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
-        window.addEventListener('popstate', this);
+        //window.addEventListener('popstate', this);
+
         switch (this.model.modelData.page) {
             default:
                 {
@@ -64,12 +65,10 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
         };
-        if (event.type === 'hashchange' || event.type === 'popstate') {
-            console.log('handle for hash change');
-            console.log(`
-            this.model.changePage(event.currentTarget.href);
+        if (event.type === 'hashchange') {
+            // || event.type === 'popstate'
+            this.model.updatePage();
             this.initViewAndListeners();
-            `);
             return;
         }
         if (event.currentTarget instanceof HTMLElement) {
@@ -116,9 +115,13 @@ export class Controller {
         this.initViewAndListeners();
     }
     private stockEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            //TODO: generate different id for dual sliders
+            const inputID = event.target.id;
+            const stockKey = inputID === SLIDER_MAX_ID ? 'stockMax' : 'stockMin';
+
+            this.model.createQueryParamFromEvent(stockKey, event.target.value);
+        }
         this.initViewAndListeners();
     }
     private sortingEvent(event: Event): void {
@@ -131,9 +134,10 @@ export class Controller {
         this.initViewAndListeners();
     }
     private searchingEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            const text = event.target.value;
+            this.model.createQueryParamFromEvent('searching', text);
+        }
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {
