@@ -43,7 +43,6 @@ class Model {
             allCategories: [],
             initialProducts: null,
             filteredProducts: null,
-            page: '',
             currentOption: null,
             shownProductInfo: null,
             calculatedFilters: null,
