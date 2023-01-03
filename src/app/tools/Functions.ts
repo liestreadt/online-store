@@ -8,7 +8,7 @@ export function increaseValueInMap(myMap: Map<string, number>, value: string): v
         myMap.set(value, previousValue + 1);
     }
 }
-export function isSearchFocused() {
+export function checkSearchFocused(): boolean {
     if (history.state) {
         const lastEventType: FilterKeys = history.state.key;
         return lastEventType === 'searching';

@@ -212,10 +212,9 @@ class Model {
     deleteParamFromURL(key: FilterKeys, param: string) {
         const url: URL = new URL(window.location.href);
         const urlSearch: URLSearchParams = url.searchParams;
-        let values = urlSearch.getAll(key);
-        values = values.filter((value) => value !== param);
+        const values = urlSearch.getAll(key).filter((value) => value !== param);
         urlSearch.delete(key);
-        values.map((value) => {
+        values.forEach((value) => {
             urlSearch.append(key, value);
         });
         url.search = urlSearch.toString();

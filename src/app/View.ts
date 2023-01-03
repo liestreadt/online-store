@@ -20,7 +20,7 @@ import {
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL } from './constants/constants';
-import { isSearchFocused } from './tools/Functions';
+import { checkSearchFocused } from './tools/Functions';
 
 class View {
     modelData: Partial<ModelData>;
@@ -181,7 +181,9 @@ class View {
     }
     addFocusToLastUsed() {
         const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);
-        if (isSearchFocused() && searchField instanceof HTMLInputElement) {
+        const isSearchFocused = checkSearchFocused();
+
+        if (isSearchFocused && searchField instanceof HTMLInputElement) {
             const textLength = searchField.value.length;
             searchField.focus();
             searchField.setSelectionRange(textLength, textLength);
