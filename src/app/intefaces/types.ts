@@ -90,11 +90,10 @@ export enum EventTargetsIDEnum {
     viewButtons = 'view-buttons-container',
 }
 
-// TODO: view should take options values from this enum
-export enum sortVariantsEnum {
-    byDefault = 'default-sort',
-    byPriceAscending = 'ascending-price',
-    byPriceDescending = 'descending-price',
-    byRatingDescending = 'descending-rating',
-    byRatingAscending = 'ascending-rating',
+export enum SortVariantsEnum {
+    DEFAULT = 'default-sort',
+    PRICE_ASCENDING = 'ascending-price',
+    PRICE_DESCENDING = 'descending-price',
+    RATING_ASCENDING = 'ascending-rating',
+    RATING_DESCENDING = 'descending-rating',
 }

@@ -1,5 +1,5 @@
 import { EventTargetsIDEnum } from '../../intefaces/types';
-import { ModelData } from '../../intefaces/types';
+import { ModelData, SortVariantsEnum } from '../../intefaces/types';
 import createSroreCard from './create-store-card';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
@@ -7,11 +7,19 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
         <section class="sorting">
             <div class="sorting-header">
                 <select name="" id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
-                    <option value="default-sort" class="sorting-option">Sort default</option>
-                    <option value="ascending-price" class="sorting-option">Sort by price (ascending)</option>
-                    <option value="descending-price" class="sorting-option">Sort by price (descending)</option>
-                    <option value="ascending-rating" class="sorting-option">Sort by rating (ascending)</option>
-                    <option value="descending-rating" class="sorting-option">Sort by rating (descending)</option>
+                    <option value="${SortVariantsEnum.DEFAULT}" class="sorting-option">Sort default</option>
+                    <option value="${
+                        SortVariantsEnum.PRICE_ASCENDING
+                    }" class="sorting-option">Sort by price (ascending)</option>
+                    <option value="${
+                        SortVariantsEnum.PRICE_DESCENDING
+                    }" class="sorting-option">Sort by price (descending)</option>
+                    <option value="${
+                        SortVariantsEnum.RATING_ASCENDING
+                    }" class="sorting-option">Sort by rating (ascending)</option>
+                    <option value="${
+                        SortVariantsEnum.RATING_DESCENDING
+                    }" class="sorting-option">Sort by rating (descending)</option>
                 </select>
                 <div class="sorting__total-found">
                     Found: <span class="sorting__amount">${modelData.filteredProducts?.length}</span>
