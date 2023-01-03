@@ -96,7 +96,7 @@ export enum sortVariantsEnum {
     byPriceDescending = 'descending-price',
     byRatingDescending = 'descending-rating',
     byRatingAscending = 'ascending-rating',
-
+}
 export enum PageCase {
     store,
     cart,
