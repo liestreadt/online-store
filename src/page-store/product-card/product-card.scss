@@ -58,3 +58,44 @@
         color: $color-font;
     }
 }
+
+.product-card_tiny {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    @extend %border;
+    width: $width-card-tiny;
+    height: $height-card-tiny;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .product-card {
+
+        &__header {
+            font-size: $font-header-tiny;
+        }
+
+        &__body {
+            font-size: $font-body-tiny;
+        }
+
+        &__info {
+            border: 0;
+            border-bottom-right-radius: 0;
+            width: inherit;
+        }
+
+        &__btn-add-to-cart,
+        &__link-to-details {
+            font-size: 1.2rem;
+
+            &:hover {
+                @extend %transform-hover-tiny;
+            }
+            &:active {
+                border: $border-small-focus;
+                @extend %transform-active-tiny;
+            }
+        }
+    }
+}

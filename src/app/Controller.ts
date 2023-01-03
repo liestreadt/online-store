@@ -137,9 +137,13 @@ export class Controller {
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
-        this.initViewAndListeners();
+        if (event.target instanceof HTMLButtonElement) {
+            if (event.target.id === this.model.modelData.currentView) {
+                return;
+            } else {
+                this.model.handleViewChange(event.target.id);
+                this.initViewAndListeners();
+            }
+        }
     }
 }

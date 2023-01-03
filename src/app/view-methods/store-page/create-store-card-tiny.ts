@@ -1,8 +1,8 @@
 import { ProductDetail } from '../../intefaces/types';
 
-export default function createStoreCard(product: ProductDetail): string {
+export default function createStoreCardTiny(product: ProductDetail): string {
     return `
-        <div class="product-card">
+        <div class="product-card_tiny">
             <h2 class="product-card__header header_small">
                 ${product.title}
             </h2>
@@ -19,9 +19,6 @@ export default function createStoreCard(product: ProductDetail): string {
                     background-size: cover;">
                 <div class="product-card__info">
                     <div class="product-card__info-item">
-                        Category: <span class="product-card__category-text">${product.category}</span>
-                    </div>
-                    <div class="product-card__info-item">
                         Brand: <span class="product-card__brand-text">${product.brand}</span>
                     </div>
                     <div class="product-card__info-item">
@@ -32,9 +29,6 @@ export default function createStoreCard(product: ProductDetail): string {
                     </div>
                     <div class="product-card__info-item">
                         Rating: <span class="product-card__rating-text">${product.rating}</span>
-                    </div>
-                    <div class="product-card__info-item">
-                        Stock: <span class="product-card__stock-text">${product.stock}</span>
                     </div>
                 </div>
                 <div class="product-card__controls">

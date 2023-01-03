@@ -1,8 +1,11 @@
 import { EventTargetsIDEnum } from '../../intefaces/types';
 import { ModelData } from '../../intefaces/types';
-import createSroreCard from './create-store-card';
+import createStoreCard from './create-store-card';
+import createStoreCardTiny from './create-store-card-tiny';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
+    const currentViewFunc = modelData.currentView === 'view-small' ? createStoreCard : createStoreCardTiny;
+    const currentCardContainerSize = modelData.currentView === 'view-small' ? 'small' : 'tiny';
     return `
         <section class="sorting">
             <div class="sorting-header">
@@ -23,12 +26,12 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     class="sorting__search"
                     placeholder="Search product">
                 <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
-                    Choose view: <button class="sorting__tiny-view">📱</button>
-                    <button class="sorting__small-view">💻</button>
+                    Choose view: <button id="view-tiny" class="sorting__tiny-view">📱</button>
+                    <button id="view-small" class="sorting__small-view">💻</button>
                 </div>
             </div>
-            <div class="sorting__card-container sorting__card-container_small">
-                ${modelData.filteredProducts?.map((i) => createSroreCard(i)).join('')}
+            <div class="sorting__card-container sorting__card-container_${currentCardContainerSize}">
+                ${modelData.filteredProducts?.map((i) => currentViewFunc(i)).join('')}
             </div>
         </section>
     `;

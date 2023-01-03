@@ -41,6 +41,7 @@ class Model {
             allCategories: [],
             filteredProducts: null,
             page: '',
+            currentView: 'view-small',
             shownProductInfo: null,
             calculatedFilters: null,
         };
@@ -185,6 +186,9 @@ class Model {
     sortProducts(sortVariant: sortVariantsEnum) {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
+    }
+    handleViewChange(view: string): void {
+        this.modelData.currentView = view;
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);

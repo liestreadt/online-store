@@ -6,6 +6,8 @@ import createStoreFilters from './view-methods/store-page/create-store-filters';
 import createSortingSection from './view-methods/store-page/create-sorting-section';
 import createProdDetailsContainer from './view-methods/prod-detail-page/create-prod-details-container';
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
+import createCartItem from './view-methods/cart-page/create-cart-item';
+import createCartContainer from './view-methods/cart-page/create-cart-container';
 
 import {
     ProductDetail,
@@ -17,8 +19,6 @@ import {
     ElementsToListen,
     EventTargetsIDEnum,
 } from './intefaces/types';
-import createCartItem from './view-methods/cart-page/create-cart-item';
-import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL } from './constants/constants';
 
 class View {

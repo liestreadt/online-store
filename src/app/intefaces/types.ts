@@ -59,6 +59,7 @@ export interface ModelData {
     allCategories: string[];
     filteredProducts: Array<ProductDetail> | null;
     page: string;
+    currentView: string;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
 }

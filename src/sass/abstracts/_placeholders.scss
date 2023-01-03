@@ -6,8 +6,15 @@
     transform: scale(1.15);
 }
 
+%transform-hover-tiny {
+    transform: scale(1.05);
+}
+
 %transform-active {
     transform: translateY(0.3rem) scale(1.15);
+}
+%transform-active-tiny {
+    transform: translateY(0.2rem) scale(1.05);
 }
 
 %transition {
