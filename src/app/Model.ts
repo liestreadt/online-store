@@ -58,6 +58,7 @@ class Model {
             this.findInitialFilterValues();
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
+            this.cart = new Cart(this.productJSON && this.productJSON.products);
         } catch {
             throw new Error('Fail to connect dummy json');
         }

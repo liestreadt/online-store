@@ -2,34 +2,31 @@ import { CART_ID } from './constants/constants';
 import { ProductCart, ProductDetail, ProductShort } from './intefaces/types';
 
 class Cart {
-    productsAll: ProductDetail[];
+    productsAll: ProductDetail[] | null;
     products: Map<string, ProductCart>;
-    saveList: ProductShort[];
 
-    constructor(productsAll: ProductDetail[]) {
+    constructor(productsAll: ProductDetail[] | null) {
         this.productsAll = productsAll;
         this.products = new Map();
-        this.saveList = [];
         this.restore();
     }
     restore(): void {
+        let saveList: ProductShort[] = [];
         const list = localStorage.getItem(CART_ID);
         if (list) {
-            this.saveList = JSON.parse(list);
-            this.saveList.forEach((info) => {
+            saveList = JSON.parse(list);
+            saveList.forEach((info) => {
                 const product = this.getProduct(info);
                 if (product) {
                     this.products.set(`${info.id}`, product);
                 }
             });
-        } else {
-            this.saveList = [];
         }
     }
     getProduct(info: ProductShort): ProductCart | null {
         const product: ProductDetail | null =
-            this.productsAll.find((product) => {
-                product.id === info.id;
+            this.productsAll?.find((product) => {
+                return product.id === info.id;
             }) || null;
         if (product) {
             return {
@@ -42,14 +39,15 @@ class Cart {
         }
         return null;
     }
-    save(): void {
+    private save(): void {
+        const saveList: ProductShort[] = [];
         this.products.forEach((product) => {
-            this.saveList.push({
+            saveList.push({
                 id: product.id,
                 amount: product.amount,
             });
         });
-        localStorage.setItem(CART_ID, JSON.stringify(this.saveList));
+        localStorage.setItem(CART_ID, JSON.stringify(saveList));
     }
     getTotalPrice(): number {
         let totalPrice = 0;
@@ -65,7 +63,14 @@ class Cart {
         });
         return totalAmount;
     }
-    addNew(product: ProductDetail): void {
+    addNew(id: string): void {
+        const product: ProductDetail | null =
+            this.productsAll?.find((product) => {
+                return product.id === +id;
+            }) || null;
+        if (!product) {
+            throw new Error('product ID is not find!');
+        }
         const productCart: ProductCart = {
             ...product,
             amount: 1,
@@ -82,7 +87,7 @@ class Cart {
     }
     increaseAmount(id: string): void {
         const product = this.products.get(id);
-        if (product && product.stock < product.amount) {
+        if (product && product.stock > product.amount) {
             product.amount += 1;
             this.save();
         }
