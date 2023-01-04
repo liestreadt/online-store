@@ -14,6 +14,7 @@ export interface ProductDetail {
 }
 export interface ProductCart extends ProductDetail {
     amount: number;
+    getProductTotalPrice: () => number;
 }
 
 export interface DummyJSON {

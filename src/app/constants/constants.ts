@@ -8,3 +8,4 @@ export const PAGES_HASH = {
     details: '#details-id-',
     error: '#404',
 };
+export const CART_ID = 'online-store-cart-neemkashu-liestreadt';
