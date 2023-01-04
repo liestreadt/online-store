@@ -12,6 +12,10 @@ export interface ProductDetail {
     rating: number;
     stock: number;
 }
+export interface ProductShort {
+    id: number;
+    amount: number;
+}
 export interface ProductCart extends ProductDetail {
     amount: number;
     getProductTotalPrice: () => number;

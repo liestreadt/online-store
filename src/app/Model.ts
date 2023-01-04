@@ -17,7 +17,7 @@ import {
 
 class Model {
     queryParams: URLSearchParams;
-    cart: Cart;
+    cart: Cart | null;
     productJSON: DummyJSON | null;
     modelData: ModelData;
     filterCalculator: FilterCalculator;
@@ -26,7 +26,7 @@ class Model {
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
-        this.cart = new Cart();
+        this.cart = null;
         this.filterCalculator = new FilterCalculator();
         this.productJSON = null;
         this.modelData = {
