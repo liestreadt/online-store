@@ -12,6 +12,9 @@ export interface ProductDetail {
     rating: number;
     stock: number;
 }
+export interface ProductCart extends ProductDetail {
+    amount: number;
+}
 
 export interface DummyJSON {
     products: Array<ProductDetail>;
