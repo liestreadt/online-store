@@ -92,10 +92,11 @@ class View {
     renderProdDetailsPage() {
         const containerMain = document.querySelector('main');
         const currentProduct = this.modelData.filteredProducts?.find((item) => item.id === this.modelData.detailsID);
-        if (containerMain && currentProduct) {
+        const mainImageSrc = this.modelData.detailsMainImageSrc;
+        if (containerMain && currentProduct && mainImageSrc) {
             containerMain.outerHTML = `
                 <main class="main-details">
-                    ${this.getProdDetailsContainer(currentProduct)}
+                    ${this.getProdDetailsContainer(currentProduct, mainImageSrc)}
                 </main>
             `;
         }
@@ -151,8 +152,8 @@ class View {
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
-    getProdDetailsContainer(data: ProductDetail): string {
-        return createProdDetailsContainer(data);
+    getProdDetailsContainer(data: ProductDetail, mainImageSrc: string): string {
+        return createProdDetailsContainer(data, mainImageSrc);
     }
     getCartContainer(data: ProductDetail): string {
         return createCartContainer(data);
@@ -181,6 +182,9 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+            },
+            details: {
+                images: document.body.querySelector('.details__aside-slides'),
             },
         };
     }

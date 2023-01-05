@@ -1,6 +1,6 @@
 import { ProductDetail } from '../../intefaces/types';
 
-export default function createProdDetailsContainer(product: ProductDetail): string {
+export default function createProdDetailsContainer(product: ProductDetail, mainImageSrc: string): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>
@@ -16,19 +16,20 @@ export default function createProdDetailsContainer(product: ProductDetail): stri
                 <span class="details__header-text">${product.title}</span>
             </h2>
             <div class="details__body">
-                <div class="details__aside-slides">
+                <div id="details-images" class="details__aside-slides">
                     ${product.images
                         .map((item) => {
                             return `<img src="${item}" alt="${product.title}">`;
                         })
                         .join('')}
                 </div>
-                <div class="details__main-picture">
-                    <img src="${
-                        product.images.filter((i) => i.match(/thumbnail/)).length
-                            ? product.images.filter((i) => i.match(/thumbnail/))
-                            : product.images[0]
-                    }" alt="${product.title}">
+                <div
+                    class="details__main-picture"
+                    style="
+                        background: url('${mainImageSrc}');
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: contain;">
                 </div>
                 <div class="details__info">
                     <div class="details__description details-item">

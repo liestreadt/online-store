@@ -62,6 +62,7 @@ export interface ModelData {
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
     detailsID: number;
+    detailsMainImageSrc: string | undefined;
 }
 export interface ElementsToListen {
     store: {
@@ -75,6 +76,9 @@ export interface ElementsToListen {
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
     };
+    details: {
+        images: HTMLDivElement | null;
+    };
 }
 
 export enum EventTargetsIDEnum {
@@ -87,6 +91,7 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+    detailsImages = 'details-images',
 }
 
 // TODO: view should take options values from this enum

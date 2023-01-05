@@ -40,12 +40,15 @@
 
         img {
             margin-bottom: $margin-tiny;
-            @extend %border;
+            border: $border-small;
+            border-radius: $radius-small;
             width: 7rem;
+            @extend %transition-fast;
 
             &:hover {
                 border: $border-small-focus;
                 cursor: pointer;
+                @extend %transform-hover;
             }
         }
     }
@@ -53,13 +56,10 @@
     &__main-picture {
         display: flex;
         align-items: center;
-        padding: 0 $padding-small;
-        width: fit-content;
-
-        img {
-            border-radius: $radius-small;
-            width: 35rem;
-        }
+        justify-content:  center;
+        margin: 0 $margin-small;
+        width: 35rem;
+        height: inherit;
     }
 
     &__info {

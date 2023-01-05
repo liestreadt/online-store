@@ -1,7 +1,6 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
-import { EventTargetsIDEnum } from './intefaces/types';
+import { ElementsToListen, FilterKeys, sortVariantsEnum, EventTargetsIDEnum, PageCase } from './intefaces/types';
 import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
@@ -32,7 +31,7 @@ export class Controller {
         //window.addEventListener('popstate', this);
 
         switch (this.model.modelData.page) {
-            default:
+            case PageCase.store:
                 {
                     //type Keys = keyof ElementsToListenStore;
                     //type Values = ElementsToListenStore[Keys];
@@ -50,6 +49,13 @@ export class Controller {
                     elementsToListen.viewButtons?.addEventListener('click', this);
                 }
                 break;
+            case PageCase.details:
+                {
+                    const elementsToListen: ElementsToListen['details'] = this.view.getElementsForEvents().details;
+
+                    elementsToListen.images?.addEventListener('click', this);
+                }
+                break;
         }
     }
 
@@ -64,6 +70,7 @@ export class Controller {
             [EventTargetsIDEnum.sorting]: this.sortingEvent,
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+            [EventTargetsIDEnum.detailsImages]: this.detailsImagesEvent,
         };
         if (event.type === 'hashchange') {
             // || event.type === 'popstate'
@@ -144,6 +151,12 @@ export class Controller {
         console.log(`
             this.model.applyQueryParam(event.currentTarget);
         `);
+        this.initViewAndListeners();
+    }
+    private detailsImagesEvent(event: Event): void {
+        if (event.target instanceof HTMLImageElement) {
+            this.model.handleDetailsImagesClick(event.target.src);
+        }
         this.initViewAndListeners();
     }
 }

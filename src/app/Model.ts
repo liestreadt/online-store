@@ -46,6 +46,7 @@ class Model {
             calculatedFilters: null,
             page: this.getPageFromURL(),
             detailsID: Number(this.getDetailsID()),
+            detailsMainImageSrc: '',
         };
         this.shownProductInfo = null;
     }
@@ -229,10 +230,17 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.modelData.detailsMainImageSrc = this.modelData.filteredProducts?.find(
+            (elem) => elem.id === this.modelData.detailsID
+        )?.images[0];
+        console.log();
     }
     sortProducts(sortVariant: sortVariantsEnum) {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
+    }
+    handleDetailsImagesClick(imageSource: string): void {
+        this.modelData.detailsMainImageSrc = imageSource;
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
