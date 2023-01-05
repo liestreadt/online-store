@@ -82,6 +82,7 @@ export interface ElementsToListen {
         sorting: HTMLSelectElement | null;
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
+        cards: HTMLDivElement | null;
     };
 }
 
@@ -95,6 +96,7 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+    cards = 'card-container',
 }
 
 // TODO: view should take options values from this enum

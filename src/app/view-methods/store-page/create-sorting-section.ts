@@ -28,7 +28,7 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     <button class="sorting__small-view">💻</button>
                 </div>
             </div>
-            <div class="sorting__card-container sorting__card-container_small">
+            <div class="sorting__card-container sorting__card-container_small" id="${EventTargetsIDEnum.cards}">
                 ${modelData.filteredProducts?.map((i) => createSroreCard(i)).join('')}
             </div>
         </section>

@@ -1,5 +1,5 @@
 import { PAGES_HASH } from '../../constants/constants';
-import { ModelData, ProductDetail } from '../../intefaces/types';
+import { EventTargetsIDEnum, ModelData, ProductDetail } from '../../intefaces/types';
 
 export default function createSroreCard(product: ProductDetail): string {
     return `
@@ -39,7 +39,7 @@ export default function createSroreCard(product: ProductDetail): string {
                     </div>
                 </div>
                 <div class="product-card__controls">
-                    <button class="product-card__btn-add-to-cart">
+                    <button class="product-card__btn-add-to-cart" id="${EventTargetsIDEnum.cards}-${product.id}">
                         ADD TO CART
                     </button>
                     <a href="${PAGES_HASH.details}${product.id}" class="product-card__link-to-details">

@@ -182,6 +182,7 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+                cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
         };
     }
