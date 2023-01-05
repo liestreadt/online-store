@@ -11,11 +11,11 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
         SortVariantsEnum.RATING_DESCENDING,
     ];
     const sortNamesArr = [
-        'Default',
-        'Price ↑ (ascending)',
-        'Price ↓ (descending)',
-        'Rating ↑ (ascending)',
-        'Rating ↓ (descending)',
+        'default',
+        'price ↑ (ascending)',
+        'price ↓ (descending)',
+        'rating ↑ (ascending)',
+        'rating ↓ (descending)',
     ];
     return `
         <section class="sorting">
@@ -26,7 +26,7 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                             return `
                             <option value="${item}" class="sorting-option" ${
                                 item === modelData.currentOption ? 'selected' : ''
-                            }>Sort: ${sortNamesArr[index]}</option>
+                            }>Sort by ${sortNamesArr[index]}</option>
                             `;
                         })
                         .join('')}
