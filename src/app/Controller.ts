@@ -152,8 +152,13 @@ export class Controller {
         if (event.target instanceof HTMLButtonElement) {
             const length = `${EventTargetsIDEnum.cards}-`.length;
             const cardID = event.target.id.slice(length);
+            const isInCart = this.model.cart?.checkProductInCart(cardID);
 
-            this.model.cart?.addNew(cardID);
+            if (isInCart) {
+                this.model.cart?.drop(cardID);
+            } else {
+                this.model.cart?.addNew(cardID);
+            }
             this.initViewAndListeners();
         }
     }

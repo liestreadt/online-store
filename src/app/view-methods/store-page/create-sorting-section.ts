@@ -29,7 +29,11 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                 </div>
             </div>
             <div class="sorting__card-container sorting__card-container_small" id="${EventTargetsIDEnum.cards}">
-                ${modelData.filteredProducts?.map((i) => createSroreCard(i)).join('')}
+                ${modelData.filteredProducts
+                    ?.map((product) =>
+                        createSroreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
+                    )
+                    .join('')}
             </div>
         </section>
     `;
