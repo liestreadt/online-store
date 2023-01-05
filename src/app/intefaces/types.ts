@@ -59,7 +59,7 @@ export interface ModelData {
     allCategories: string[];
     initialProducts: Array<ProductDetail> | null;
     filteredProducts: Array<ProductDetail> | null;
-    currentOption: HTMLOptionElement | null;
+    currentOption: SortVariantsEnum | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
     page: PageCase;

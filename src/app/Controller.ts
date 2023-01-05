@@ -126,10 +126,9 @@ export class Controller {
     }
     private sortingEvent(event: Event): void {
         if (event.target instanceof HTMLSelectElement) {
-            const currOption = event.target.querySelector(`option[value=${event.target.value}]`);
             const key = 'sorting';
             this.model.createQueryParamFromEvent(key, event.target?.value);
-            this.model.sortProducts(event.target?.value as SortVariantsEnum, currOption as HTMLOptionElement);
+            this.model.sortProducts(event.target?.value as SortVariantsEnum);
         }
         this.initViewAndListeners();
     }

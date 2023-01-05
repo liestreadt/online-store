@@ -1,25 +1,35 @@
 import { ModelData, SortVariantsEnum } from '../../intefaces/types';
-import { EventTargetsIDEnum, FilterKeys } from '../../intefaces/types';
+import { EventTargetsIDEnum } from '../../intefaces/types';
 import createSroreCard from './create-store-card';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
+    const sortVariantsArr = [
+        SortVariantsEnum.DEFAULT,
+        SortVariantsEnum.PRICE_ASCENDING,
+        SortVariantsEnum.PRICE_DESCENDING,
+        SortVariantsEnum.RATING_ASCENDING,
+        SortVariantsEnum.RATING_DESCENDING,
+    ];
+    const sortNamesArr = [
+        'Default',
+        'Price ↑ (ascending)',
+        'Price ↓ (descending)',
+        'Rating ↑ (ascending)',
+        'Rating ↓ (descending)',
+    ];
     return `
         <section class="sorting">
             <div class="sorting-header">
-                <select name="" id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
-                    <option value="${SortVariantsEnum.DEFAULT}" class="sorting-option">Sort default</option>
-                    <option value="${
-                        SortVariantsEnum.PRICE_ASCENDING
-                    }" class="sorting-option">Sort by price (ascending)</option>
-                    <option value="${
-                        SortVariantsEnum.PRICE_DESCENDING
-                    }" class="sorting-option">Sort by price (descending)</option>
-                    <option value="${
-                        SortVariantsEnum.RATING_ASCENDING
-                    }" class="sorting-option">Sort by rating (ascending)</option>
-                    <option value="${
-                        SortVariantsEnum.RATING_DESCENDING
-                    }" class="sorting-option">Sort by rating (descending)</option>
+                <select id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
+                    ${sortVariantsArr
+                        .map((item, index) => {
+                            return `
+                            <option value="${item}" class="sorting-option" ${
+                                item === modelData.currentOption ? 'selected' : ''
+                            }>Sort: ${sortNamesArr[index]}</option>
+                            `;
+                        })
+                        .join('')}
                 </select>
                 <div class="sorting__total-found">
                     Found: <span class="sorting__amount">${modelData.filteredProducts?.length}</span>

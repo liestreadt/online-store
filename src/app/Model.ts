@@ -140,6 +140,9 @@ class Model {
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
     }
+    applyQueryParamsToSorting() {
+        this.sortProducts(this.modelData.activeFilters.sorting?.[0] as SortVariantsEnum);
+    }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
             const allProducts: Array<ProductDetail> = this.productJSON.products;
@@ -181,7 +184,8 @@ class Model {
     createQueryParamFromEvent(key: FilterKeys, value: string) {
         switch (key) {
             case 'sorting': {
-                // TODO: create url with added new sorting params
+                this.changeParamInURL('sorting', value);
+                this.reInit();
                 break;
             }
             case 'category': {
@@ -232,9 +236,10 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.applyQueryParamsToSorting();
     }
-    sortProducts(sortVariant: SortVariantsEnum, currOption: HTMLOptionElement): void {
-        this.modelData.currentOption = currOption;
+    sortProducts(sortVariant: SortVariantsEnum): void {
+        this.modelData.currentOption = sortVariant;
         switch (sortVariant) {
             case SortVariantsEnum.DEFAULT:
                 {
@@ -311,6 +316,7 @@ class Model {
     reInit() {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();
+        this.applyQueryParamsToSorting();
         this.applyQueryParam();
     }
 }
