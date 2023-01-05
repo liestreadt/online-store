@@ -69,8 +69,8 @@ export interface ElementsToListen {
         copy: HTMLButtonElement | null;
         category: HTMLDivElement | null;
         brand: HTMLDivElement | null;
-        price: HTMLInputElement | null; // double-input element
-        stock: HTMLInputElement | null; // double-input element
+        price: HTMLDivElement | null; // double-input element
+        stock: HTMLDivElement | null; // double-input element
         sorting: HTMLSelectElement | null;
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
