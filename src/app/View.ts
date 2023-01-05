@@ -17,10 +17,11 @@ import {
     ElementsToListen,
     EventTargetsIDEnum,
     PageCase,
+    FilterKeys,
 } from './intefaces/types';
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
-import { CURRENCY_SYMBOL } from './constants/constants';
+import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/Functions';
 
 class View {
@@ -138,14 +139,14 @@ class View {
         const sliderContainerStock = document.querySelector(`#${EventTargetsIDEnum.stock}`) as HTMLElement;
 
         const minPrice = this.modelData.initialFilterValues?.minPrice || 0;
-        const minUserPrice = this.modelData.calculatedFilters?.minUserPrice || 0;
+        const minUserPrice = this.modelData.shownProductInfo?.minPrice || 0;
         const maxPrice = this.modelData.initialFilterValues?.maxPrice || Infinity;
-        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || Infinity;
+        const maxUserPrice = this.modelData.shownProductInfo?.maxPrice || Infinity;
 
         const minStock = this.modelData.initialFilterValues?.minStock || 0;
-        const minUserStock = this.modelData.calculatedFilters?.minUserStock || 0;
+        const minUserStock = this.modelData.shownProductInfo?.minStock || 0;
         const maxStock = this.modelData.initialFilterValues?.maxStock || Infinity;
-        const maxUserStock = this.modelData.calculatedFilters?.maxUserStock || Infinity;
+        const maxUserStock = this.modelData.shownProductInfo?.maxStock || Infinity;
 
         const dualSliderPrice = new DualSlider(minPrice, maxPrice, minUserPrice, maxUserPrice, CURRENCY_SYMBOL);
         const dualSliderStock = new DualSlider(minStock, maxStock, minUserStock, maxUserStock);

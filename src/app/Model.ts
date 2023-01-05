@@ -135,7 +135,10 @@ class Model {
             this.filterCalculator.updateSearchName(active.searching[0]);
         }
         this.modelData.calculatedFilters = this.filterCalculator;
-        this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
+        this.shownProductInfo = this.filterCalculator.recalculate(
+            this.productJSON?.products || null,
+            history.state?.key
+        );
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
     }
@@ -176,7 +179,7 @@ class Model {
             return productsSummaryInfo;
         }
     }
-    createQueryParamFromEvent(key: FilterKeys, value: string) {
+    createQueryParamFromEvent(key: FilterKeys, value: string, secondValue?: number) {
         switch (key) {
             case 'sorting': {
                 // TODO: create url with added new sorting params
@@ -201,22 +204,42 @@ class Model {
                 break;
             }
             case 'priceMin': {
-                this.changeParamInURL('priceMin', value);
+                if (secondValue && +value > secondValue) {
+                    this.changeParamInURL('priceMax', value);
+                    this.changeParamInURL('priceMin', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('priceMin', value);
+                }
                 this.reInit();
                 break;
             }
             case 'priceMax': {
-                this.changeParamInURL('priceMax', value);
+                if (secondValue && +value < secondValue) {
+                    this.changeParamInURL('priceMin', value);
+                    this.changeParamInURL('priceMax', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('priceMax', value);
+                }
                 this.reInit();
                 break;
             }
             case 'stockMin': {
-                this.changeParamInURL('stockMin', value);
+                if (secondValue && +value > secondValue) {
+                    this.changeParamInURL('stockMax', value);
+                    this.changeParamInURL('stockMin', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('stockMin', value);
+                }
                 this.reInit();
                 break;
             }
             case 'stockMax': {
-                this.changeParamInURL('stockMax', value);
+                if (secondValue && +value < secondValue) {
+                    this.changeParamInURL('stockMin', value);
+                    this.changeParamInURL('stockMax', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('stockMax', value);
+                }
                 this.reInit();
                 break;
             }
