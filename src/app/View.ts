@@ -30,7 +30,7 @@ class View {
         this.renderPage();
     }
     renderPage() {
-        if (!this.modelData.filteredProducts) {
+        if (document.readyState !== 'complete') {
             //TODO: if no product is sutable for filters, show empty sorting area
             this.renderLoadingPage();
         } else {
@@ -91,12 +91,11 @@ class View {
     }
     renderProdDetailsPage() {
         const containerMain = document.querySelector('main');
-        // skeleton for the future, when current product will be given after click on detail
-        const products = this.modelData.filteredProducts;
-        if (containerMain && products) {
+        const currentProduct = this.modelData.filteredProducts?.find((item) => item.id === this.modelData.detailsID);
+        if (containerMain && currentProduct) {
             containerMain.outerHTML = `
                 <main class="main-details">
-                    ${this.getProdDetailsContainer(products[1])}
+                    ${this.getProdDetailsContainer(currentProduct)}
                 </main>
             `;
         }

@@ -19,12 +19,16 @@ export default function createProdDetailsContainer(product: ProductDetail): stri
                 <div class="details__aside-slides">
                     ${product.images
                         .map((item) => {
-                            return `<img src="${item}" alt="macbook">`;
+                            return `<img src="${item}" alt="${product.title}">`;
                         })
                         .join('')}
                 </div>
                 <div class="details__main-picture">
-                    <img src="https://i.dummyjson.com/data/products/6/3.png" alt="macbook_id">
+                    <img src="${
+                        product.images.filter((i) => i.match(/thumbnail/)).length
+                            ? product.images.filter((i) => i.match(/thumbnail/))
+                            : product.images[0]
+                    }" alt="${product.title}">
                 </div>
                 <div class="details__info">
                     <div class="details__description details-item">

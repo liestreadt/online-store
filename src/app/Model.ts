@@ -45,7 +45,7 @@ class Model {
             shownProductInfo: null,
             calculatedFilters: null,
             page: this.getPageFromURL(),
-            detailsID: '',
+            detailsID: Number(this.getDetailsID()),
         };
         this.shownProductInfo = null;
     }
@@ -88,7 +88,7 @@ class Model {
     updatePage() {
         this.modelData.page = this.getPageFromURL();
         if (this.modelData.page === PageCase.details) {
-            this.modelData.detailsID = this.getDetailsID();
+            this.modelData.detailsID = Number(this.getDetailsID());
         }
         this.readParamsFromURL();
         this.findInitialFilterValues();

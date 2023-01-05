@@ -61,7 +61,7 @@ export interface ModelData {
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
-    detailsID: string;
+    detailsID: number;
 }
 export interface ElementsToListen {
     store: {
