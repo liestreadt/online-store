@@ -118,7 +118,7 @@ class View {
         document.body.innerHTML += `<main></main>`;
     }
     renderHeader() {
-        document.body.innerHTML = createHeader();
+        document.body.innerHTML = createHeader(this.modelData);
     }
     renderFooter() {
         document.body.innerHTML += createFooter();

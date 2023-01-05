@@ -1,3 +1,4 @@
+import Cart from '../Cart';
 import { FilterCalculator } from '../FilterCalculator';
 
 export interface ProductDetail {
@@ -70,6 +71,7 @@ export interface ModelData {
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
     detailsID: string;
+    cart: Cart | null;
 }
 export interface ElementsToListen {
     store: {
