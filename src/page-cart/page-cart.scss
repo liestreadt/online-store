@@ -91,6 +91,11 @@
         font-weight: bold;
     }
 
+    &__description {
+        height: 3.6rem;
+        overflow: hidden;
+    }
+
     &__metrics {
         display: flex;
         justify-content: space-around;
@@ -132,6 +137,9 @@
         text-align: center;
     }
 }
+.cart-item > * {
+    margin-left: 0.5rem;
+}
 
 .summary {
     display: flex;
@@ -169,7 +177,7 @@
     &__right-side {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: center;
     }
 
     &__promo-input {
@@ -177,6 +185,10 @@
         padding: $padding-small;
         background-color: $color-blue-gradient;
         font-size: inherit;
+    }
+
+    &__example {
+        padding-top: $padding-tiny;
     }
 
     &__btn-buy {
