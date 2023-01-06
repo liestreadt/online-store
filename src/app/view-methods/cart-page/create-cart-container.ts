@@ -41,7 +41,7 @@ export default function createCartContainer(cart: Cart | null): string {
                         class="cart__amount-num"
                         type="number"
                         min="1"
-                        max="${maxPage ?? 1}"
+                        max="${products?.size ?? 1}"
                         value="${limit ?? 3}">
                 </div>
                 <div class="cart__pagination">

@@ -76,6 +76,7 @@ class Cart {
                 amount: product.amount,
             });
         });
+        this.productsToShow = this.getProductsToShow();
         localStorage.setItem(CART_ID, JSON.stringify(saveList));
     }
     getTotalPrice(): number {

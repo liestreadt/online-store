@@ -110,7 +110,7 @@ class View {
             containerMain.outerHTML = `
                 <main class="main-cart">
                     ${this.getCartContainer(this.modelData.cart ?? null)}
-                    ${this.getCartSummary()}
+                    ${this.modelData.cart && this.getCartSummary(this.modelData.cart)}
                 </main>
             `;
         }
@@ -159,8 +159,8 @@ class View {
     getCartContainer(cart: Cart | null): string {
         return createCartContainer(cart);
     }
-    getCartSummary(): string {
-        return createCartSummary();
+    getCartSummary(cart: Cart): string {
+        return createCartSummary(cart);
     }
     getButtonsArray() {
         return [...document.body.querySelectorAll('button')];
