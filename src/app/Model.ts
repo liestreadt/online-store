@@ -58,11 +58,11 @@ class Model {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
+            this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.readParamsFromURL();
             this.findInitialFilterValues();
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
-            this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.modelData.cart = this.cart;
         } catch {
             throw new Error('Fail to connect dummy json');
@@ -146,6 +146,18 @@ class Model {
         );
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
+    }
+    applyQueryParamsToCart() {
+        const active = this.modelData.activeFilters;
+        if (!this.cart) {
+            throw new Error('Cart is not initialized');
+        }
+        if (active.cartListLimit) {
+            this.cart.showProperties.limit = +active.cartListLimit;
+        }
+        if (active.cartListPage) {
+            this.cart.showProperties.listPage = +active.cartListPage;
+        }
     }
     applyQueryParamsToSorting() {
         this.sortProducts(this.modelData.activeFilters.sorting?.[0] as SortVariantsEnum);
@@ -264,6 +276,7 @@ class Model {
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
         this.applyQueryParamsToSorting();
+        this.applyQueryParamsToCart();
     }
     getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
         filteredProductsInModelData.sort((prev, curr) => {

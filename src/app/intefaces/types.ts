@@ -47,6 +47,8 @@ export const filterParamsKeys = [
     'stockMin',
     'stockMax',
     'searching',
+    'cartListLimit',
+    'cartListPage',
 ] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];
@@ -117,4 +119,8 @@ export enum PageCase {
     cart,
     details,
     error,
+}
+export interface ShowCart {
+    limit: number;
+    listPage: number;
 }

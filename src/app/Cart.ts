@@ -1,14 +1,23 @@
 import { CART_ID } from './constants/constants';
-import { ProductCart, ProductDetails, ProductShort } from './intefaces/types';
+import { ProductCart, ProductDetails, ProductShort, ShowCart } from './intefaces/types';
 
+const DEFAULT_LIMIT = 3;
+const DEFAULT_CART_PAGE = 2;
 class Cart {
     productsAll: ProductDetails[] | null;
     products: Map<string, ProductCart>;
+    showProperties: ShowCart;
+    productsToShow: ProductCart[] | null;
 
     constructor(productsAll: ProductDetails[] | null) {
         this.productsAll = productsAll;
         this.products = new Map();
         this.restore();
+        this.showProperties = {
+            limit: DEFAULT_LIMIT,
+            listPage: DEFAULT_CART_PAGE,
+        };
+        this.productsToShow = this.getProductsToShow();
     }
     restore(): void {
         let saveList: ProductShort[] = [];
@@ -38,6 +47,18 @@ class Cart {
             };
         }
         return null;
+    }
+    getProductsToShow(): ProductCart[] | null {
+        if (this.products.size === 0) {
+            return null;
+        }
+        const { limit, listPage } = this.showProperties;
+        const list: ProductCart[] = [...this.products].map(([id, product]) => product);
+        // index + 1 is used to enumerate products in view
+        list.filter((product, index) => {
+            return index + 1 > (listPage - 1) * limit && index + 1 <= listPage * limit;
+        });
+        return list;
     }
     private save(): void {
         const saveList: ProductShort[] = [];

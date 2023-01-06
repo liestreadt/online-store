@@ -3,7 +3,6 @@ import { CURRENCY_SYMBOL } from '../../constants/constants';
 import { ProductCart, ProductDetails } from '../../intefaces/types';
 
 export default function createCartItem(product: ProductCart): string {
-    console.log('product', product);
     return `
         <div class="cart-item">
             <div class="cart-item__num">
