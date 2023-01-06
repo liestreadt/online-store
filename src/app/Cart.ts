@@ -33,6 +33,14 @@ class Cart {
     get limit() {
         return this.showProperties.limit;
     }
+    set listPage(newPage: number) {
+        this.showProperties.listPage = newPage;
+        this.productsToShow = this.getProductsToShow();
+    }
+    checkValidPage(page: number): boolean {
+        const maxListPage = Math.ceil(this.products.size / this.limit);
+        return page > 0 && page <= maxListPage;
+    }
     restore(): void {
         let saveList: ProductShort[] = [];
         const list = localStorage.getItem(CART_ID);

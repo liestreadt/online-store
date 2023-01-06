@@ -94,14 +94,23 @@ export class Controller {
         }
         console.log(`No event handler for ${event.type} and ${event.target}`);
     }
-    pageBackEvent() {
+    pageBackEvent(event: Event) {
         console.log('pageBackEvent!');
+        if (event.target instanceof HTMLElement && this.model.cart) {
+            const value = this.model.cart.showProperties.listPage - 1;
+            this.model.createQueryParamFromEvent('cartListPage', `${value}`);
+            this.initViewAndListeners();
+        }
     }
-    pageForwardEvent() {
+    pageForwardEvent(event: Event) {
         console.log('pageForwardEvent!');
+        if (event.target instanceof HTMLElement && this.model.cart) {
+            const value = this.model.cart.showProperties.listPage + 1;
+            this.model.createQueryParamFromEvent('cartListPage', `${value}`);
+            this.initViewAndListeners();
+        }
     }
     listLimitEvent(event: Event) {
-        console.log('listLimitEvent!');
         if (event.target instanceof HTMLInputElement) {
             const newLimit = event.target.value;
             this.model.createQueryParamFromEvent('cartListLimit', newLimit);

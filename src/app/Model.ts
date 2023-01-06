@@ -156,7 +156,14 @@ class Model {
             this.cart.limit = +active.cartListLimit[0];
         }
         if (active.cartListPage) {
-            this.cart.showProperties.listPage = +active.cartListPage[0];
+            const pageFromQuery: number = +active.cartListPage[0];
+            const maxPage: number = this.cart.maxPage();
+            if (maxPage < pageFromQuery) {
+                this.changeParamInURL('cartListPage', `${maxPage}`);
+                this.reInit();
+            } else {
+                this.cart.listPage = +active.cartListPage[0];
+            }
         }
     }
     applyQueryParamsToSorting() {
@@ -277,6 +284,13 @@ class Model {
                     this.changeParamInURL('cartListLimit', `${newLimit}`);
                 }
                 this.reInit();
+                break;
+            }
+            case 'cartListPage': {
+                if (this.cart && this.cart.checkValidPage(+value)) {
+                    this.changeParamInURL('cartListPage', value);
+                    this.reInit();
+                }
                 break;
             }
         }
