@@ -239,9 +239,6 @@ class Model {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
     }
-    handleDetailsImagesClick(imageSource: string): void {
-        this.modelData.detailsMainImageSrc = imageSource;
-    }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
         const urlSearch: URLSearchParams = url.searchParams;

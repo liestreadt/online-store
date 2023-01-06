@@ -4,7 +4,10 @@ import createFooter from './view-methods/store-page/create-footer';
 import createHeader from './view-methods/store-page/create-header';
 import createStoreFilters from './view-methods/store-page/create-store-filters';
 import createSortingSection from './view-methods/store-page/create-sorting-section';
-import createProdDetailsContainer from './view-methods/prod-detail-page/create-prod-details-container';
+import {
+    calculateImages,
+    createProdDetailsContainer,
+} from './view-methods/prod-detail-page/create-prod-details-container';
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
 
 import {
@@ -46,6 +49,15 @@ class View {
                 case PageCase.details:
                     {
                         this.renderProdDetailsPage();
+                        const asd = this.modelData.filteredProducts?.find(
+                            (item) => item.id === this.modelData.detailsID
+                        );
+                        if (asd) {
+                            calculateImages(asd).then((data) => {
+                                console.log(data);
+                                this.renderImages(data);
+                            });
+                        }
                     }
                     break;
                 case PageCase.cart:
@@ -70,6 +82,20 @@ class View {
             this.addFocusToLastUsed();
         }
     }
+
+    renderImages(data: string[]) {
+        const cont = document.querySelector('#details-images');
+        if (cont) {
+            cont.innerHTML += `
+                ${data
+                    .map((item) => {
+                        return `<img src="${item}" alt="title">`;
+                    })
+                    .join('')}
+            `;
+        }
+    }
+
     renderLoadingPage() {
         document.body.innerHTML = `
             <main class="main-loading">
@@ -196,6 +222,20 @@ class View {
             const textLength = searchField.value.length;
             searchField.focus();
             searchField.setSelectionRange(textLength, textLength);
+        }
+    }
+    handleDetailsImagesClick(imageSource: string): void {
+        const mainImg = document.body.querySelector('.details__main-picture') as HTMLDivElement;
+        if (mainImg) {
+            mainImg.setAttribute(
+                'style',
+                `
+                background: url('${imageSource}');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+            `
+            );
         }
     }
 }

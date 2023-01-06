@@ -1,6 +1,20 @@
 import { ProductDetail } from '../../intefaces/types';
 
-export default function createProdDetailsContainer(product: ProductDetail, mainImageSrc: string): string {
+export async function calculateImages(product: ProductDetail) {
+    const asd: (string | null)[] = [];
+    for (let i = 0; i < product.images.length; i++) {
+        const imgResponse = await fetch(product.images[i], { method: 'HEAD' });
+        const imgSize = imgResponse.headers.get('content-length');
+        if (asd.includes(imgSize)) {
+            delete product.images[i];
+        } else {
+            asd.push(imgSize);
+        }
+    }
+    return product.images;
+}
+
+export function createProdDetailsContainer(product: ProductDetail, mainImageSrc: string): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>
@@ -17,11 +31,6 @@ export default function createProdDetailsContainer(product: ProductDetail, mainI
             </h2>
             <div class="details__body">
                 <div id="details-images" class="details__aside-slides">
-                    ${product.images
-                        .map((item) => {
-                            return `<img src="${item}" alt="${product.title}">`;
-                        })
-                        .join('')}
                 </div>
                 <div
                     class="details__main-picture"
