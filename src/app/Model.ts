@@ -253,11 +253,6 @@ class Model {
         if (this.modelData.filteredProducts) {
             this.modelData.currentOption = sortVariant;
             switch (sortVariant) {
-                default:
-                    {
-                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
-                    }
-                    break;
                 case SortVariantsEnum.DEFAULT:
                     {
                         this.getAscendingSorting(this.modelData.filteredProducts, 'id');
@@ -281,6 +276,11 @@ class Model {
                 case SortVariantsEnum.RATING_DESCENDING:
                     {
                         this.getDescendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                default:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
                     }
                     break;
             }
