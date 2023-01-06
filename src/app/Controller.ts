@@ -48,6 +48,7 @@ export class Controller {
                     elementsToListen.sorting?.addEventListener('change', this);
                     elementsToListen.searching?.addEventListener('input', this);
                     elementsToListen.viewButtons?.addEventListener('click', this);
+                    elementsToListen.cards?.addEventListener('click', this);
                 }
                 break;
         }
@@ -64,6 +65,7 @@ export class Controller {
             [EventTargetsIDEnum.sorting]: this.sortingEvent,
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+            [EventTargetsIDEnum.cards]: this.addToCartEvent,
         };
         if (event.type === 'hashchange') {
             // || event.type === 'popstate'
@@ -150,5 +152,19 @@ export class Controller {
             this.model.applyQueryParam(event.currentTarget);
         `);
         this.initViewAndListeners();
+    }
+    private addToCartEvent(event: Event): void {
+        if (event.target instanceof HTMLButtonElement) {
+            const length = `${EventTargetsIDEnum.cards}-`.length;
+            const cardID = event.target.id.slice(length);
+            const isInCart = this.model.cart?.checkProductInCart(cardID);
+
+            if (isInCart) {
+                this.model.cart?.drop(cardID);
+            } else {
+                this.model.cart?.addNew(cardID);
+            }
+            this.initViewAndListeners();
+        }
     }
 }

@@ -119,7 +119,7 @@ class View {
         document.body.innerHTML += `<main></main>`;
     }
     renderHeader() {
-        document.body.innerHTML = createHeader();
+        document.body.innerHTML = createHeader(this.modelData);
     }
     renderFooter() {
         document.body.innerHTML += createFooter();
@@ -183,6 +183,7 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+                cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
         };
     }

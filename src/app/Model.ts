@@ -46,6 +46,7 @@ class Model {
             calculatedFilters: null,
             page: this.getPageFromURL(),
             detailsID: '',
+            cart: null,
         };
         this.shownProductInfo = null;
     }
@@ -59,6 +60,7 @@ class Model {
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
             this.cart = new Cart(this.productJSON && this.productJSON.products);
+            this.modelData.cart = this.cart;
         } catch {
             throw new Error('Fail to connect dummy json');
         }
