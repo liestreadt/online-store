@@ -1,11 +1,11 @@
 import { CART_ID } from './constants/constants';
-import { ProductCart, ProductDetail, ProductShort } from './intefaces/types';
+import { ProductCart, ProductDetails, ProductShort } from './intefaces/types';
 
 class Cart {
-    productsAll: ProductDetail[] | null;
+    productsAll: ProductDetails[] | null;
     products: Map<string, ProductCart>;
 
-    constructor(productsAll: ProductDetail[] | null) {
+    constructor(productsAll: ProductDetails[] | null) {
         this.productsAll = productsAll;
         this.products = new Map();
         this.restore();
@@ -24,7 +24,7 @@ class Cart {
         }
     }
     getProduct(info: ProductShort): ProductCart | null {
-        const product: ProductDetail | null =
+        const product: ProductDetails | null =
             this.productsAll?.find((product) => {
                 return product.id === info.id;
             }) || null;
@@ -64,7 +64,7 @@ class Cart {
         return totalAmount;
     }
     addNew(id: string): void {
-        const product: ProductDetail | null =
+        const product: ProductDetails | null =
             this.productsAll?.find((product) => {
                 return product.id === +id;
             }) || null;

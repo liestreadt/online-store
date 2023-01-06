@@ -1,11 +1,11 @@
 import { CAPTION_ADD, CAPTION_DROP, PAGES_HASH } from '../../constants/constants';
-import { EventTargetsIDEnum, ModelData, ProductDetail } from '../../intefaces/types';
+import { EventTargetsIDEnum, ModelData, ProductDetails } from '../../intefaces/types';
 
 function getCapture(isInCart: boolean): string {
     return isInCart ? CAPTION_DROP.toUpperCase() : CAPTION_ADD.toUpperCase();
 }
 
-export default function createSroreCard(product: ProductDetail, isInCart: boolean): string {
+export default function createSroreCard(product: ProductDetails, isInCart: boolean): string {
     return `
         <div class="product-card">
             <h2 class="product-card__header header_small">

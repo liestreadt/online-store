@@ -1,6 +1,6 @@
-import { ProductDetail } from '../../intefaces/types';
+import { ProductDetails } from '../../intefaces/types';
 
-export default function createCartItem(product: ProductDetail): string {
+export default function createCartItem(product: ProductDetails): string {
     return `
         <div class="cart-item">
             <div class="cart-item__num">
