@@ -1,7 +1,9 @@
 import Cart from '../../Cart';
+import { CURRENCY_SYMBOL } from '../../constants/constants';
 import { ProductCart, ProductDetails } from '../../intefaces/types';
 
 export default function createCartItem(product: ProductCart): string {
+    console.log('product', product);
     return `
         <div class="cart-item">
             <div class="cart-item__num">
@@ -10,8 +12,8 @@ export default function createCartItem(product: ProductCart): string {
             <div class="cart-item__pic"
                 style="
                 background: url(${
-                    product.images.filter((i) => i.match(/thumbnail/)).length
-                        ? product.images.filter((i) => i.match(/thumbnail/))
+                    product.images.filter((url) => url.match(/thumbnail/)).length
+                        ? product.images.filter((url) => url.match(/thumbnail/))
                         : product.images[0]
                 });
                 background-position: center;
@@ -47,7 +49,7 @@ export default function createCartItem(product: ProductCart): string {
                     </button>
                 </div>
                 <div class="cart-item__price">
-                    €46.00
+                    ${CURRENCY_SYMBOL}${product.getProductTotalPrice()}
                 </div>
             </div>
         </div>

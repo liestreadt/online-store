@@ -1,6 +1,13 @@
 import Cart from '../../Cart';
 import createCartItem from './create-cart-item';
 
+function createList(products: Cart['products']): string {
+    const list: string[] = [];
+    products.forEach((product) => {
+        list.push(createCartItem(product));
+    });
+    return list.join('');
+}
 export default function createCartContainer(products: Cart['products'] | null): string {
     console.log('products.size', products, products?.size);
     if (!products || products.size === 0) {
@@ -37,9 +44,7 @@ export default function createCartContainer(products: Cart['products'] | null): 
                 </div>
             </h2>
             <div class="cart__list">
-                ${products.forEach((product) => {
-                    createCartItem(product);
-                })}
+                ${createList(products)}
             </div>
         </section>
     `;
