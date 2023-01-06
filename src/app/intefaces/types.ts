@@ -113,9 +113,7 @@ export enum EventTargetsIDEnum {
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
     cards = 'card-container',
-}
 
-export enum CartEventTargetsIDEnum {
     PAGE_BACK = 'pagination-back',
     PAGE_FORWARD = 'pagination-forward',
     LIST_LIMIT = 'list-limit',

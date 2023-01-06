@@ -18,7 +18,6 @@ import {
     EventTargetsIDEnum,
     PageCase,
     FilterKeys,
-    CartEventTargetsIDEnum,
 } from './intefaces/types';
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
@@ -184,12 +183,12 @@ class View {
                 cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
             cart: {
-                pageBack: document.querySelector(`#${CartEventTargetsIDEnum.PAGE_BACK}`),
-                pageForward: document.querySelector(`#${CartEventTargetsIDEnum.PAGE_FORWARD}`),
-                listLimit: document.querySelector(`#${CartEventTargetsIDEnum.LIST_LIMIT}`),
-                cartList: document.querySelector(`#${CartEventTargetsIDEnum.CART_LIST}`),
-                promoInput: document.querySelector(`#${CartEventTargetsIDEnum.PROMO}`),
-                buyButton: document.querySelector(`#${CartEventTargetsIDEnum.BUY}`),
+                pageBack: document.querySelector(`#${EventTargetsIDEnum.PAGE_BACK}`),
+                pageForward: document.querySelector(`#${EventTargetsIDEnum.PAGE_FORWARD}`),
+                listLimit: document.querySelector(`#${EventTargetsIDEnum.LIST_LIMIT}`),
+                cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
+                promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
             },
         };
         return elements;

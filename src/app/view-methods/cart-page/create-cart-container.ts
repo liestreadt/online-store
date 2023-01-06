@@ -1,5 +1,5 @@
 import Cart from '../../Cart';
-import { CartEventTargetsIDEnum } from '../../intefaces/types';
+import { EventTargetsIDEnum } from '../../intefaces/types';
 import createCartItem from './create-cart-item';
 
 function createList(cart: Cart): string {
@@ -40,7 +40,7 @@ export default function createCartContainer(cart: Cart | null): string {
                 <div class="cart__amount">
                     Show by: <input
                         class="cart__amount-num"
-                        id="${CartEventTargetsIDEnum.LIST_LIMIT}"
+                        id="${EventTargetsIDEnum.LIST_LIMIT}"
                         type="number"
                         min="1"
                         max="${products?.size ?? 1}"
@@ -50,18 +50,18 @@ export default function createCartContainer(cart: Cart | null): string {
                     <div class="pagination-text">
                         Page:
                     </div>
-                    <a class="pagination-left" id="${CartEventTargetsIDEnum.PAGE_BACK}">
+                    <a class="pagination-left" id="${EventTargetsIDEnum.PAGE_BACK}">
                         ←
                     </a>
                     <div class="pagination-current">
                         ${listPage}
                     </div>
-                    <a class="pagination-right" id="${CartEventTargetsIDEnum.PAGE_FORWARD}">
+                    <a class="pagination-right" id="${EventTargetsIDEnum.PAGE_FORWARD}">
                         →
                     </a>
                 </div>
             </h2>
-            <div class="cart__list" id="${CartEventTargetsIDEnum.CART_LIST}">
+            <div class="cart__list" id="${EventTargetsIDEnum.CART_LIST}">
                 ${createList(cart)}
             </div>
         </section>

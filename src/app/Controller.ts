@@ -1,7 +1,7 @@
 import View from './View';
 import Model from './Model';
 import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum } from './intefaces/types';
-import { EventTargetsIDEnum, CartEventTargetsIDEnum } from './intefaces/types';
+import { EventTargetsIDEnum } from './intefaces/types';
 import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
@@ -54,7 +54,7 @@ export class Controller {
                 elementsToListen.pageForward?.addEventListener('click', this);
                 elementsToListen.listLimit?.addEventListener('change', this);
                 elementsToListen.cartList?.addEventListener('click', this);
-                elementsToListen.promoInput?.addEventListener('change', this);
+                elementsToListen.promoInput?.addEventListener('input', this);
                 elementsToListen.buyButton?.addEventListener('click', this);
                 break;
             }
@@ -74,12 +74,12 @@ export class Controller {
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
             [EventTargetsIDEnum.cards]: this.addToCartEvent,
 
-            [CartEventTargetsIDEnum.PAGE_BACK]: this.pageBackEvent,
-            [CartEventTargetsIDEnum.PAGE_FORWARD]: this.pageForwardEvent,
-            [CartEventTargetsIDEnum.LIST_LIMIT]: this.listLimitEvent,
-            [CartEventTargetsIDEnum.CART_LIST]: this.cartListEvent,
-            [CartEventTargetsIDEnum.PROMO]: this.promoInputEvent,
-            [CartEventTargetsIDEnum.BUY]: this.buyButtonEvent,
+            [EventTargetsIDEnum.PAGE_BACK]: this.pageBackEvent,
+            [EventTargetsIDEnum.PAGE_FORWARD]: this.pageForwardEvent,
+            [EventTargetsIDEnum.LIST_LIMIT]: this.listLimitEvent,
+            [EventTargetsIDEnum.CART_LIST]: this.cartListEvent,
+            [EventTargetsIDEnum.PROMO]: this.promoInputEvent,
+            [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
         };
         if (event.type === 'hashchange') {
             // || event.type === 'popstate'
@@ -100,8 +100,13 @@ export class Controller {
     pageForwardEvent() {
         console.log('pageForwardEvent!');
     }
-    listLimitEvent() {
+    listLimitEvent(event: Event) {
         console.log('listLimitEvent!');
+        if (event.target instanceof HTMLInputElement) {
+            const newLimit = event.target.value;
+            this.model.createQueryParamFromEvent('cartListLimit', newLimit);
+            this.initViewAndListeners();
+        }
     }
     cartListEvent() {
         console.log('cartListEvent!');

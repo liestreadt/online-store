@@ -1,6 +1,6 @@
 import Cart from '../../Cart';
 import { CURRENCY_SYMBOL } from '../../constants/constants';
-import { CartEventTargetsIDEnum } from '../../intefaces/types';
+import { EventTargetsIDEnum } from '../../intefaces/types';
 
 export default function createCartSummary(cart: Cart): string {
     if (cart.products.size === 0) {
@@ -26,14 +26,14 @@ export default function createCartSummary(cart: Cart): string {
                             type="search"
                             placeholder="Enter promo code"
                             class="summary__promo-input"
-                            id="${CartEventTargetsIDEnum.PROMO}"
+                            id="${EventTargetsIDEnum.PROMO}"
                         >
                     </div>
                     <div class="summary__example">
                         Test promo-codes: "rss", "epam"
                     </div>
                 </div>
-                <button class="summary__btn-buy" id="${CartEventTargetsIDEnum.BUY}">
+                <button class="summary__btn-buy" id="${EventTargetsIDEnum.BUY}">
                     Buy Now
                 </button>
             </div>

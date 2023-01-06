@@ -153,10 +153,10 @@ class Model {
             throw new Error('Cart is not initialized');
         }
         if (active.cartListLimit) {
-            this.cart.showProperties.limit = +active.cartListLimit;
+            this.cart.limit = +active.cartListLimit[0];
         }
         if (active.cartListPage) {
-            this.cart.showProperties.listPage = +active.cartListPage;
+            this.cart.showProperties.listPage = +active.cartListPage[0];
         }
     }
     applyQueryParamsToSorting() {
@@ -268,6 +268,16 @@ class Model {
             case 'searching': {
                 this.changeParamInURL('searching', value);
                 this.reInit();
+                break;
+            }
+            case 'cartListLimit': {
+                if (this.cart) {
+                    const integer = +value < 1 ? 1 : Math.floor(+value);
+                    const newLimit = Math.min(integer, this.cart.products.size);
+                    this.changeParamInURL('cartListLimit', `${newLimit}`);
+                }
+                this.reInit();
+                break;
             }
         }
     }

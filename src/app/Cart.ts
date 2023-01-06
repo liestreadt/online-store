@@ -26,6 +26,13 @@ class Cart {
         }
         return 1;
     }
+    set limit(newLimit: number) {
+        this.showProperties.limit = newLimit;
+        this.productsToShow = this.getProductsToShow();
+    }
+    get limit() {
+        return this.showProperties.limit;
+    }
     restore(): void {
         let saveList: ProductShort[] = [];
         const list = localStorage.getItem(CART_ID);
