@@ -1,6 +1,6 @@
 import { ModelData, SortVariantsEnum } from '../../intefaces/types';
 import { EventTargetsIDEnum } from '../../intefaces/types';
-import createSroreCard from './create-store-card';
+import createStoreCard from './create-store-card';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
     const SORT_OPTIONS = Object.values(SortVariantsEnum);
@@ -41,7 +41,7 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
             <div class="sorting__card-container sorting__card-container_small" id="${EventTargetsIDEnum.cards}">
                 ${modelData.filteredProducts
                     ?.map((product) =>
-                        createSroreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
+                        createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
                     )
                     .join('')}
             </div>

@@ -5,7 +5,7 @@ function getCapture(isInCart: boolean): string {
     return isInCart ? CAPTION_DROP.toUpperCase() : CAPTION_ADD.toUpperCase();
 }
 
-export default function createSroreCard(product: ProductDetails, isInCart: boolean): string {
+export default function createStoreCard(product: ProductDetails, isInCart: boolean): string {
     return `
         <div class="product-card">
             <h2 class="product-card__header header_small">

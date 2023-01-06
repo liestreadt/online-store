@@ -1,5 +1,4 @@
 import Cart from '../../Cart';
-import { ProductDetails } from '../../intefaces/types';
 import createCartItem from './create-cart-item';
 
 export default function createCartContainer(products: Cart['products'] | null): string {
