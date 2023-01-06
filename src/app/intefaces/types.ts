@@ -1,3 +1,4 @@
+import Cart from '../Cart';
 import { FilterCalculator } from '../FilterCalculator';
 
 export interface ProductDetails {
@@ -11,6 +12,14 @@ export interface ProductDetails {
     images: Array<string>;
     rating: number;
     stock: number;
+}
+export interface ProductShort {
+    id: number;
+    amount: number;
+}
+export interface ProductCart extends ProductDetail {
+    amount: number;
+    getProductTotalPrice: () => number;
 }
 
 export interface DummyJSON {
@@ -66,6 +75,7 @@ export interface ModelData {
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
     detailsID: string;
+    cart: Cart | null;
 }
 export interface ElementsToListen {
     store: {
@@ -73,11 +83,12 @@ export interface ElementsToListen {
         copy: HTMLButtonElement | null;
         category: HTMLDivElement | null;
         brand: HTMLDivElement | null;
-        price: HTMLInputElement | null; // double-input element
-        stock: HTMLInputElement | null; // double-input element
+        price: HTMLDivElement | null; // double-input element
+        stock: HTMLDivElement | null; // double-input element
         sorting: HTMLSelectElement | null;
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
+        cards: HTMLDivElement | null;
     };
 }
 
@@ -91,6 +102,7 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+    cards = 'card-container',
 }
 
 export enum SortVariantsEnum {

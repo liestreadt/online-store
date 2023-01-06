@@ -18,7 +18,7 @@ import {
 
 class Model {
     queryParams: URLSearchParams;
-    cart: Cart;
+    cart: Cart | null;
     productJSON: DummyJSON | null;
     modelData: ModelData;
     filterCalculator: FilterCalculator;
@@ -27,7 +27,7 @@ class Model {
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
-        this.cart = new Cart();
+        this.cart = null;
         this.filterCalculator = new FilterCalculator();
         this.productJSON = null;
         this.modelData = {
@@ -49,6 +49,7 @@ class Model {
             calculatedFilters: null,
             page: this.getPageFromURL(),
             detailsID: '',
+            cart: null,
         };
         this.shownProductInfo = null;
     }
@@ -61,6 +62,8 @@ class Model {
             this.findInitialFilterValues();
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
+            this.cart = new Cart(this.productJSON && this.productJSON.products);
+            this.modelData.cart = this.cart;
         } catch {
             throw new Error('Fail to connect dummy json');
         }
@@ -137,7 +140,10 @@ class Model {
             this.filterCalculator.updateSearchName(active.searching[0]);
         }
         this.modelData.calculatedFilters = this.filterCalculator;
-        this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
+        this.shownProductInfo = this.filterCalculator.recalculate(
+            this.productJSON?.products || null,
+            history.state?.key
+        );
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
     }
@@ -182,7 +188,7 @@ class Model {
             return productsSummaryInfo;
         }
     }
-    createQueryParamFromEvent(key: FilterKeys, value: string) {
+    createQueryParamFromEvent(key: FilterKeys, value: string, secondValue?: number) {
         switch (key) {
             case 'sorting': {
                 this.changeParamInURL('sorting', value);
@@ -208,22 +214,42 @@ class Model {
                 break;
             }
             case 'priceMin': {
-                this.changeParamInURL('priceMin', value);
+                if (secondValue && +value > secondValue) {
+                    this.changeParamInURL('priceMax', value);
+                    this.changeParamInURL('priceMin', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('priceMin', value);
+                }
                 this.reInit();
                 break;
             }
             case 'priceMax': {
-                this.changeParamInURL('priceMax', value);
+                if (secondValue && +value < secondValue) {
+                    this.changeParamInURL('priceMin', value);
+                    this.changeParamInURL('priceMax', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('priceMax', value);
+                }
                 this.reInit();
                 break;
             }
             case 'stockMin': {
-                this.changeParamInURL('stockMin', value);
+                if (secondValue && +value > secondValue) {
+                    this.changeParamInURL('stockMax', value);
+                    this.changeParamInURL('stockMin', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('stockMin', value);
+                }
                 this.reInit();
                 break;
             }
             case 'stockMax': {
-                this.changeParamInURL('stockMax', value);
+                if (secondValue && +value < secondValue) {
+                    this.changeParamInURL('stockMin', value);
+                    this.changeParamInURL('stockMax', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('stockMax', value);
+                }
                 this.reInit();
                 break;
             }

@@ -48,6 +48,7 @@ export class Controller {
                     elementsToListen.sorting?.addEventListener('change', this);
                     elementsToListen.searching?.addEventListener('input', this);
                     elementsToListen.viewButtons?.addEventListener('click', this);
+                    elementsToListen.cards?.addEventListener('click', this);
                 }
                 break;
         }
@@ -64,6 +65,7 @@ export class Controller {
             [EventTargetsIDEnum.sorting]: this.sortingEvent,
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+            [EventTargetsIDEnum.cards]: this.addToCartEvent,
         };
         if (event.type === 'hashchange') {
             // || event.type === 'popstate'
@@ -108,19 +110,24 @@ export class Controller {
     private priceEvent(event: Event): void {
         if (event.target instanceof HTMLInputElement) {
             const inputID = event.target.id;
-            const priceKey = inputID === SLIDER_MAX_ID ? 'priceMax' : 'priceMin';
-
-            this.model.createQueryParamFromEvent(priceKey, event.target.value);
+            const priceKey: FilterKeys = inputID === SLIDER_MAX_ID ? 'priceMax' : 'priceMin';
+            const secondValue =
+                inputID === SLIDER_MAX_ID
+                    ? this.model.shownProductInfo?.minPrice
+                    : this.model.shownProductInfo?.maxPrice;
+            this.model.createQueryParamFromEvent(priceKey, event.target.value, secondValue);
         }
         this.initViewAndListeners();
     }
     private stockEvent(event: Event): void {
         if (event.target instanceof HTMLInputElement) {
-            //TODO: generate different id for dual sliders
             const inputID = event.target.id;
-            const stockKey = inputID === SLIDER_MAX_ID ? 'stockMax' : 'stockMin';
-
-            this.model.createQueryParamFromEvent(stockKey, event.target.value);
+            const stockKey: FilterKeys = inputID === SLIDER_MAX_ID ? 'stockMax' : 'stockMin';
+            const secondValue =
+                inputID === SLIDER_MAX_ID
+                    ? this.model.shownProductInfo?.minStock
+                    : this.model.shownProductInfo?.maxStock;
+            this.model.createQueryParamFromEvent(stockKey, event.target.value, secondValue);
         }
         this.initViewAndListeners();
     }
@@ -144,5 +151,19 @@ export class Controller {
             this.model.applyQueryParam(event.currentTarget);
         `);
         this.initViewAndListeners();
+    }
+    private addToCartEvent(event: Event): void {
+        if (event.target instanceof HTMLButtonElement) {
+            const length = `${EventTargetsIDEnum.cards}-`.length;
+            const cardID = event.target.id.slice(length);
+            const isInCart = this.model.cart?.checkProductInCart(cardID);
+
+            if (isInCart) {
+                this.model.cart?.drop(cardID);
+            } else {
+                this.model.cart?.addNew(cardID);
+            }
+            this.initViewAndListeners();
+        }
     }
 }

@@ -1,7 +1,11 @@
-import { PAGES_HASH } from '../../constants/constants';
-import { ModelData, ProductDetails } from '../../intefaces/types';
+import { CAPTION_ADD, CAPTION_DROP, PAGES_HASH } from '../../constants/constants';
+import { EventTargetsIDEnum, ModelData, ProductDetail } from '../../intefaces/types';
 
-export default function createSroreCard(product: ProductDetails): string {
+function getCapture(isInCart: boolean): string {
+    return isInCart ? CAPTION_DROP.toUpperCase() : CAPTION_ADD.toUpperCase();
+}
+
+export default function createSroreCard(product: ProductDetail, isInCart: boolean): string {
     return `
         <div class="product-card">
             <h2 class="product-card__header header_small">
@@ -39,8 +43,8 @@ export default function createSroreCard(product: ProductDetails): string {
                     </div>
                 </div>
                 <div class="product-card__controls">
-                    <button class="product-card__btn-add-to-cart">
-                        ADD TO CART
+                    <button class="product-card__btn-add-to-cart" id="${EventTargetsIDEnum.cards}-${product.id}">
+                        ${getCapture(isInCart)}
                     </button>
                     <a href="${PAGES_HASH.details}${product.id}" class="product-card__link-to-details">
                         DETAILS

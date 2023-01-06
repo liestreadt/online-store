@@ -81,7 +81,7 @@ export class FilterCalculator {
         }
         return true;
     }
-    recalculate(allProducts: Array<ProductDetails> | null): ShownProductInfo | null {
+    recalculate(allProducts: Array<ProductDetail> | null, lastFilter: FilterKeys | null): ShownProductInfo | null {
         let minPrice = Infinity;
         let maxPrice = 0;
         let minStock = Infinity;
