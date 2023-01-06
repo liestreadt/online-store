@@ -2,11 +2,13 @@ import Cart from '../../Cart';
 import { CURRENCY_SYMBOL } from '../../constants/constants';
 import { ProductCart, ProductDetails } from '../../intefaces/types';
 
-export default function createCartItem(product: ProductCart): string {
+export default function createCartItem(product: ProductCart, index: number, cart: Cart): string {
+    const { limit, listPage } = cart?.showProperties;
+    const numberInList = index + 1 + limit * (listPage - 1);
     return `
         <div class="cart-item">
             <div class="cart-item__num">
-                1
+                ${numberInList}
             </div>
             <div class="cart-item__pic"
                 style="
@@ -41,7 +43,7 @@ export default function createCartItem(product: ProductCart): string {
                         +
                     </button>
                     <div class="controls-count">
-                        5
+                        ${product.amount}
                     </div>
                     <button class="controls-decrease">
                         -

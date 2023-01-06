@@ -105,11 +105,11 @@ class View {
     }
     renderCartPage() {
         const containerMain = document.querySelector('main');
-        const cartItems = this.modelData.cart?.products;
+
         if (containerMain) {
             containerMain.outerHTML = `
                 <main class="main-cart">
-                    ${this.getCartContainer(cartItems ?? null)}
+                    ${this.getCartContainer(this.modelData.cart ?? null)}
                     ${this.getCartSummary()}
                 </main>
             `;
@@ -156,8 +156,8 @@ class View {
     getProdDetailsContainer(data: ProductDetails): string {
         return createProdDetailsContainer(data);
     }
-    getCartContainer(products: Cart['products'] | null): string {
-        return createCartContainer(products);
+    getCartContainer(cart: Cart | null): string {
+        return createCartContainer(cart);
     }
     getCartSummary(): string {
         return createCartSummary();

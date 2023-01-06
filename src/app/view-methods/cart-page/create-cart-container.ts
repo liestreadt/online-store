@@ -1,23 +1,34 @@
 import Cart from '../../Cart';
 import createCartItem from './create-cart-item';
 
-function createList(products: Cart['products']): string {
+function createList(cart: Cart): string {
+    const productsToShow = cart.productsToShow;
     const list: string[] = [];
-    products.forEach((product) => {
-        list.push(createCartItem(product));
+
+    if (!productsToShow) {
+        return '';
+    }
+    productsToShow.forEach((product, index) => {
+        list.push(createCartItem(product, index, cart));
     });
     return list.join('');
 }
-export default function createCartContainer(products: Cart['products'] | null): string {
-    console.log('products.size', products, products?.size);
-    if (!products || products.size === 0) {
+export default function createCartContainer(cart: Cart | null): string {
+    const products = cart?.products;
+
+    if (!cart || !products || products.size === 0) {
         return `
         <section class="cart">
             <h2 class="cart__header header_empty">
-                    Cart is Empty
+                    Cart is empty
             </h2>
         </section>`;
     }
+
+    const maxPage = cart?.maxPage();
+    const { limit, listPage } = cart?.showProperties;
+    console.log('products.size', products, products?.size);
+    console.log('maxPage', maxPage);
 
     return `
         <section class="cart">
@@ -26,7 +37,12 @@ export default function createCartContainer(products: Cart['products'] | null): 
                     Products In Cart
                 </div>
                 <div class="cart__amount">
-                    Show by: <input class="cart__amount-num" type="number" min="0">
+                    Show by: <input
+                        class="cart__amount-num"
+                        type="number"
+                        min="1"
+                        max="${maxPage ?? 1}"
+                        value="${limit ?? 3}">
                 </div>
                 <div class="cart__pagination">
                     <div class="pagination-text">
@@ -36,7 +52,7 @@ export default function createCartContainer(products: Cart['products'] | null): 
                         ←
                     </a>
                     <div class="pagination-current">
-                        1
+                        ${listPage}
                     </div>
                     <a class="pagination-right">
                         →
@@ -44,7 +60,7 @@ export default function createCartContainer(products: Cart['products'] | null): 
                 </div>
             </h2>
             <div class="cart__list">
-                ${createList(products)}
+                ${createList(cart)}
             </div>
         </section>
     `;

@@ -1,8 +1,9 @@
 import { CART_ID } from './constants/constants';
 import { ProductCart, ProductDetails, ProductShort, ShowCart } from './intefaces/types';
 
-const DEFAULT_LIMIT = 3;
-const DEFAULT_CART_PAGE = 2;
+const DEFAULT_LIMIT = 4;
+const DEFAULT_CART_PAGE = 1;
+
 class Cart {
     productsAll: ProductDetails[] | null;
     products: Map<string, ProductCart>;
@@ -18,6 +19,12 @@ class Cart {
             listPage: DEFAULT_CART_PAGE,
         };
         this.productsToShow = this.getProductsToShow();
+    }
+    maxPage() {
+        if (this.products) {
+            return Math.ceil(this.products.size / this.showProperties.limit);
+        }
+        return 1;
     }
     restore(): void {
         let saveList: ProductShort[] = [];
@@ -53,11 +60,12 @@ class Cart {
             return null;
         }
         const { limit, listPage } = this.showProperties;
-        const list: ProductCart[] = [...this.products].map(([id, product]) => product);
+        let list: ProductCart[] = [...this.products].map(([id, product]) => product);
         // index + 1 is used to enumerate products in view
-        list.filter((product, index) => {
-            return index + 1 > (listPage - 1) * limit && index + 1 <= listPage * limit;
+        list = list.filter((product, index) => {
+            return index + 1 > (listPage - 1) * limit && index < listPage * limit;
         });
+        console.log('list', list);
         return list;
     }
     private save(): void {
