@@ -8,7 +8,7 @@ import createProdDetailsContainer from './view-methods/prod-detail-page/create-p
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
 
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     FilterParamsValues,
     filterParamsKeys,
@@ -153,15 +153,12 @@ class View {
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
-    getProdDetailsContainer(data: ProductDetail): string {
+    getProdDetailsContainer(data: ProductDetails): string {
         return createProdDetailsContainer(data);
     }
     getCartContainer(products: Cart['products'] | null): string {
         return createCartContainer(products);
     }
-    // getCartItem(data: ProductDetail): string {
-    //     return createCartItem(data);
-    // }
     getCartSummary(): string {
         return createCartSummary();
     }

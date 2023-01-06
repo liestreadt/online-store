@@ -3,15 +3,16 @@ import increaseValueInMap from './tools/Functions';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     ShownProductInfo,
     filterParamsKeys,
     FilterKeys,
     FilterParamsValues,
+    FilteredProductsKeys,
     InitialFilterValues,
     ModelData,
-    sortVariantsEnum,
+    SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
 
@@ -41,7 +42,9 @@ class Model {
             },
             allBrands: [],
             allCategories: [],
+            initialProducts: null,
             filteredProducts: null,
+            currentOption: null,
             shownProductInfo: null,
             calculatedFilters: null,
             page: this.getPageFromURL(),
@@ -144,14 +147,17 @@ class Model {
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
     }
+    applyQueryParamsToSorting() {
+        this.sortProducts(this.modelData.activeFilters.sorting?.[0] as SortVariantsEnum);
+    }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
-            const allProducts: Array<ProductDetail> = this.productJSON.products;
+            const allProducts: Array<ProductDetails> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info: InitialFilterValues, product: ProductDetail) => {
+                (info: InitialFilterValues, product: ProductDetails) => {
                     info.minPrice = Math.min(info.minPrice, product.price);
                     info.maxPrice = Math.max(info.maxPrice, product.price);
 
@@ -177,6 +183,7 @@ class Model {
             );
             this.modelData.allBrands = [...new Set(allBrands)];
             this.modelData.allCategories = [...new Set(allCategories)];
+            this.modelData.initialProducts = this.productJSON.products;
             this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
@@ -184,7 +191,8 @@ class Model {
     createQueryParamFromEvent(key: FilterKeys, value: string, secondValue?: number) {
         switch (key) {
             case 'sorting': {
-                // TODO: create url with added new sorting params
+                this.changeParamInURL('sorting', value);
+                this.reInit();
                 break;
             }
             case 'category': {
@@ -255,10 +263,54 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.applyQueryParamsToSorting();
     }
-    sortProducts(sortVariant: sortVariantsEnum) {
-        // TODO: implemet sorting by option
-        // this.modelData.filteredProducts?.sort()
+    getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +prev[sortProperty] - +curr[sortProperty];
+        });
+    }
+    getDescendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +curr[sortProperty] - +prev[sortProperty];
+        });
+    }
+    sortProducts(sortVariant: SortVariantsEnum): void {
+        if (this.modelData.filteredProducts) {
+            this.modelData.currentOption = sortVariant;
+            switch (sortVariant) {
+                case SortVariantsEnum.DEFAULT:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                default:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+            }
+        }
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
@@ -293,6 +345,7 @@ class Model {
     reInit() {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();
+        this.applyQueryParamsToSorting();
         this.applyQueryParam();
     }
 }

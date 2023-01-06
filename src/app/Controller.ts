@@ -1,6 +1,6 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
+import { ElementsToListen, FilterKeys, SortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
 import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
@@ -132,11 +132,10 @@ export class Controller {
         this.initViewAndListeners();
     }
     private sortingEvent(event: Event): void {
-        if (event.target instanceof HTMLOptionElement) {
-            const key = 'sorting' as FilterKeys;
+        if (event.target instanceof HTMLSelectElement) {
+            const key = 'sorting';
             this.model.createQueryParamFromEvent(key, event.target?.value);
-            this.model.applyQueryParam();
-            this.model.sortProducts(event.target?.value as sortVariantsEnum);
+            this.model.sortProducts(event.target?.value as SortVariantsEnum);
         }
         this.initViewAndListeners();
     }

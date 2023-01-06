@@ -1,6 +1,6 @@
-import { ProductDetail } from '../../intefaces/types';
+import { ProductDetails } from '../../intefaces/types';
 
-export default function createProdDetailsContainer(product: ProductDetail): string {
+export default function createProdDetailsContainer(product: ProductDetails): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>

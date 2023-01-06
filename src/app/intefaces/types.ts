@@ -1,7 +1,7 @@
 import Cart from '../Cart';
 import { FilterCalculator } from '../FilterCalculator';
 
-export interface ProductDetail {
+export interface ProductDetails {
     id: number;
     title: string;
     description: string;
@@ -17,13 +17,13 @@ export interface ProductShort {
     id: number;
     amount: number;
 }
-export interface ProductCart extends ProductDetail {
+export interface ProductCart extends ProductDetails {
     amount: number;
     getProductTotalPrice: () => number;
 }
 
 export interface DummyJSON {
-    products: Array<ProductDetail>;
+    products: Array<ProductDetails>;
     limit: number;
     total: number;
     skip: number;
@@ -35,7 +35,7 @@ export interface ShownProductInfo {
     maxStock: number;
     categories: Map<string, number>;
     brands: Map<string, number>;
-    shownProducts: ProductDetail[];
+    shownProducts: ProductDetails[];
 }
 
 export const filterParamsKeys = [
@@ -53,6 +53,8 @@ export type FilterKeys = typeof filterParamsKeys[number];
 
 export type FilterParamsValues = Record<FilterKeys, string[]>;
 
+export type FilteredProductsKeys = keyof ProductDetails;
+
 export interface InitialFilterValues {
     minPrice: number;
     maxPrice: number;
@@ -66,7 +68,9 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
-    filteredProducts: Array<ProductDetail> | null;
+    initialProducts: Array<ProductDetails> | null;
+    filteredProducts: Array<ProductDetails> | null;
+    currentOption: SortVariantsEnum | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
@@ -101,13 +105,12 @@ export enum EventTargetsIDEnum {
     cards = 'card-container',
 }
 
-// TODO: view should take options values from this enum
-export enum sortVariantsEnum {
-    byDefault = 'default-sort',
-    byPriceAscending = 'ascending-price',
-    byPriceDescending = 'descending-price',
-    byRatingDescending = 'descending-rating',
-    byRatingAscending = 'ascending-rating',
+export enum SortVariantsEnum {
+    DEFAULT = 'default-sort',
+    PRICE_ASCENDING = 'ascending-price',
+    PRICE_DESCENDING = 'descending-price',
+    RATING_ASCENDING = 'ascending-rating',
+    RATING_DESCENDING = 'descending-rating',
 }
 export enum PageCase {
     store,
