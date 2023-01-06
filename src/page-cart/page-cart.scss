@@ -9,14 +9,12 @@
     flex-direction: column;
     margin: $margin-medium auto;
     @extend %border;
-    padding-bottom: $padding-tiny;
     width: 80%;
     height: fit-content;
 
     &__header {
         display: flex;
         justify-content: space-around;
-        font-size: $font-header;
     }
 
     &__pagination {

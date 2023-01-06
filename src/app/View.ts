@@ -23,6 +23,7 @@ import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/Functions';
+import Cart from './Cart';
 
 class View {
     modelData: Partial<ModelData>;
@@ -104,12 +105,11 @@ class View {
     }
     renderCartPage() {
         const containerMain = document.querySelector('main');
-        // skeleton for the future, when current product will be given after click on detail
-        const cartItems = this.modelData.filteredProducts;
-        if (containerMain && cartItems) {
+        const cartItems = this.modelData.cart?.products;
+        if (containerMain) {
             containerMain.outerHTML = `
                 <main class="main-cart">
-                    ${this.getCartContainer(cartItems[1])}
+                    ${this.getCartContainer(cartItems ?? null)}
                     ${this.getCartSummary()}
                 </main>
             `;
@@ -156,12 +156,12 @@ class View {
     getProdDetailsContainer(data: ProductDetail): string {
         return createProdDetailsContainer(data);
     }
-    getCartContainer(data: ProductDetail): string {
-        return createCartContainer(data);
+    getCartContainer(products: Cart['products'] | null): string {
+        return createCartContainer(products);
     }
-    getCartItem(data: ProductDetail): string {
-        return createCartItem(data);
-    }
+    // getCartItem(data: ProductDetail): string {
+    //     return createCartItem(data);
+    // }
     getCartSummary(): string {
         return createCartSummary();
     }

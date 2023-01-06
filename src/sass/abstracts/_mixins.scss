@@ -18,9 +18,9 @@
     }
 }
 
-@mixin header {
-    border-bottom: $border;
-    border-radius: $radius-small $radius-small 0 0;
+@mixin header($border-bottom: $border, $border-radius-top: $radius-small $radius-small 0 0) {
+    border-bottom: $border-bottom;
+    border-radius: $border-radius-top;
     padding: $padding-tiny;
     background-color: $color-headers-bkg;
     text-align: center;

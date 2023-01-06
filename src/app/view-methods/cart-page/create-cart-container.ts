@@ -1,10 +1,21 @@
+import Cart from '../../Cart';
 import { ProductDetail } from '../../intefaces/types';
 import createCartItem from './create-cart-item';
 
-export default function createCartContainer(data: ProductDetail): string {
+export default function createCartContainer(products: Cart['products'] | null): string {
+    console.log('products.size', products, products?.size);
+    if (!products || products.size === 0) {
+        return `
+        <section class="cart">
+            <h2 class="cart__header header_empty">
+                    Cart is Empty
+            </h2>
+        </section>`;
+    }
+
     return `
         <section class="cart">
-            <h2 class="cart__header header_medium">
+            <h2 class="cart__header header_small">
                 <div class="cart__title">
                     Products In Cart
                 </div>
@@ -27,7 +38,9 @@ export default function createCartContainer(data: ProductDetail): string {
                 </div>
             </h2>
             <div class="cart__list">
-                ${createCartItem(data)}
+                ${products.forEach((product) => {
+                    createCartItem(product);
+                })}
             </div>
         </section>
     `;
