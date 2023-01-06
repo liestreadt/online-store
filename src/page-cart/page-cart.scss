@@ -37,6 +37,18 @@
         flex-direction: column;
         margin: $margin-tiny $margin-tiny 0 $margin-tiny;
     }
+
+    &__amount-num {
+        border: $border;
+        border-radius: $radius-small;
+        max-width: $width-number-input;
+        font-family: inherit;
+        font-size: 1.6rem;
+
+        &::-webkit-inner-spin-button {
+            opacity: 1;
+        }
+    }
 }
 
 .cart-item {

@@ -20,7 +20,7 @@ export default function createCartContainer(products: Cart['products'] | null): 
                     Products In Cart
                 </div>
                 <div class="cart__amount">
-                    Items in cart: <span class="cart__amount-num">2</span>
+                    Show by: <input class="cart__amount-num" type="number" min="0">
                 </div>
                 <div class="cart__pagination">
                     <div class="pagination-text">
