@@ -41,9 +41,7 @@ export default function createModal(): string {
                             CVC2 / CVV2: <input class="modal__debit-card-cvc-input">
                         </div>
                     </div>
-                    <button class="modal__btn-confirm">
-                        CONFIRM
-                    </button>
+                    <input type="submit" class="modal__btn-confirm" value="Confirm">
                 </div>
             </form>
         </section>

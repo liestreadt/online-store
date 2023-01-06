@@ -81,5 +81,6 @@
 
     &__btn-confirm {
         margin: $margin-small 0;
+        @include button();
     }
 }
