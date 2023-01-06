@@ -15,6 +15,7 @@ import {
     InitialFilterValues,
     ModelData,
     ElementsToListen,
+    ElementsToValidate,
     EventTargetsIDEnum,
     PageCase,
     FilterKeys,
@@ -170,6 +171,21 @@ class View {
     }
     copyURLtoClipboard() {
         console.log('copy url');
+    }
+    getElementsForValidation(): ElementsToValidate {
+        return {
+            form: document.body.querySelector('#modal-form'),
+            formElements: {
+                name: document.body.querySelector('#modal-name'),
+                number: document.body.querySelector('#modal-number'),
+                address: document.body.querySelector('#modal-address'),
+                email: document.body.querySelector('#modal-email'),
+                debitCardNumber: document.body.querySelector('#modal-debit-number'),
+                debitCardExpireDate: document.body.querySelector('#modal-debit-valid-to'),
+                debitCardCode: document.body.querySelector('#modal-debit-code'),
+                confirm: document.body.querySelector('#modal-confirm'),
+            },
+        };
     }
     getElementsForEvents(): ElementsToListen {
         return {

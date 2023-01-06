@@ -85,6 +85,20 @@ export interface ElementsToListen {
     };
 }
 
+export interface ElementsToValidate {
+    form: HTMLFormElement | null;
+    formElements: {
+        name: HTMLInputElement | null;
+        number: HTMLInputElement | null;
+        address: HTMLInputElement | null;
+        email: HTMLInputElement | null;
+        debitCardNumber: HTMLInputElement | null;
+        debitCardExpireDate: HTMLInputElement | null;
+        debitCardCode: HTMLInputElement | null;
+        confirm: HTMLInputElement | null;
+    };
+}
+
 export enum EventTargetsIDEnum {
     reset = 'button-reset',
     copy = 'button-copy',
