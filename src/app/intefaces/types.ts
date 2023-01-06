@@ -1,6 +1,6 @@
 import { FilterCalculator } from '../FilterCalculator';
 
-export interface ProductDetail {
+export interface ProductDetails {
     id: number;
     title: string;
     description: string;
@@ -14,7 +14,7 @@ export interface ProductDetail {
 }
 
 export interface DummyJSON {
-    products: Array<ProductDetail>;
+    products: Array<ProductDetails>;
     limit: number;
     total: number;
     skip: number;
@@ -26,7 +26,7 @@ export interface ShownProductInfo {
     maxStock: number;
     categories: Map<string, number>;
     brands: Map<string, number>;
-    shownProducts: ProductDetail[];
+    shownProducts: ProductDetails[];
 }
 
 export const filterParamsKeys = [
@@ -44,6 +44,8 @@ export type FilterKeys = typeof filterParamsKeys[number];
 
 export type FilterParamsValues = Record<FilterKeys, string[]>;
 
+export type FilteredProductsKeys = keyof ProductDetails;
+
 export interface InitialFilterValues {
     minPrice: number;
     maxPrice: number;
@@ -57,8 +59,8 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
-    initialProducts: Array<ProductDetail> | null;
-    filteredProducts: Array<ProductDetail> | null;
+    initialProducts: Array<ProductDetails> | null;
+    filteredProducts: Array<ProductDetails> | null;
     currentOption: SortVariantsEnum | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;

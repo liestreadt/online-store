@@ -3,12 +3,13 @@ import increaseValueInMap from './tools/Functions';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     ShownProductInfo,
     filterParamsKeys,
     FilterKeys,
     FilterParamsValues,
+    FilteredProductsKeys,
     InitialFilterValues,
     ModelData,
     SortVariantsEnum,
@@ -145,12 +146,12 @@ class Model {
     }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
-            const allProducts: Array<ProductDetail> = this.productJSON.products;
+            const allProducts: Array<ProductDetails> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info: InitialFilterValues, product: ProductDetail) => {
+                (info: InitialFilterValues, product: ProductDetails) => {
                     info.minPrice = Math.min(info.minPrice, product.price);
                     info.maxPrice = Math.max(info.maxPrice, product.price);
 
@@ -238,49 +239,51 @@ class Model {
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
         this.applyQueryParamsToSorting();
     }
+    getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +prev[sortProperty] - +curr[sortProperty];
+        });
+    }
+    getDescendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +curr[sortProperty] - +prev[sortProperty];
+        });
+    }
     sortProducts(sortVariant: SortVariantsEnum): void {
-        this.modelData.currentOption = sortVariant;
-        switch (sortVariant) {
-            case SortVariantsEnum.DEFAULT:
-                {
-                    if (this.modelData.filteredProducts)
-                        this.modelData.filteredProducts?.sort((prev, curr) => {
-                            return prev.id - curr.id;
-                        });
-                }
-                break;
-            case SortVariantsEnum.PRICE_ASCENDING:
-                {
-                    if (this.modelData.filteredProducts)
-                        this.modelData.filteredProducts?.sort((prev, curr) => {
-                            return prev.price - curr.price;
-                        });
-                }
-                break;
-            case SortVariantsEnum.PRICE_DESCENDING:
-                {
-                    if (this.modelData.filteredProducts)
-                        this.modelData.filteredProducts?.sort((prev, curr) => {
-                            return curr.price - prev.price;
-                        });
-                }
-                break;
-            case SortVariantsEnum.RATING_ASCENDING:
-                {
-                    if (this.modelData.filteredProducts)
-                        this.modelData.filteredProducts?.sort((prev, curr) => {
-                            return prev.rating - curr.rating;
-                        });
-                }
-                break;
-            case SortVariantsEnum.RATING_DESCENDING:
-                {
-                    if (this.modelData.filteredProducts)
-                        this.modelData.filteredProducts?.sort((prev, curr) => {
-                            return curr.rating - prev.rating;
-                        });
-                }
-                break;
+        if (this.modelData.filteredProducts) {
+            this.modelData.currentOption = sortVariant;
+            switch (sortVariant) {
+                default:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+                case SortVariantsEnum.DEFAULT:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+            }
         }
     }
     appendParamToURL(key: FilterKeys, value: string) {

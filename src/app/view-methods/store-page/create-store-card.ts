@@ -1,7 +1,7 @@
 import { PAGES_HASH } from '../../constants/constants';
-import { ModelData, ProductDetail } from '../../intefaces/types';
+import { ModelData, ProductDetails } from '../../intefaces/types';
 
-export default function createSroreCard(product: ProductDetail): string {
+export default function createSroreCard(product: ProductDetails): string {
     return `
         <div class="product-card">
             <h2 class="product-card__header header_small">

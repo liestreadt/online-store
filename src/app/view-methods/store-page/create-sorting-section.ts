@@ -3,13 +3,7 @@ import { EventTargetsIDEnum } from '../../intefaces/types';
 import createSroreCard from './create-store-card';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
-    const sortVariantsArr = [
-        SortVariantsEnum.DEFAULT,
-        SortVariantsEnum.PRICE_ASCENDING,
-        SortVariantsEnum.PRICE_DESCENDING,
-        SortVariantsEnum.RATING_ASCENDING,
-        SortVariantsEnum.RATING_DESCENDING,
-    ];
+    const SORT_OPTIONS = Object.values(SortVariantsEnum);
     const sortNamesArr = [
         'default',
         'price ↑ (ascending)',
@@ -21,15 +15,13 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
         <section class="sorting">
             <div class="sorting-header">
                 <select id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
-                    ${sortVariantsArr
-                        .map((item, index) => {
-                            return `
+                    ${SORT_OPTIONS.map((item, index) => {
+                        return `
                             <option value="${item}" class="sorting-option" ${
-                                item === modelData.currentOption ? 'selected' : ''
-                            }>Sort by ${sortNamesArr[index]}</option>
+                            item === modelData.currentOption ? 'selected' : ''
+                        }>Sort by ${sortNamesArr[index]}</option>
                             `;
-                        })
-                        .join('')}
+                    }).join('')}
                 </select>
                 <div class="sorting__total-found">
                     Found: <span class="sorting__amount">${modelData.filteredProducts?.length}</span>
