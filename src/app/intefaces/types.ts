@@ -92,6 +92,14 @@ export interface ElementsToListen {
         viewButtons: HTMLDivElement | null;
         cards: HTMLDivElement | null;
     };
+    cart: {
+        pageBack: HTMLAnchorElement | null;
+        pageForward: HTMLAnchorElement | null;
+        listLimit: HTMLButtonElement | null;
+        cartList: HTMLDivElement | null;
+        promoInput: HTMLInputElement | null;
+        buyButton: HTMLButtonElement | null;
+    };
 }
 
 export enum EventTargetsIDEnum {
@@ -105,6 +113,15 @@ export enum EventTargetsIDEnum {
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
     cards = 'card-container',
+}
+
+export enum CartEventTargetsIDEnum {
+    PAGE_BACK = 'pagination-back',
+    PAGE_FORWARD = 'pagination-forward',
+    LIST_LIMIT = 'list-limit',
+    CART_LIST = 'cart-list',
+    PROMO = 'promo-input',
+    BUY = 'buy-button',
 }
 
 export enum SortVariantsEnum {

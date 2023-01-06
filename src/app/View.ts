@@ -18,6 +18,7 @@ import {
     EventTargetsIDEnum,
     PageCase,
     FilterKeys,
+    CartEventTargetsIDEnum,
 } from './intefaces/types';
 import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
@@ -169,7 +170,7 @@ class View {
         console.log('copy url');
     }
     getElementsForEvents(): ElementsToListen {
-        return {
+        const elements: ElementsToListen = {
             store: {
                 reset: document.body.querySelector(`#${EventTargetsIDEnum.reset}`),
                 copy: document.body.querySelector(`#${EventTargetsIDEnum.copy}`),
@@ -182,7 +183,16 @@ class View {
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
                 cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
+            cart: {
+                pageBack: document.querySelector(`#${CartEventTargetsIDEnum.PAGE_BACK}`),
+                pageForward: document.querySelector(`#${CartEventTargetsIDEnum.PAGE_FORWARD}`),
+                listLimit: document.querySelector(`#${CartEventTargetsIDEnum.LIST_LIMIT}`),
+                cartList: document.querySelector(`#${CartEventTargetsIDEnum.CART_LIST}`),
+                promoInput: document.querySelector(`#${CartEventTargetsIDEnum.PROMO}`),
+                buyButton: document.querySelector(`#${CartEventTargetsIDEnum.BUY}`),
+            },
         };
+        return elements;
     }
     addFocusToLastUsed() {
         const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);

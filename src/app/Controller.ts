@@ -1,7 +1,7 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, SortVariantsEnum } from './intefaces/types';
-import { EventTargetsIDEnum } from './intefaces/types';
+import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum } from './intefaces/types';
+import { EventTargetsIDEnum, CartEventTargetsIDEnum } from './intefaces/types';
 import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
@@ -32,25 +32,32 @@ export class Controller {
         //window.addEventListener('popstate', this);
 
         switch (this.model.modelData.page) {
-            default:
-                {
-                    //type Keys = keyof ElementsToListenStore;
-                    //type Values = ElementsToListenStore[Keys];
-                    //const elementsToListen: Values = this.view.getElementsForEvents();
-                    const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+            case PageCase.store: {
+                const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
 
-                    elementsToListen.reset?.addEventListener('click', this);
-                    elementsToListen.copy?.addEventListener('click', this);
-                    elementsToListen.category?.addEventListener('click', this);
-                    elementsToListen.brand?.addEventListener('click', this);
-                    elementsToListen.price?.addEventListener('change', this);
-                    elementsToListen.stock?.addEventListener('change', this);
-                    elementsToListen.sorting?.addEventListener('change', this);
-                    elementsToListen.searching?.addEventListener('input', this);
-                    elementsToListen.viewButtons?.addEventListener('click', this);
-                    elementsToListen.cards?.addEventListener('click', this);
-                }
+                elementsToListen.reset?.addEventListener('click', this);
+                elementsToListen.copy?.addEventListener('click', this);
+                elementsToListen.category?.addEventListener('click', this);
+                elementsToListen.brand?.addEventListener('click', this);
+                elementsToListen.price?.addEventListener('change', this);
+                elementsToListen.stock?.addEventListener('change', this);
+                elementsToListen.sorting?.addEventListener('change', this);
+                elementsToListen.searching?.addEventListener('input', this);
+                elementsToListen.viewButtons?.addEventListener('click', this);
+                elementsToListen.cards?.addEventListener('click', this);
                 break;
+            }
+            case PageCase.cart: {
+                const elementsToListen: ElementsToListen['cart'] = this.view.getElementsForEvents().cart;
+
+                elementsToListen.pageBack?.addEventListener('click', this);
+                elementsToListen.pageForward?.addEventListener('click', this);
+                elementsToListen.listLimit?.addEventListener('change', this);
+                elementsToListen.cartList?.addEventListener('click', this);
+                elementsToListen.promoInput?.addEventListener('change', this);
+                elementsToListen.buyButton?.addEventListener('click', this);
+                break;
+            }
         }
     }
 
@@ -66,6 +73,13 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
             [EventTargetsIDEnum.cards]: this.addToCartEvent,
+
+            [CartEventTargetsIDEnum.PAGE_BACK]: this.pageBackEvent,
+            [CartEventTargetsIDEnum.PAGE_FORWARD]: this.pageForwardEvent,
+            [CartEventTargetsIDEnum.LIST_LIMIT]: this.listLimitEvent,
+            [CartEventTargetsIDEnum.CART_LIST]: this.cartListEvent,
+            [CartEventTargetsIDEnum.PROMO]: this.promoInputEvent,
+            [CartEventTargetsIDEnum.BUY]: this.buyButtonEvent,
         };
         if (event.type === 'hashchange') {
             // || event.type === 'popstate'
@@ -79,6 +93,24 @@ export class Controller {
             return;
         }
         console.log(`No event handler for ${event.type} and ${event.target}`);
+    }
+    pageBackEvent() {
+        console.log('pageBackEvent!');
+    }
+    pageForwardEvent() {
+        console.log('pageForwardEvent!');
+    }
+    listLimitEvent() {
+        console.log('listLimitEvent!');
+    }
+    cartListEvent() {
+        console.log('cartListEvent!');
+    }
+    promoInputEvent() {
+        console.log('promoInputEvent!');
+    }
+    buyButtonEvent() {
+        console.log('buyButtonEvent!');
     }
     private resetEvent(event: Event): void {
         console.log('this.model.resetFilters()');
