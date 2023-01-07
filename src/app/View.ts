@@ -174,16 +174,15 @@ class View {
     }
     getElementsForValidation(): ElementsToValidate {
         return {
-            form: document.body.querySelector('#modal-form'),
+            form: document.body.querySelector(`#${EventTargetsIDEnum.modalForm}`),
             formElements: {
-                name: document.body.querySelector('#modal-name'),
-                number: document.body.querySelector('#modal-number'),
-                address: document.body.querySelector('#modal-address'),
-                email: document.body.querySelector('#modal-email'),
-                debitCardNumber: document.body.querySelector('#modal-debit-number'),
-                debitCardExpireDate: document.body.querySelector('#modal-debit-valid-to'),
-                debitCardCode: document.body.querySelector('#modal-debit-code'),
-                confirm: document.body.querySelector('#modal-confirm'),
+                name: document.body.querySelector(`#${EventTargetsIDEnum.modalName}`),
+                number: document.body.querySelector(`#${EventTargetsIDEnum.modalNumber}`),
+                address: document.body.querySelector(`#${EventTargetsIDEnum.modalAddress}`),
+                email: document.body.querySelector(`#${EventTargetsIDEnum.modalEmail}`),
+                debitCardNumber: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitNumber}`),
+                debitCardExpireDate: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitValidTo}`),
+                debitCardCode: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitCode}`),
             },
         };
     }

@@ -1,6 +1,6 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
+import { ElementsToListen, ElementsToValidate, FilterKeys, sortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
 import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
@@ -26,6 +26,7 @@ export class Controller {
     initViewAndListeners(): void {
         this.view = new View(this.model.modelData);
         this.addListeners();
+        // this.addListenersToModalElems();
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
@@ -38,6 +39,7 @@ export class Controller {
                     //type Values = ElementsToListenStore[Keys];
                     //const elementsToListen: Values = this.view.getElementsForEvents();
                     const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+                    const elementsToValidate: ElementsToValidate = this.view.getElementsForValidation();
 
                     elementsToListen.reset?.addEventListener('click', this);
                     elementsToListen.copy?.addEventListener('click', this);
@@ -48,6 +50,15 @@ export class Controller {
                     elementsToListen.sorting?.addEventListener('change', this);
                     elementsToListen.searching?.addEventListener('input', this);
                     elementsToListen.viewButtons?.addEventListener('click', this);
+
+                    elementsToValidate.form?.addEventListener('submit', this);
+                    elementsToValidate.formElements.name?.addEventListener('input', this);
+                    elementsToValidate.formElements.number?.addEventListener('input', this);
+                    elementsToValidate.formElements.address?.addEventListener('input', this);
+                    elementsToValidate.formElements.email?.addEventListener('input', this);
+                    elementsToValidate.formElements.debitCardNumber?.addEventListener('input', this);
+                    elementsToValidate.formElements.debitCardExpireDate?.addEventListener('input', this);
+                    elementsToValidate.formElements.debitCardCode?.addEventListener('input', this);
                 }
                 break;
         }
@@ -64,6 +75,15 @@ export class Controller {
             [EventTargetsIDEnum.sorting]: this.sortingEvent,
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+
+            [EventTargetsIDEnum.modalForm]: this.modalFormEvent,
+            [EventTargetsIDEnum.modalName]: this.modalNameEvent,
+            [EventTargetsIDEnum.modalNumber]: this.modalNumberEvent,
+            [EventTargetsIDEnum.modalAddress]: this.modalAddressEvent,
+            [EventTargetsIDEnum.modalEmail]: this.modalEmailEvent,
+            [EventTargetsIDEnum.modalDebitNumber]: this.modalDebitNumberEvent,
+            [EventTargetsIDEnum.modalDebitValidTo]: this.modalDebitValidToEvent,
+            [EventTargetsIDEnum.modalDebitCode]: this.modalDebitCodeEvent,
         };
         if (event.type === 'hashchange') {
             // || event.type === 'popstate'
@@ -151,4 +171,112 @@ export class Controller {
         `);
         this.initViewAndListeners();
     }
+    private modalFormEvent(event: Event) {
+        event.preventDefault();
+        if (Object.values(this.model.modelData.modalErrors).includes(true)) {
+            console.log('Please fill the fields correctly');
+            console.log(Object.values(this.model.modelData.modalErrors));
+        } else {
+            console.log('Confirmed!');
+        }
+    }
+    private modalNameEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
+        input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
+        if (!input.value.match(regexName)) {
+            console.log('name Error');
+            this.model.modelData.modalErrors.name = true;
+        } else {
+            console.log('name Passed');
+            this.model.modelData.modalErrors.name = false;
+        }
+    }
+    private modalNumberEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const regexNumber = /\+(\d{9})/g;
+        input.value = input.value.replace(/[^0-9\\+]/g, '');
+        input.value = input.value.replace(/\+{2,}/g, '+');
+        if (!input.value.match(regexNumber)) {
+            console.log('number Error');
+            this.model.modelData.modalErrors.number = true;
+        } else {
+            console.log('number Passed');
+            this.model.modelData.modalErrors.number = false;
+        }
+    }
+    private modalAddressEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const regexAddress = /(^[^\s]{5,})(\s{1})([^\s]{5,})(\s{1})([^\s]{5,})$/gi;
+        input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
+        if (!input.value.match(regexAddress)) {
+            console.log('name Error');
+            this.model.modelData.modalErrors.address = true;
+        } else {
+            console.log('adress Passed');
+            this.model.modelData.modalErrors.address = false;
+        }
+    }
+    private modalEmailEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const regexEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+        if (!input.value.match(regexEmail)) {
+            console.log('email error');
+            this.model.modelData.modalErrors.email = true;
+        } else {
+            console.log('email Passed');
+            this.model.modelData.modalErrors.email = false;
+        }
+    }
+    private modalDebitNumberEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const regexDebitNumber = /^(\d{16})$/g;
+        input.value = input.value.replace(/[^0-9]/g, '');
+        if (!input.value.match(regexDebitNumber)) {
+            console.log('debitNumber Error');
+            this.model.modelData.modalErrors.debitNumber = true;
+        } else {
+            console.log('debitNumber Passed');
+            this.model.modelData.modalErrors.debitNumber = false;
+        }
+    }
+    private modalDebitValidToEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        input.value = input.value.replace(/[^0-9]/g, '');
+        // input.value = input.value.replace(/^([0-9]{2})$/g, `${input.value} / `);
+        const regexDebitValidTo = /^[0-9]{2}$/g;
+        if (input.value.match(regexDebitValidTo)) {
+            input.value += '/';
+            console.log('ValidTo Error');
+        }
+    }
+    private modalDebitCodeEvent(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const regexDebitNumber = /^(\d{3})$/g;
+        input.value = input.value.replace(/[^0-9]/g, '');
+        if (!input.value.match(regexDebitNumber)) {
+            console.log('debitCode Error');
+            this.model.modelData.modalErrors.debitCode = true;
+        } else {
+            console.log('debitCode Passed');
+            this.model.modelData.modalErrors.debitCode = false;
+        }
+    }
+
+    // private addListenersToModalElems() {
+    //     this.view.getElementsForValidation().formElements.name?.addEventListener('focusout', (event) => {
+    //         const regexName = /(\w{3,})(\s{1,})(\w{3,})/g;
+    //         const input = event.target as HTMLInputElement;
+    //         if (!input.value.match(regexName)) {
+    //             console.log('valid Error');
+    //         }
+    //     });
+    //     this.view.getElementsForValidation().formElements.number?.addEventListener('focusout', (event) => {
+    //         const regexName = /\+(\d{9})/g;
+    //         const input = event.target as HTMLInputElement;
+    //         if (!input.value.match(regexName)) {
+    //             console.log('valid Error');
+    //         }
+    //     });
+    // }
 }

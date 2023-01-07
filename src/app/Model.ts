@@ -46,6 +46,15 @@ class Model {
             calculatedFilters: null,
             page: this.getPageFromURL(),
             detailsID: '',
+            modalErrors: {
+                name: true,
+                number: true,
+                address: true,
+                email: true,
+                debitNumber: true,
+                // debitValidTo: true,
+                debitCode: true,
+            },
         };
         this.shownProductInfo = null;
     }

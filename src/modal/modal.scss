@@ -63,6 +63,8 @@
 
             &-input {
                 @include modal-input;
+
+
             }
         }
 
@@ -82,5 +84,11 @@
     &__btn-confirm {
         margin: $margin-small 0;
         @include button();
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 }

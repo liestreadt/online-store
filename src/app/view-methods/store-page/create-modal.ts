@@ -42,8 +42,8 @@ export default function createModal(): string {
                                 class="modal__debit-card-number-input">
                         </div>
                         <div class="modal__debit-card-other">
-                            Valid to: <input id="modal-debit-valid-to" class="modal__debit-card-valid-to-input">
-                            CVC2 / CVV2: <input id="modal-debit-code" class="modal__debit-card-cvc-input">
+                            Valid to: <input type="text" id="modal-debit-valid-to" class="modal__debit-card-valid-to-input">
+                            CVC2 / CVV2: <input type="number" id="modal-debit-code" class="modal__debit-card-cvc-input">
                         </div>
                     </div>
                     <input id="modal-confirm" type="submit" class="modal__btn-confirm" value="Confirm">

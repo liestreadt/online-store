@@ -70,6 +70,15 @@ export interface ModelData {
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
     detailsID: string;
+    modalErrors: {
+        name: boolean;
+        number: boolean;
+        address: boolean;
+        email: boolean;
+        debitNumber: boolean;
+        // debitValidTo: boolean;
+        debitCode: boolean;
+    };
 }
 export interface ElementsToListen {
     store: {
@@ -95,7 +104,6 @@ export interface ElementsToValidate {
         debitCardNumber: HTMLInputElement | null;
         debitCardExpireDate: HTMLInputElement | null;
         debitCardCode: HTMLInputElement | null;
-        confirm: HTMLInputElement | null;
     };
 }
 
@@ -109,6 +117,14 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+    modalForm = 'modal-form',
+    modalName = 'modal-name',
+    modalNumber = 'modal-number',
+    modalAddress = 'modal-address',
+    modalEmail = 'modal-email',
+    modalDebitNumber = 'modal-debit-number',
+    modalDebitValidTo = 'modal-debit-valid-to',
+    modalDebitCode = 'modal-debit-code',
 }
 
 // TODO: view should take options values from this enum
