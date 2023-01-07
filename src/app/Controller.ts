@@ -2,7 +2,7 @@ import View from './View';
 import Model from './Model';
 import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
-import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
+import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
     if (element instanceof HTMLInputElement) {
@@ -95,7 +95,6 @@ export class Controller {
         console.log(`No event handler for ${event.type} and ${event.target}`);
     }
     pageBackEvent(event: Event) {
-        console.log('pageBackEvent!');
         if (event.target instanceof HTMLElement && this.model.cart) {
             const value = this.model.cart.showProperties.listPage - 1;
             this.model.createQueryParamFromEvent('cartListPage', `${value}`);
@@ -103,7 +102,6 @@ export class Controller {
         }
     }
     pageForwardEvent(event: Event) {
-        console.log('pageForwardEvent!');
         if (event.target instanceof HTMLElement && this.model.cart) {
             const value = this.model.cart.showProperties.listPage + 1;
             this.model.createQueryParamFromEvent('cartListPage', `${value}`);
@@ -117,8 +115,24 @@ export class Controller {
             this.initViewAndListeners();
         }
     }
-    cartListEvent() {
-        console.log('cartListEvent!');
+    cartListEvent(event: Event) {
+        if (event.target instanceof HTMLButtonElement) {
+            const buttonID = event.target.id;
+            const lengthIncrease = INCREASE_ID_PREFIX.length;
+            const lengthDecrease = INCREASE_ID_PREFIX.length;
+
+            if (buttonID.slice(0, lengthIncrease) === INCREASE_ID_PREFIX) {
+                const productID = buttonID.slice(lengthIncrease);
+                this.model.cart?.increaseAmount(productID);
+                this.model.applyQueryParamsToCart();
+            }
+            if (buttonID.slice(0, lengthDecrease) === DECREASE_ID_PREFIX) {
+                const productID = buttonID.slice(lengthDecrease);
+                this.model.cart?.decreaseAmount(productID);
+                this.model.applyQueryParamsToCart();
+            }
+            this.initViewAndListeners();
+        }
     }
     promoInputEvent() {
         console.log('promoInputEvent!');

@@ -26,10 +26,7 @@ export default function createCartContainer(cart: Cart | null): string {
         </section>`;
     }
 
-    const maxPage = cart?.maxPage();
     const { limit, listPage } = cart?.showProperties;
-    console.log('products.size', products, products?.size);
-    console.log('maxPage', maxPage);
 
     return `
         <section class="cart">

@@ -80,7 +80,6 @@ class Cart {
         list = list.filter((product, index) => {
             return index + 1 > (listPage - 1) * limit && index < listPage * limit;
         });
-        console.log('list', list);
         return list;
     }
     private save(): void {
@@ -139,11 +138,11 @@ class Cart {
     }
     decreaseAmount(id: string): void {
         const product = this.products.get(id);
-        if (product && product.amount > 1) {
-            product.amount -= 1;
-        }
         if (product && product.amount === 1) {
             this.drop(id);
+        }
+        if (product && product.amount > 1) {
+            product.amount -= 1;
         }
         this.save();
     }

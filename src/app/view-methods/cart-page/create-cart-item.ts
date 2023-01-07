@@ -1,5 +1,5 @@
 import Cart from '../../Cart';
-import { CURRENCY_SYMBOL } from '../../constants/constants';
+import { CURRENCY_SYMBOL, DECREASE_ID_PREFIX, INCREASE_ID_PREFIX } from '../../constants/constants';
 import { ProductCart, ProductDetails } from '../../intefaces/types';
 
 export default function createCartItem(product: ProductCart, index: number, cart: Cart): string {
@@ -39,13 +39,15 @@ export default function createCartItem(product: ProductCart, index: number, cart
                     Stock: <span class="amount-in-stock">${product.stock}</span>
                 </div>
                 <div class="cart-item__controls">
-                    <button class="controls-increase">
+                    <button class="controls-increase"
+                    id="${INCREASE_ID_PREFIX}${product.id}">
                         +
                     </button>
                     <div class="controls-count">
                         ${product.amount}
                     </div>
-                    <button class="controls-decrease">
+                    <button class="controls-decrease"
+                    id="${DECREASE_ID_PREFIX}${product.id}">
                         -
                     </button>
                 </div>
