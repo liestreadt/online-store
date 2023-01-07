@@ -56,13 +56,27 @@ export class Controller {
                 elementsToListen.promoInput?.addEventListener('input', this);
                 elementsToListen.buyButton?.addEventListener('click', this);
                 break;
-            case PageCase.details:
-                {
-                    const elementsToListen: ElementsToListen['details'] = this.view.getElementsForEvents().details;
-
-                    elementsToListen.images?.addEventListener('click', this);
-                }
+            }
+            case PageCase.details: {
+                const elementsToListen: ElementsToListen['details'] = this.view.getElementsForEvents().details;
+                elementsToListen.images?.addEventListener('click', this);
                 break;
+            }
+            default: {
+                const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+
+                elementsToListen.reset?.addEventListener('click', this);
+                elementsToListen.copy?.addEventListener('click', this);
+                elementsToListen.category?.addEventListener('click', this);
+                elementsToListen.brand?.addEventListener('click', this);
+                elementsToListen.price?.addEventListener('change', this);
+                elementsToListen.stock?.addEventListener('change', this);
+                elementsToListen.sorting?.addEventListener('change', this);
+                elementsToListen.searching?.addEventListener('input', this);
+                elementsToListen.viewButtons?.addEventListener('click', this);
+                elementsToListen.cards?.addEventListener('click', this);
+                break;
+            }
         }
     }
 
