@@ -23,6 +23,7 @@ import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/Functions';
+import Cart from './Cart';
 
 class View {
     modelData: Partial<ModelData>;
@@ -104,13 +105,12 @@ class View {
     }
     renderCartPage() {
         const containerMain = document.querySelector('main');
-        // skeleton for the future, when current product will be given after click on detail
-        const cartItems = this.modelData.filteredProducts;
-        if (containerMain && cartItems) {
+
+        if (containerMain) {
             containerMain.outerHTML = `
                 <main class="main-cart">
-                    ${this.getCartContainer(cartItems[1])}
-                    ${this.getCartSummary()}
+                    ${this.getCartContainer(this.modelData.cart ?? null)}
+                    ${this.modelData.cart && this.getCartSummary(this.modelData.cart)}
                 </main>
             `;
         }
@@ -156,14 +156,11 @@ class View {
     getProdDetailsContainer(data: ProductDetails): string {
         return createProdDetailsContainer(data);
     }
-    getCartContainer(data: ProductDetails): string {
-        return createCartContainer(data);
+    getCartContainer(cart: Cart | null): string {
+        return createCartContainer(cart);
     }
-    getCartItem(data: ProductDetails): string {
-        return createCartItem(data);
-    }
-    getCartSummary(): string {
-        return createCartSummary();
+    getCartSummary(cart: Cart): string {
+        return createCartSummary(cart);
     }
     getButtonsArray() {
         return [...document.body.querySelectorAll('button')];
@@ -172,7 +169,7 @@ class View {
         console.log('copy url');
     }
     getElementsForEvents(): ElementsToListen {
-        return {
+        const elements: ElementsToListen = {
             store: {
                 reset: document.body.querySelector(`#${EventTargetsIDEnum.reset}`),
                 copy: document.body.querySelector(`#${EventTargetsIDEnum.copy}`),
@@ -185,7 +182,16 @@ class View {
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
                 cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
+            cart: {
+                pageBack: document.querySelector(`#${EventTargetsIDEnum.PAGE_BACK}`),
+                pageForward: document.querySelector(`#${EventTargetsIDEnum.PAGE_FORWARD}`),
+                listLimit: document.querySelector(`#${EventTargetsIDEnum.LIST_LIMIT}`),
+                cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
+                promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+            },
         };
+        return elements;
     }
     addFocusToLastUsed() {
         const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);

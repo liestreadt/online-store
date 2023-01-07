@@ -1,16 +1,20 @@
-import { ProductDetails } from '../../intefaces/types';
+import Cart from '../../Cart';
+import { CURRENCY_SYMBOL, DECREASE_ID_PREFIX, INCREASE_ID_PREFIX } from '../../constants/constants';
+import { ProductCart, ProductDetails } from '../../intefaces/types';
 
-export default function createCartItem(product: ProductDetails): string {
+export default function createCartItem(product: ProductCart, index: number, cart: Cart): string {
+    const { limit, listPage } = cart?.showProperties;
+    const numberInList = index + 1 + limit * (listPage - 1);
     return `
         <div class="cart-item">
             <div class="cart-item__num">
-                1
+                ${numberInList}
             </div>
             <div class="cart-item__pic"
                 style="
                 background: url(${
-                    product.images.filter((i) => i.match(/thumbnail/)).length
-                        ? product.images.filter((i) => i.match(/thumbnail/))
+                    product.images.filter((url) => url.match(/thumbnail/)).length
+                        ? product.images.filter((url) => url.match(/thumbnail/))
                         : product.images[0]
                 });
                 background-position: center;
@@ -22,9 +26,9 @@ export default function createCartItem(product: ProductDetails): string {
                 <div class="cart-item__title">
                     ${product.title}
                 </div>
-                <div class="cart-item__description">
+                <p class="cart-item__description">
                     ${product.description}
-                </div>
+                </p>
                 <div class="cart-item__metrics">
                     <span class="cart-item__rating">Rating: ${product.rating}</span>
                     <span class="cart-item__discount">Discount: ${product.discountPercentage}%</span>
@@ -35,18 +39,20 @@ export default function createCartItem(product: ProductDetails): string {
                     Stock: <span class="amount-in-stock">${product.stock}</span>
                 </div>
                 <div class="cart-item__controls">
-                    <button class="controls-increase">
+                    <button class="controls-increase"
+                    id="${INCREASE_ID_PREFIX}${product.id}">
                         +
                     </button>
                     <div class="controls-count">
-                        5
+                        ${product.amount}
                     </div>
-                    <button class="controls-decrease">
+                    <button class="controls-decrease"
+                    id="${DECREASE_ID_PREFIX}${product.id}">
                         -
                     </button>
                 </div>
                 <div class="cart-item__price">
-                    €46.00
+                    ${CURRENCY_SYMBOL}${product.getProductTotalPrice()}
                 </div>
             </div>
         </div>

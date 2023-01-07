@@ -58,11 +58,11 @@ class Model {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
+            this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.readParamsFromURL();
             this.findInitialFilterValues();
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
-            this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.modelData.cart = this.cart;
         } catch {
             throw new Error('Fail to connect dummy json');
@@ -146,6 +146,25 @@ class Model {
         );
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
+    }
+    applyQueryParamsToCart() {
+        const active = this.modelData.activeFilters;
+        if (!this.cart) {
+            throw new Error('Cart is not initialized');
+        }
+        if (active.cartListLimit) {
+            this.cart.limit = +active.cartListLimit[0];
+        }
+        if (active.cartListPage) {
+            const pageFromQuery: number = +active.cartListPage[0];
+            const lastPage: number = this.cart.lastPage();
+            if (lastPage < pageFromQuery) {
+                this.changeParamInURL('cartListPage', `${lastPage}`);
+                this.reInit();
+            } else {
+                this.cart.listPage = +active.cartListPage[0];
+            }
+        }
     }
     applyQueryParamsToSorting() {
         this.sortProducts(this.modelData.activeFilters.sorting?.[0] as SortVariantsEnum);
@@ -256,6 +275,23 @@ class Model {
             case 'searching': {
                 this.changeParamInURL('searching', value);
                 this.reInit();
+                break;
+            }
+            case 'cartListLimit': {
+                if (this.cart) {
+                    const integer = +value < 1 ? 1 : Math.floor(+value);
+                    const newLimit = Math.min(integer, this.cart.products.size);
+                    this.changeParamInURL('cartListLimit', `${newLimit}`);
+                }
+                this.reInit();
+                break;
+            }
+            case 'cartListPage': {
+                if (this.cart && this.cart.checkValidPage(+value)) {
+                    this.changeParamInURL('cartListPage', value);
+                    this.reInit();
+                }
+                break;
             }
         }
     }
@@ -264,6 +300,7 @@ class Model {
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
         this.applyQueryParamsToSorting();
+        this.applyQueryParamsToCart();
     }
     getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
         filteredProductsInModelData.sort((prev, curr) => {

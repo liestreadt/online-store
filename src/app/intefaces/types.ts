@@ -47,6 +47,8 @@ export const filterParamsKeys = [
     'stockMin',
     'stockMax',
     'searching',
+    'cartListLimit',
+    'cartListPage',
 ] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];
@@ -90,6 +92,14 @@ export interface ElementsToListen {
         viewButtons: HTMLDivElement | null;
         cards: HTMLDivElement | null;
     };
+    cart: {
+        pageBack: HTMLAnchorElement | null;
+        pageForward: HTMLAnchorElement | null;
+        listLimit: HTMLButtonElement | null;
+        cartList: HTMLDivElement | null;
+        promoInput: HTMLInputElement | null;
+        buyButton: HTMLButtonElement | null;
+    };
 }
 
 export enum EventTargetsIDEnum {
@@ -103,6 +113,13 @@ export enum EventTargetsIDEnum {
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
     cards = 'card-container',
+
+    PAGE_BACK = 'pagination-back',
+    PAGE_FORWARD = 'pagination-forward',
+    LIST_LIMIT = 'list-limit',
+    CART_LIST = 'cart-list',
+    PROMO = 'promo-input',
+    BUY = 'buy-button',
 }
 
 export enum SortVariantsEnum {
@@ -117,4 +134,8 @@ export enum PageCase {
     cart,
     details,
     error,
+}
+export interface ShowCart {
+    limit: number;
+    listPage: number;
 }
