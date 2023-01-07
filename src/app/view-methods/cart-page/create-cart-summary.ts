@@ -3,7 +3,7 @@ import { CURRENCY_SYMBOL } from '../../constants/constants';
 import { EventTargetsIDEnum } from '../../intefaces/types';
 
 export default function createCartSummary(cart: Cart): string {
-    if (cart.products.size === 0) {
+    if (!cart.products.size) {
         return '';
     }
     return `

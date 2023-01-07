@@ -1,7 +1,7 @@
 import { CART_ID } from './constants/constants';
 import { ProductCart, ProductDetails, ProductShort, ShowCart } from './intefaces/types';
 
-const DEFAULT_LIMIT = 4;
+export const DEFAULT_LIMIT = 4;
 const DEFAULT_CART_PAGE = 1;
 
 class Cart {
@@ -20,11 +20,11 @@ class Cart {
         };
         this.productsToShow = this.getProductsToShow();
     }
-    maxPage() {
+    lastPage() {
         if (this.products) {
             return Math.ceil(this.products.size / this.showProperties.limit);
         }
-        return 1;
+        return DEFAULT_CART_PAGE;
     }
     set limit(newLimit: number) {
         this.showProperties.limit = newLimit;
@@ -71,14 +71,17 @@ class Cart {
         return null;
     }
     getProductsToShow(): ProductCart[] | null {
-        if (this.products.size === 0) {
+        if (!this.products.size) {
             return null;
         }
         const { limit, listPage } = this.showProperties;
         let list: ProductCart[] = [...this.products].map(([id, product]) => product);
         // index + 1 is used to enumerate products in view
         list = list.filter((product, index) => {
-            return index + 1 > (listPage - 1) * limit && index < listPage * limit;
+            const firstIndexToShow = (listPage - 1) * limit;
+            const lastIndexToShow = listPage * limit - 1;
+            const isProductOnPage = index >= firstIndexToShow && index <= lastIndexToShow;
+            return isProductOnPage;
         });
         return list;
     }

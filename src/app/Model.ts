@@ -157,9 +157,9 @@ class Model {
         }
         if (active.cartListPage) {
             const pageFromQuery: number = +active.cartListPage[0];
-            const maxPage: number = this.cart.maxPage();
-            if (maxPage < pageFromQuery) {
-                this.changeParamInURL('cartListPage', `${maxPage}`);
+            const lastPage: number = this.cart.lastPage();
+            if (lastPage < pageFromQuery) {
+                this.changeParamInURL('cartListPage', `${lastPage}`);
                 this.reInit();
             } else {
                 this.cart.listPage = +active.cartListPage[0];

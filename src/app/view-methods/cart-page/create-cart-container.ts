@@ -1,4 +1,4 @@
-import Cart from '../../Cart';
+import Cart, { DEFAULT_LIMIT } from '../../Cart';
 import { EventTargetsIDEnum } from '../../intefaces/types';
 import createCartItem from './create-cart-item';
 
@@ -16,8 +16,9 @@ function createList(cart: Cart): string {
 }
 export default function createCartContainer(cart: Cart | null): string {
     const products = cart?.products;
+    const isCartEmpty = products && products.size;
 
-    if (!cart || !products || products.size === 0) {
+    if (!cart || !isCartEmpty) {
         return `
         <section class="cart">
             <h2 class="cart__header header_empty">
@@ -26,7 +27,7 @@ export default function createCartContainer(cart: Cart | null): string {
         </section>`;
     }
 
-    const { limit, listPage } = cart?.showProperties;
+    const { limit, listPage } = cart.showProperties;
 
     return `
         <section class="cart">
@@ -41,7 +42,7 @@ export default function createCartContainer(cart: Cart | null): string {
                         type="number"
                         min="1"
                         max="${products?.size ?? 1}"
-                        value="${limit ?? 3}">
+                        value="${limit ?? DEFAULT_LIMIT}">
                 </div>
                 <div class="cart__pagination">
                     <div class="pagination-text">

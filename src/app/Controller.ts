@@ -95,15 +95,16 @@ export class Controller {
         console.log(`No event handler for ${event.type} and ${event.target}`);
     }
     pageBackEvent(event: Event) {
-        if (event.target instanceof HTMLElement && this.model.cart) {
-            const value = this.model.cart.showProperties.listPage - 1;
-            this.model.createQueryParamFromEvent('cartListPage', `${value}`);
-            this.initViewAndListeners();
-        }
+        const changeBy = -1;
+        this.handlePageEvent(event, changeBy);
     }
     pageForwardEvent(event: Event) {
+        const changeBy = 1;
+        this.handlePageEvent(event, changeBy);
+    }
+    handlePageEvent(event: Event, pageChange: number) {
         if (event.target instanceof HTMLElement && this.model.cart) {
-            const value = this.model.cart.showProperties.listPage + 1;
+            const value = this.model.cart.showProperties.listPage + pageChange;
             this.model.createQueryParamFromEvent('cartListPage', `${value}`);
             this.initViewAndListeners();
         }
