@@ -1,6 +1,6 @@
-import { ProductDetail } from '../../intefaces/types';
+import { ProductDetails } from '../../intefaces/types';
 
-export async function calculateImages(product: ProductDetail) {
+export async function calculateImages(product: ProductDetails) {
     const asd: (string | null)[] = [];
     for (let i = 0; i < product.images.length; i++) {
         const imgResponse = await fetch(product.images[i], { method: 'HEAD' });
@@ -14,7 +14,7 @@ export async function calculateImages(product: ProductDetail) {
     return product.images;
 }
 
-export function createProdDetailsContainer(product: ProductDetail, mainImageSrc: string): string {
+export function createProdDetailsContainer(product: ProductDetails, mainImageSrc: string): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>

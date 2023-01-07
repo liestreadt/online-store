@@ -3,21 +3,22 @@ import increaseValueInMap from './tools/Functions';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     ShownProductInfo,
     filterParamsKeys,
     FilterKeys,
     FilterParamsValues,
+    FilteredProductsKeys,
     InitialFilterValues,
     ModelData,
-    sortVariantsEnum,
+    SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
 
 class Model {
     queryParams: URLSearchParams;
-    cart: Cart;
+    cart: Cart | null;
     productJSON: DummyJSON | null;
     modelData: ModelData;
     filterCalculator: FilterCalculator;
@@ -26,7 +27,7 @@ class Model {
     constructor(urlString: string = window.location.href) {
         const url = new URL(urlString);
         this.queryParams = url.searchParams;
-        this.cart = new Cart();
+        this.cart = null;
         this.filterCalculator = new FilterCalculator();
         this.productJSON = null;
         this.modelData = {
@@ -41,12 +42,15 @@ class Model {
             },
             allBrands: [],
             allCategories: [],
+            initialProducts: null,
             filteredProducts: null,
+            currentOption: null,
             shownProductInfo: null,
             calculatedFilters: null,
             page: this.getPageFromURL(),
             detailsID: Number(this.getDetailsID()),
             detailsMainImageSrc: '',
+            cart: null,
         };
         this.shownProductInfo = null;
     }
@@ -55,10 +59,12 @@ class Model {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
+            this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.readParamsFromURL();
             this.findInitialFilterValues();
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
+            this.modelData.cart = this.cart;
         } catch {
             throw new Error('Fail to connect dummy json');
         }
@@ -135,18 +141,43 @@ class Model {
             this.filterCalculator.updateSearchName(active.searching[0]);
         }
         this.modelData.calculatedFilters = this.filterCalculator;
-        this.shownProductInfo = this.filterCalculator.recalculate(this.productJSON?.products || null);
+        this.shownProductInfo = this.filterCalculator.recalculate(
+            this.productJSON?.products || null,
+            history.state?.key
+        );
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
     }
+    applyQueryParamsToCart() {
+        const active = this.modelData.activeFilters;
+        if (!this.cart) {
+            throw new Error('Cart is not initialized');
+        }
+        if (active.cartListLimit) {
+            this.cart.limit = +active.cartListLimit[0];
+        }
+        if (active.cartListPage) {
+            const pageFromQuery: number = +active.cartListPage[0];
+            const lastPage: number = this.cart.lastPage();
+            if (lastPage < pageFromQuery) {
+                this.changeParamInURL('cartListPage', `${lastPage}`);
+                this.reInit();
+            } else {
+                this.cart.listPage = +active.cartListPage[0];
+            }
+        }
+    }
+    applyQueryParamsToSorting() {
+        this.sortProducts(this.modelData.activeFilters.sorting?.[0] as SortVariantsEnum);
+    }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
-            const allProducts: Array<ProductDetail> = this.productJSON.products;
+            const allProducts: Array<ProductDetails> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info: InitialFilterValues, product: ProductDetail) => {
+                (info: InitialFilterValues, product: ProductDetails) => {
                     info.minPrice = Math.min(info.minPrice, product.price);
                     info.maxPrice = Math.max(info.maxPrice, product.price);
 
@@ -172,14 +203,16 @@ class Model {
             );
             this.modelData.allBrands = [...new Set(allBrands)];
             this.modelData.allCategories = [...new Set(allCategories)];
+            this.modelData.initialProducts = this.productJSON.products;
             this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
     }
-    createQueryParamFromEvent(key: FilterKeys, value: string) {
+    createQueryParamFromEvent(key: FilterKeys, value: string, secondValue?: number) {
         switch (key) {
             case 'sorting': {
-                // TODO: create url with added new sorting params
+                this.changeParamInURL('sorting', value);
+                this.reInit();
                 break;
             }
             case 'category': {
@@ -201,28 +234,65 @@ class Model {
                 break;
             }
             case 'priceMin': {
-                this.changeParamInURL('priceMin', value);
+                if (secondValue && +value > secondValue) {
+                    this.changeParamInURL('priceMax', value);
+                    this.changeParamInURL('priceMin', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('priceMin', value);
+                }
                 this.reInit();
                 break;
             }
             case 'priceMax': {
-                this.changeParamInURL('priceMax', value);
+                if (secondValue && +value < secondValue) {
+                    this.changeParamInURL('priceMin', value);
+                    this.changeParamInURL('priceMax', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('priceMax', value);
+                }
                 this.reInit();
                 break;
             }
             case 'stockMin': {
-                this.changeParamInURL('stockMin', value);
+                if (secondValue && +value > secondValue) {
+                    this.changeParamInURL('stockMax', value);
+                    this.changeParamInURL('stockMin', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('stockMin', value);
+                }
                 this.reInit();
                 break;
             }
             case 'stockMax': {
-                this.changeParamInURL('stockMax', value);
+                if (secondValue && +value < secondValue) {
+                    this.changeParamInURL('stockMin', value);
+                    this.changeParamInURL('stockMax', `${secondValue}`);
+                } else {
+                    this.changeParamInURL('stockMax', value);
+                }
                 this.reInit();
                 break;
             }
             case 'searching': {
                 this.changeParamInURL('searching', value);
                 this.reInit();
+                break;
+            }
+            case 'cartListLimit': {
+                if (this.cart) {
+                    const integer = +value < 1 ? 1 : Math.floor(+value);
+                    const newLimit = Math.min(integer, this.cart.products.size);
+                    this.changeParamInURL('cartListLimit', `${newLimit}`);
+                }
+                this.reInit();
+                break;
+            }
+            case 'cartListPage': {
+                if (this.cart && this.cart.checkValidPage(+value)) {
+                    this.changeParamInURL('cartListPage', value);
+                    this.reInit();
+                }
+                break;
             }
         }
     }
@@ -234,10 +304,55 @@ class Model {
             (elem) => elem.id === this.modelData.detailsID
         )?.images[0];
         console.log();
+        this.applyQueryParamsToSorting();
+        this.applyQueryParamsToCart();
     }
-    sortProducts(sortVariant: sortVariantsEnum) {
-        // TODO: implemet sorting by option
-        // this.modelData.filteredProducts?.sort()
+    getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +prev[sortProperty] - +curr[sortProperty];
+        });
+    }
+    getDescendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +curr[sortProperty] - +prev[sortProperty];
+        });
+    }
+    sortProducts(sortVariant: SortVariantsEnum): void {
+        if (this.modelData.filteredProducts) {
+            this.modelData.currentOption = sortVariant;
+            switch (sortVariant) {
+                case SortVariantsEnum.DEFAULT:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                default:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+            }
+        }
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
@@ -272,6 +387,7 @@ class Model {
     reInit() {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();
+        this.applyQueryParamsToSorting();
         this.applyQueryParam();
     }
 }

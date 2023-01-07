@@ -1,17 +1,27 @@
-import { EventTargetsIDEnum, FilterKeys } from '../../intefaces/types';
-import { ModelData } from '../../intefaces/types';
-import createSroreCard from './create-store-card';
+import { ModelData, SortVariantsEnum } from '../../intefaces/types';
+import { EventTargetsIDEnum } from '../../intefaces/types';
+import createStoreCard from './create-store-card';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
+    const SORT_OPTIONS = Object.values(SortVariantsEnum);
+    const sortNamesArr = [
+        'default',
+        'price ↑ (ascending)',
+        'price ↓ (descending)',
+        'rating ↑ (ascending)',
+        'rating ↓ (descending)',
+    ];
     return `
         <section class="sorting">
             <div class="sorting-header">
-                <select name="" id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
-                    <option value="default-sort" class="sorting-option" selected>Sort default</option>
-                    <option value="ascending-price" class="sorting-option">Sort by price (ascending)</option>
-                    <option value="desending-price" class="sorting-option">Sort by price (descending)</option>
-                    <option value="ascending-rating" class="sorting-option">Sort by rating (ascending)</option>
-                    <option value="descending-rating" class="sorting-option">Sort by rating (descending)</option>
+                <select id="${EventTargetsIDEnum.sorting}" class="sorting__menu">
+                    ${SORT_OPTIONS.map((item, index) => {
+                        return `
+                            <option value="${item}" class="sorting-option" ${
+                            item === modelData.currentOption ? 'selected' : ''
+                        }>Sort by ${sortNamesArr[index]}</option>
+                            `;
+                    }).join('')}
                 </select>
                 <div class="sorting__total-found">
                     Found: <span class="sorting__amount">${modelData.filteredProducts?.length}</span>
@@ -28,8 +38,12 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     <button class="sorting__small-view">💻</button>
                 </div>
             </div>
-            <div class="sorting__card-container sorting__card-container_small">
-                ${modelData.filteredProducts?.map((i) => createSroreCard(i)).join('')}
+            <div class="sorting__card-container sorting__card-container_small" id="${EventTargetsIDEnum.cards}">
+                ${modelData.filteredProducts
+                    ?.map((product) =>
+                        createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
+                    )
+                    .join('')}
             </div>
         </section>
     `;

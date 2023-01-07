@@ -50,6 +50,14 @@
         height: fit-content;
     }
 
+    &__btn_added {
+        background-color: $color-cards-info;
+    }
+
+    &_added {
+        box-shadow: 0 0 5px 2px $color-sand-gradient;
+    }
+
     &__link-to-details {
         display: flex;
         align-items: center;
