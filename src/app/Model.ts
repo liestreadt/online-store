@@ -11,6 +11,7 @@ import {
     InitialFilterValues,
     ModelData,
     sortVariantsEnum,
+    ViewVariantsEnum,
 } from './intefaces/types';
 
 class Model {
@@ -41,7 +42,7 @@ class Model {
             allCategories: [],
             filteredProducts: null,
             page: '',
-            currentView: 'view-big',
+            currentView: null,
             shownProductInfo: null,
             calculatedFilters: null,
         };
@@ -176,19 +177,32 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'view': {
+                this.changeParamInURL('view', value);
+                this.reInit();
+                break;
+            }
         }
     }
     applyQueryParam() {
         console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.applyQueryParamsToViewType();
+    }
+    applyQueryParamsToViewType() {
+        this.handleViewChange(this.modelData.activeFilters.view?.[0] as ViewVariantsEnum);
     }
     sortProducts(sortVariant: sortVariantsEnum) {
         // TODO: implemet sorting by option
         // this.modelData.filteredProducts?.sort()
     }
     handleViewChange(view: string): void {
-        this.modelData.currentView = view;
+        if (view) {
+            this.modelData.currentView = view;
+        } else {
+            this.modelData.currentView = ViewVariantsEnum.big;
+        }
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);

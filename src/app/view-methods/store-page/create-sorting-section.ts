@@ -1,4 +1,4 @@
-import { EventTargetsIDEnum } from '../../intefaces/types';
+import { EventTargetsIDEnum, ViewVariantsEnum } from '../../intefaces/types';
 import { ModelData } from '../../intefaces/types';
 import createStoreCard from './create-store-card';
 import createStoreCardBig from './create-store-card-big';
@@ -28,8 +28,12 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     class="sorting__search"
                     placeholder="Search product">
                 <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
-                    Choose view: <button id="view-big" class="sorting__big-view ${isViewButtonBigSelected}">☰</button>
-                    <button id="view-small" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
+                    Choose view: <button id="${
+                        ViewVariantsEnum.big
+                    }" class="sorting__big-view ${isViewButtonBigSelected}">☰</button>
+                    <button id="${
+                        ViewVariantsEnum.small
+                    }" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
                 </div>
             </div>
             <div class="sorting__card-container sorting__card-container_${currentCardContainerSize}">

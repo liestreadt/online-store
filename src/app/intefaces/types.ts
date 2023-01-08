@@ -38,6 +38,7 @@ export const filterParamsKeys = [
     'stockMin',
     'stockMax',
     'searching',
+    'view',
 ] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];
@@ -59,7 +60,7 @@ export interface ModelData {
     allCategories: string[];
     filteredProducts: Array<ProductDetail> | null;
     page: string;
-    currentView: string;
+    currentView: string | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
 }
@@ -96,4 +97,9 @@ export enum sortVariantsEnum {
     byPriceDescending = 'descending-price',
     byRatingDescending = 'descending-rating',
     byRatingAscending = 'ascending-rating',
+}
+
+export enum ViewVariantsEnum {
+    small = 'view-small',
+    big = 'view-big',
 }
