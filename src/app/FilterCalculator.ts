@@ -1,5 +1,5 @@
 import { FilterKeys, ProductDetails, ShownProductInfo } from './intefaces/types';
-import increaseValueInMap from './tools/Functions';
+import increaseValueInMap from './tools/helpers';
 
 export class FilterCalculator {
     minUserPrice: number;

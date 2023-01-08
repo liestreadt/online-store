@@ -160,6 +160,14 @@ class Cart {
     checkProductInCart(id: string): boolean {
         return this.products.has(id);
     }
+    toggleProductInCart(cardId: string) {
+        const isInCart = this.checkProductInCart(cardId);
+        if (isInCart) {
+            this.drop(cardId);
+        } else {
+            this.addNew(cardId);
+        }
+    }
 }
 
 export default Cart;

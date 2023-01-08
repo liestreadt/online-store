@@ -1,7 +1,6 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum } from './intefaces/types';
-import { EventTargetsIDEnum } from './intefaces/types';
+import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum, EventTargetsIDEnum } from './intefaces/types';
 import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
@@ -58,6 +57,27 @@ export class Controller {
                 elementsToListen.buyButton?.addEventListener('click', this);
                 break;
             }
+            case PageCase.details: {
+                const elementsToListen: ElementsToListen['details'] = this.view.getElementsForEvents().details;
+                elementsToListen.images?.addEventListener('click', this);
+                elementsToListen.detailsAddToCart?.addEventListener('click', this);
+                break;
+            }
+            default: {
+                const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+
+                elementsToListen.reset?.addEventListener('click', this);
+                elementsToListen.copy?.addEventListener('click', this);
+                elementsToListen.category?.addEventListener('click', this);
+                elementsToListen.brand?.addEventListener('click', this);
+                elementsToListen.price?.addEventListener('change', this);
+                elementsToListen.stock?.addEventListener('change', this);
+                elementsToListen.sorting?.addEventListener('change', this);
+                elementsToListen.searching?.addEventListener('input', this);
+                elementsToListen.viewButtons?.addEventListener('click', this);
+                elementsToListen.cards?.addEventListener('click', this);
+                break;
+            }
         }
     }
 
@@ -73,6 +93,7 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
             [EventTargetsIDEnum.cards]: this.addToCartEvent,
+            [EventTargetsIDEnum.detailsAddToCart]: this.detailsAddToCartEvent,
 
             [EventTargetsIDEnum.PAGE_BACK]: this.pageBackEvent,
             [EventTargetsIDEnum.PAGE_FORWARD]: this.pageForwardEvent,
@@ -80,6 +101,7 @@ export class Controller {
             [EventTargetsIDEnum.CART_LIST]: this.cartListEvent,
             [EventTargetsIDEnum.PROMO]: this.promoInputEvent,
             [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
+            [EventTargetsIDEnum.detailsImages]: this.detailsImagesEvent,
         };
         if (event.type === 'hashchange' || event.type === 'popstate') {
             this.model.updatePage();
@@ -216,14 +238,21 @@ export class Controller {
         if (event.target instanceof HTMLButtonElement) {
             const length = `${EventTargetsIDEnum.cards}-`.length;
             const cardID = event.target.id.slice(length);
-            const isInCart = this.model.cart?.checkProductInCart(cardID);
-
-            if (isInCart) {
-                this.model.cart?.drop(cardID);
-            } else {
-                this.model.cart?.addNew(cardID);
-            }
+            this.model.cart?.toggleProductInCart(cardID);
             this.initViewAndListeners();
+        }
+    }
+    private detailsAddToCartEvent(event: Event): void {
+        if (event.target instanceof HTMLButtonElement) {
+            const cardID = this.model.modelData.detailsID;
+            this.model.cart?.toggleProductInCart(`${cardID}`);
+            this.initViewAndListeners();
+        }
+    }
+    private detailsImagesEvent(event: Event): void {
+        if (event.target instanceof HTMLImageElement) {
+            this.model.modelData.detailsMainImageSrc = event.target.src;
+            this.view.handleDetailsImagesClick(event.target.src);
         }
     }
 }

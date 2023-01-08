@@ -1,5 +1,5 @@
 import Cart, { DEFAULT_CART_PAGE } from './Cart';
-import increaseValueInMap from './tools/Functions';
+import increaseValueInMap from './tools/helpers';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
 import {
@@ -48,16 +48,22 @@ class Model {
             shownProductInfo: null,
             calculatedFilters: null,
             page: this.getPageFromURL(),
-            detailsID: '',
+            detailsID: Number(this.getDetailsID()),
+            detailsMainImageSrc: '',
             cart: null,
         };
         this.shownProductInfo = null;
     }
-    async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
+    async loadProducts(source = 'https://dummyjson.com/products?limit=50'): Promise<void> {
         try {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
+            if (this.productJSON?.products) {
+                this.productJSON.products.forEach((elem: ProductDetails) => {
+                    elem.isImagesUnique = false;
+                });
+            }
             this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.readParamsFromURL();
             this.findInitialFilterValues();
@@ -94,7 +100,7 @@ class Model {
     updatePage() {
         this.modelData.page = this.getPageFromURL();
         if (this.modelData.page === PageCase.details) {
-            this.modelData.detailsID = this.getDetailsID();
+            this.modelData.detailsID = Number(this.getDetailsID());
         }
         this.readParamsFromURL();
         this.findInitialFilterValues();
@@ -302,6 +308,9 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.modelData.detailsMainImageSrc = this.modelData.filteredProducts?.find(
+            (elem) => elem.id === this.modelData.detailsID
+        )?.images[0];
         this.applyQueryParamsToSorting();
         this.applyQueryParamsToCart();
     }
@@ -359,7 +368,6 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, value }, '', url.toString());
-        //console.log('add category to url search params');
     }
     deleteParamFromURL(key: FilterKeys, param: string) {
         const url: URL = new URL(window.location.href);
