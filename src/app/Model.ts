@@ -1,5 +1,5 @@
 import Cart from './Cart';
-import increaseValueInMap, { calculateImages } from './tools/Functions';
+import increaseValueInMap from './tools/helpers';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
 import {
@@ -54,13 +54,12 @@ class Model {
         };
         this.shownProductInfo = null;
     }
-    async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
+    async loadProducts(source = 'https://dummyjson.com/products?limit=50'): Promise<void> {
         try {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
             if (this.productJSON?.products) {
-                this.productJSON.products = this.productJSON.products.slice(0, 50);
                 this.productJSON.products.forEach((elem: ProductDetails) => {
                     elem.isImagesUnique = false;
                 });
@@ -309,7 +308,6 @@ class Model {
         this.modelData.detailsMainImageSrc = this.modelData.filteredProducts?.find(
             (elem) => elem.id === this.modelData.detailsID
         )?.images[0];
-        console.log();
         this.applyQueryParamsToSorting();
         this.applyQueryParamsToCart();
     }
@@ -367,7 +365,6 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, value }, '', url.toString());
-        //console.log('add category to url search params');
     }
     deleteParamFromURL(key: FilterKeys, param: string) {
         const url: URL = new URL(window.location.href);

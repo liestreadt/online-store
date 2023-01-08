@@ -78,7 +78,7 @@ export interface ModelData {
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
     detailsID: number;
-    detailsMainImageSrc: string | undefined;
+    detailsMainImageSrc?: string;
     cart: Cart | null;
 }
 export interface ElementsToListen {
