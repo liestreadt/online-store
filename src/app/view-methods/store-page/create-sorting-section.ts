@@ -3,8 +3,6 @@ import createStoreCard from './create-store-card';
 import createStoreCardBig from './create-store-card-big';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
-    const isProductInCart = modelData.cart?.checkProductInCart(`${product.id}`) ?? false;
-    const currentViewFunc = modelData.currentView === 'view-big' ? createStoreCardBig(product, isProductInCart) : createStoreCard(product, isProductInCart);
     const currentCardContainerSize = modelData.currentView === 'view-big' ? 'big' : 'small';
     const isViewButtonBigSelected = modelData.currentView === 'view-big' ? 'sorting__big-view_selected' : '';
     const isViewButtonSmallSelected = modelData.currentView === 'view-big' ? '' : 'sorting__small-view_selected';
@@ -48,11 +46,15 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     }" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
                 </div>
             </div>
-            <div class="sorting__card-container sorting__card-container_small" id="${EventTargetsIDEnum.cards}">
+            <div
+                class="sorting__card-container sorting__card-container_${currentCardContainerSize}"
+                id="${EventTargetsIDEnum.cards}">
                 ${modelData.filteredProducts
-                    ?.map((product) =>
-                        currentViewFunc(product, isProductInCart)
-                    )
+                    ?.map((product) => {
+                        return modelData.currentView === 'view-big'
+                            ? createStoreCardBig(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
+                            : createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false);
+                    })
                     .join('')}
             </div>
         </section>
