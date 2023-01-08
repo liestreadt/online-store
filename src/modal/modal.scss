@@ -1,11 +1,11 @@
 .modal {
     display: flex;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: $color-modal-bkg;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 
     &__window {
         display: flex;
@@ -63,8 +63,6 @@
 
             &-input {
                 @include modal-input;
-
-
             }
         }
 
@@ -86,9 +84,28 @@
         @include button();
     }
 
+    &__error-message {
+        display: none;
+        border: $border-error;
+        border-radius: $radius-small;
+        padding: $padding-small;
+        background-color: $color-modal-input-error;
+        font-size: 2rem;
+    }
+
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
     }
+}
+
+.error {
+    border: $border-error;
+    background-color: $color-modal-input-error;
+}
+
+.passed {
+    border: $border-passed;
+    background-color: $color-modal-input-passed;
 }

@@ -211,6 +211,26 @@ class View {
             searchField.setSelectionRange(textLength, textLength);
         }
     }
+    hadleModalInputError(input: HTMLInputElement) {
+        input.classList.remove('passed');
+        input.classList.add('error');
+    }
+    hadleModalInputPassed(input: HTMLInputElement) {
+        input.classList.remove('error');
+        input.classList.add('passed');
+    }
+    toggleModalErrorMessage(display: string) {
+        const errorMessage = document.body.querySelector('#modal-error-message') as HTMLDivElement;
+        if (errorMessage) {
+            errorMessage.style.display = `${display}`;
+        }
+    }
+    handleFormError() {
+        this.toggleModalErrorMessage('block');
+    }
+    handleFormPassed() {
+        this.toggleModalErrorMessage('none');
+    }
 }
 
 export default View;

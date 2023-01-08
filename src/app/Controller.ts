@@ -176,8 +176,10 @@ export class Controller {
         if (Object.values(this.model.modelData.modalErrors).includes(true)) {
             console.log('Please fill the fields correctly');
             console.log(Object.values(this.model.modelData.modalErrors));
+            this.view.handleFormError();
         } else {
             console.log('Confirmed!');
+            this.view.handleFormPassed();
         }
     }
     private modalNameEvent(event: Event) {
@@ -187,9 +189,11 @@ export class Controller {
         if (!input.value.match(regexName)) {
             console.log('name Error');
             this.model.modelData.modalErrors.name = true;
+            this.view.hadleModalInputError(input);
         } else {
             console.log('name Passed');
             this.model.modelData.modalErrors.name = false;
+            this.view.hadleModalInputPassed(input);
         }
     }
     private modalNumberEvent(event: Event) {
@@ -200,9 +204,11 @@ export class Controller {
         if (!input.value.match(regexNumber)) {
             console.log('number Error');
             this.model.modelData.modalErrors.number = true;
+            this.view.hadleModalInputError(input);
         } else {
             console.log('number Passed');
             this.model.modelData.modalErrors.number = false;
+            this.view.hadleModalInputPassed(input);
         }
     }
     private modalAddressEvent(event: Event) {
@@ -212,9 +218,11 @@ export class Controller {
         if (!input.value.match(regexAddress)) {
             console.log('name Error');
             this.model.modelData.modalErrors.address = true;
+            this.view.hadleModalInputError(input);
         } else {
             console.log('adress Passed');
             this.model.modelData.modalErrors.address = false;
+            this.view.hadleModalInputPassed(input);
         }
     }
     private modalEmailEvent(event: Event) {
@@ -223,9 +231,11 @@ export class Controller {
         if (!input.value.match(regexEmail)) {
             console.log('email error');
             this.model.modelData.modalErrors.email = true;
+            this.view.hadleModalInputError(input);
         } else {
             console.log('email Passed');
             this.model.modelData.modalErrors.email = false;
+            this.view.hadleModalInputPassed(input);
         }
     }
     private modalDebitNumberEvent(event: Event) {
@@ -235,9 +245,11 @@ export class Controller {
         if (!input.value.match(regexDebitNumber)) {
             console.log('debitNumber Error');
             this.model.modelData.modalErrors.debitNumber = true;
+            this.view.hadleModalInputError(input);
         } else {
             console.log('debitNumber Passed');
             this.model.modelData.modalErrors.debitNumber = false;
+            this.view.hadleModalInputPassed(input);
         }
     }
     private modalDebitValidToEvent(event: Event) {
@@ -257,9 +269,11 @@ export class Controller {
         if (!input.value.match(regexDebitNumber)) {
             console.log('debitCode Error');
             this.model.modelData.modalErrors.debitCode = true;
+            this.view.hadleModalInputError(input);
         } else {
             console.log('debitCode Passed');
             this.model.modelData.modalErrors.debitCode = false;
+            this.view.hadleModalInputPassed(input);
         }
     }
 

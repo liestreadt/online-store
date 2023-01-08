@@ -48,6 +48,9 @@ export default function createModal(): string {
                     </div>
                     <input id="modal-confirm" type="submit" class="modal__btn-confirm" value="Confirm">
                 </div>
+                <div id="modal-error-message" class="modal__error-message">
+                    Please fill the fields correctly
+                </div>
             </form>
         </section>
     `;
