@@ -29,7 +29,7 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
-        //window.addEventListener('popstate', this);
+        window.addEventListener('popstate', this);
 
         switch (this.model.modelData.page) {
             case PageCase.store: {
@@ -81,8 +81,8 @@ export class Controller {
             [EventTargetsIDEnum.PROMO]: this.promoInputEvent,
             [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
         };
-        if (event.type === 'hashchange') {
-            // || event.type === 'popstate'
+        if (event.type === 'hashchange' || event.type === 'popstate') {
+            console.log('event.type', event.type);
             this.model.updatePage();
             this.initViewAndListeners();
             return;

@@ -2,7 +2,7 @@ import { CART_ID } from './constants/constants';
 import { ProductCart, ProductDetails, ProductShort, ShowCart } from './intefaces/types';
 
 export const DEFAULT_LIMIT = 4;
-const DEFAULT_CART_PAGE = 1;
+export const DEFAULT_CART_PAGE = 1;
 
 class Cart {
     productsAll: ProductDetails[] | null;
