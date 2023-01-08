@@ -82,7 +82,6 @@ export class Controller {
             [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
         };
         if (event.type === 'hashchange' || event.type === 'popstate') {
-            console.log('event.type', event.type);
             this.model.updatePage();
             this.initViewAndListeners();
             return;
