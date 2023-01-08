@@ -1,4 +1,4 @@
-import Cart from './Cart';
+import Cart, { DEFAULT_CART_PAGE } from './Cart';
 import increaseValueInMap from './tools/helpers';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
@@ -104,6 +104,7 @@ class Model {
         }
         this.readParamsFromURL();
         this.findInitialFilterValues();
+        this.applyQueryParamsToFilter();
         this.applyQueryParam();
     }
     readParamsFromURL(): Partial<FilterParamsValues> {
@@ -170,6 +171,8 @@ class Model {
             } else {
                 this.cart.listPage = +active.cartListPage[0];
             }
+        } else {
+            this.cart.listPage = DEFAULT_CART_PAGE;
         }
     }
     applyQueryParamsToSorting() {

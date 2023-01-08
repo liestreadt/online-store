@@ -2,7 +2,7 @@ import { CART_ID } from './constants/constants';
 import { ProductCart, ProductDetails, ProductShort, ShowCart } from './intefaces/types';
 
 export const DEFAULT_LIMIT = 4;
-const DEFAULT_CART_PAGE = 1;
+export const DEFAULT_CART_PAGE = 1;
 
 class Cart {
     productsAll: ProductDetails[] | null;
@@ -34,8 +34,12 @@ class Cart {
         return this.showProperties.limit;
     }
     set listPage(newPage: number) {
-        this.showProperties.listPage = newPage;
-        this.productsToShow = this.getProductsToShow();
+        if (this.checkValidPage(newPage)) {
+            this.showProperties.listPage = newPage;
+            this.productsToShow = this.getProductsToShow();
+        } else {
+            this.showProperties.listPage = DEFAULT_CART_PAGE;
+        }
     }
     checkValidPage(page: number): boolean {
         const maxListPage = Math.ceil(this.products.size / this.limit);

@@ -28,7 +28,7 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
-        //window.addEventListener('popstate', this);
+        window.addEventListener('popstate', this);
 
         switch (this.model.modelData.page) {
             case PageCase.store: {
@@ -103,8 +103,7 @@ export class Controller {
             [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
             [EventTargetsIDEnum.detailsImages]: this.detailsImagesEvent,
         };
-        if (event.type === 'hashchange') {
-            // || event.type === 'popstate'
+        if (event.type === 'hashchange' || event.type === 'popstate') {
             this.model.updatePage();
             this.initViewAndListeners();
             return;
