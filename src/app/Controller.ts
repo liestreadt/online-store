@@ -137,16 +137,14 @@ export class Controller {
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {
-        if (event.target instanceof HTMLButtonElement) {
+        const isValidEventTarget =
+            event.target instanceof HTMLButtonElement && event.target.id !== this.model.modelData.currentView;
+
+        if (isValidEventTarget) {
             const key = 'view' as FilterKeys;
-            console.log(event.target.id);
-            if (event.target.id === this.model.modelData.currentView) {
-                return;
-            } else {
-                this.model.handleViewChange(event.target.id);
-                this.model.createQueryParamFromEvent(key, event.target.id);
-                this.initViewAndListeners();
-            }
+            this.model.handleViewChange(event.target.id);
+            this.model.createQueryParamFromEvent(key, event.target.id);
+            this.initViewAndListeners();
         }
     }
 }
