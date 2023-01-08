@@ -1,6 +1,7 @@
+import Cart from '../Cart';
 import { FilterCalculator } from '../FilterCalculator';
 
-export interface ProductDetail {
+export interface ProductDetails {
     id: number;
     title: string;
     description: string;
@@ -12,9 +13,17 @@ export interface ProductDetail {
     rating: number;
     stock: number;
 }
+export interface ProductShort {
+    id: number;
+    amount: number;
+}
+export interface ProductCart extends ProductDetails {
+    amount: number;
+    getProductTotalPrice: () => number;
+}
 
 export interface DummyJSON {
-    products: Array<ProductDetail>;
+    products: Array<ProductDetails>;
     limit: number;
     total: number;
     skip: number;
@@ -26,7 +35,7 @@ export interface ShownProductInfo {
     maxStock: number;
     categories: Map<string, number>;
     brands: Map<string, number>;
-    shownProducts: ProductDetail[];
+    shownProducts: ProductDetails[];
 }
 
 export const filterParamsKeys = [
@@ -39,11 +48,15 @@ export const filterParamsKeys = [
     'stockMax',
     'searching',
     'view',
+    'cartListLimit',
+    'cartListPage',
 ] as const;
 
 export type FilterKeys = typeof filterParamsKeys[number];
 
 export type FilterParamsValues = Record<FilterKeys, string[]>;
+
+export type FilteredProductsKeys = keyof ProductDetails;
 
 export interface InitialFilterValues {
     minPrice: number;
@@ -58,11 +71,15 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
-    filteredProducts: Array<ProductDetail> | null;
-    page: string;
     currentView: string | null;
+    initialProducts: Array<ProductDetails> | null;
+    filteredProducts: Array<ProductDetails> | null;
+    currentOption: SortVariantsEnum | null;
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
+    page: PageCase;
+    detailsID: string;
+    cart: Cart | null;
 }
 export interface ElementsToListen {
     store: {
@@ -70,11 +87,20 @@ export interface ElementsToListen {
         copy: HTMLButtonElement | null;
         category: HTMLDivElement | null;
         brand: HTMLDivElement | null;
-        price: HTMLInputElement | null; // double-input element
-        stock: HTMLInputElement | null; // double-input element
+        price: HTMLDivElement | null; // double-input element
+        stock: HTMLDivElement | null; // double-input element
         sorting: HTMLSelectElement | null;
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
+        cards: HTMLDivElement | null;
+    };
+    cart: {
+        pageBack: HTMLAnchorElement | null;
+        pageForward: HTMLAnchorElement | null;
+        listLimit: HTMLButtonElement | null;
+        cartList: HTMLDivElement | null;
+        promoInput: HTMLInputElement | null;
+        buyButton: HTMLButtonElement | null;
     };
 }
 
@@ -88,15 +114,32 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+    cards = 'card-container',
+
+    PAGE_BACK = 'pagination-back',
+    PAGE_FORWARD = 'pagination-forward',
+    LIST_LIMIT = 'list-limit',
+    CART_LIST = 'cart-list',
+    PROMO = 'promo-input',
+    BUY = 'buy-button',
 }
 
-// TODO: view should take options values from this enum
-export enum sortVariantsEnum {
-    byDefault = 'default-sort',
-    byPriceAscending = 'ascending-price',
-    byPriceDescending = 'descending-price',
-    byRatingDescending = 'descending-rating',
-    byRatingAscending = 'ascending-rating',
+export enum SortVariantsEnum {
+    DEFAULT = 'default-sort',
+    PRICE_ASCENDING = 'ascending-price',
+    PRICE_DESCENDING = 'descending-price',
+    RATING_ASCENDING = 'ascending-rating',
+    RATING_DESCENDING = 'descending-rating',
+}
+export enum PageCase {
+    store,
+    cart,
+    details,
+    error,
+}
+export interface ShowCart {
+    limit: number;
+    listPage: number;
 }
 
 export enum ViewVariantsEnum {

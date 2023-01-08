@@ -1,4 +1,4 @@
-import { ProductDetail, ShownProductInfo } from './intefaces/types';
+import { FilterKeys, ProductDetails, ShownProductInfo } from './intefaces/types';
 import increaseValueInMap from './tools/Functions';
 
 export class FilterCalculator {
@@ -46,7 +46,24 @@ export class FilterCalculator {
     updateSearchName(newSearchName: string) {
         this.searchName = newSearchName.toLowerCase();
     }
-    checkProductPassFilters(product: ProductDetail): boolean {
+    checkProductPassSearching(product: ProductDetails): boolean {
+        type productKey = keyof typeof product;
+        const fieldsToSearch: productKey[] = [
+            'title',
+            'description',
+            'price',
+            'discountPercentage',
+            'brand',
+            'category',
+            'rating',
+            'stock',
+        ];
+        const isProductPassSearching = fieldsToSearch.some((key) =>
+            product[key].toString().toLowerCase().includes(this.searchName)
+        );
+        return isProductPassSearching;
+    }
+    checkProductPassFilters(product: ProductDetails): boolean {
         if (this.categories.size > 0 && !this.categories.has(product.category)) {
             return false;
         }
@@ -59,19 +76,19 @@ export class FilterCalculator {
         if (this.minUserStock > product.stock || this.maxUserStock < product.stock) {
             return false;
         }
-        if (!product.title.toLowerCase().includes(this.searchName)) {
+        if (!this.checkProductPassSearching(product)) {
             return false;
         }
         return true;
     }
-    recalculate(allProducts: Array<ProductDetail> | null): ShownProductInfo | null {
+    recalculate(allProducts: Array<ProductDetails> | null, lastFilter: FilterKeys | null): ShownProductInfo | null {
         let minPrice = Infinity;
         let maxPrice = 0;
         let minStock = Infinity;
         let maxStock = 0;
         const categories = new Map();
         const brands = new Map();
-        const shownProducts: Array<ProductDetail> = [];
+        const shownProducts: Array<ProductDetails> = [];
 
         if (!allProducts) {
             return null;

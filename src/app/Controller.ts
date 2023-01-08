@@ -1,8 +1,8 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, sortVariantsEnum } from './intefaces/types';
+import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
-import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
+import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
     if (element instanceof HTMLInputElement) {
@@ -29,26 +29,35 @@ export class Controller {
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
-        window.addEventListener('popstate', this);
-        switch (this.model.modelData.page) {
-            default:
-                {
-                    //type Keys = keyof ElementsToListenStore;
-                    //type Values = ElementsToListenStore[Keys];
-                    //const elementsToListen: Values = this.view.getElementsForEvents();
-                    const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+        //window.addEventListener('popstate', this);
 
-                    elementsToListen.reset?.addEventListener('click', this);
-                    elementsToListen.copy?.addEventListener('click', this);
-                    elementsToListen.category?.addEventListener('click', this);
-                    elementsToListen.brand?.addEventListener('click', this);
-                    elementsToListen.price?.addEventListener('change', this);
-                    elementsToListen.stock?.addEventListener('change', this);
-                    elementsToListen.sorting?.addEventListener('change', this);
-                    elementsToListen.searching?.addEventListener('input', this);
-                    elementsToListen.viewButtons?.addEventListener('click', this);
-                }
+        switch (this.model.modelData.page) {
+            case PageCase.store: {
+                const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
+
+                elementsToListen.reset?.addEventListener('click', this);
+                elementsToListen.copy?.addEventListener('click', this);
+                elementsToListen.category?.addEventListener('click', this);
+                elementsToListen.brand?.addEventListener('click', this);
+                elementsToListen.price?.addEventListener('change', this);
+                elementsToListen.stock?.addEventListener('change', this);
+                elementsToListen.sorting?.addEventListener('change', this);
+                elementsToListen.searching?.addEventListener('input', this);
+                elementsToListen.viewButtons?.addEventListener('click', this);
+                elementsToListen.cards?.addEventListener('click', this);
                 break;
+            }
+            case PageCase.cart: {
+                const elementsToListen: ElementsToListen['cart'] = this.view.getElementsForEvents().cart;
+
+                elementsToListen.pageBack?.addEventListener('click', this);
+                elementsToListen.pageForward?.addEventListener('click', this);
+                elementsToListen.listLimit?.addEventListener('change', this);
+                elementsToListen.cartList?.addEventListener('click', this);
+                elementsToListen.promoInput?.addEventListener('input', this);
+                elementsToListen.buyButton?.addEventListener('click', this);
+                break;
+            }
         }
     }
 
@@ -63,13 +72,19 @@ export class Controller {
             [EventTargetsIDEnum.sorting]: this.sortingEvent,
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+            [EventTargetsIDEnum.cards]: this.addToCartEvent,
+
+            [EventTargetsIDEnum.PAGE_BACK]: this.pageBackEvent,
+            [EventTargetsIDEnum.PAGE_FORWARD]: this.pageForwardEvent,
+            [EventTargetsIDEnum.LIST_LIMIT]: this.listLimitEvent,
+            [EventTargetsIDEnum.CART_LIST]: this.cartListEvent,
+            [EventTargetsIDEnum.PROMO]: this.promoInputEvent,
+            [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
         };
-        if (event.type === 'hashchange' || event.type === 'popstate') {
-            console.log('handle for hash change');
-            console.log(`
-            this.model.changePage(event.currentTarget.href);
+        if (event.type === 'hashchange') {
+            // || event.type === 'popstate'
+            this.model.updatePage();
             this.initViewAndListeners();
-            `);
             return;
         }
         if (event.currentTarget instanceof HTMLElement) {
@@ -78,6 +93,53 @@ export class Controller {
             return;
         }
         console.log(`No event handler for ${event.type} and ${event.target}`);
+    }
+    pageBackEvent(event: Event) {
+        const changeBy = -1;
+        this.handlePageEvent(event, changeBy);
+    }
+    pageForwardEvent(event: Event) {
+        const changeBy = 1;
+        this.handlePageEvent(event, changeBy);
+    }
+    handlePageEvent(event: Event, pageChange: number) {
+        if (event.target instanceof HTMLElement && this.model.cart) {
+            const value = this.model.cart.showProperties.listPage + pageChange;
+            this.model.createQueryParamFromEvent('cartListPage', `${value}`);
+            this.initViewAndListeners();
+        }
+    }
+    listLimitEvent(event: Event) {
+        if (event.target instanceof HTMLInputElement) {
+            const newLimit = event.target.value;
+            this.model.createQueryParamFromEvent('cartListLimit', newLimit);
+            this.initViewAndListeners();
+        }
+    }
+    cartListEvent(event: Event) {
+        if (event.target instanceof HTMLButtonElement) {
+            const buttonID = event.target.id;
+            const lengthIncrease = INCREASE_ID_PREFIX.length;
+            const lengthDecrease = INCREASE_ID_PREFIX.length;
+
+            if (buttonID.slice(0, lengthIncrease) === INCREASE_ID_PREFIX) {
+                const productID = buttonID.slice(lengthIncrease);
+                this.model.cart?.increaseAmount(productID);
+                this.model.applyQueryParamsToCart();
+            }
+            if (buttonID.slice(0, lengthDecrease) === DECREASE_ID_PREFIX) {
+                const productID = buttonID.slice(lengthDecrease);
+                this.model.cart?.decreaseAmount(productID);
+                this.model.applyQueryParamsToCart();
+            }
+            this.initViewAndListeners();
+        }
+    }
+    promoInputEvent() {
+        console.log('promoInputEvent!');
+    }
+    buyButtonEvent() {
+        console.log('buyButtonEvent!');
     }
     private resetEvent(event: Event): void {
         console.log('this.model.resetFilters()');
@@ -109,31 +171,40 @@ export class Controller {
     private priceEvent(event: Event): void {
         if (event.target instanceof HTMLInputElement) {
             const inputID = event.target.id;
-            const priceKey = inputID === SLIDER_MAX_ID ? 'priceMax' : 'priceMin';
-
-            this.model.createQueryParamFromEvent(priceKey, event.target.value);
+            const priceKey: FilterKeys = inputID === SLIDER_MAX_ID ? 'priceMax' : 'priceMin';
+            const secondValue =
+                inputID === SLIDER_MAX_ID
+                    ? this.model.shownProductInfo?.minPrice
+                    : this.model.shownProductInfo?.maxPrice;
+            this.model.createQueryParamFromEvent(priceKey, event.target.value, secondValue);
         }
         this.initViewAndListeners();
     }
     private stockEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            const inputID = event.target.id;
+            const stockKey: FilterKeys = inputID === SLIDER_MAX_ID ? 'stockMax' : 'stockMin';
+            const secondValue =
+                inputID === SLIDER_MAX_ID
+                    ? this.model.shownProductInfo?.minStock
+                    : this.model.shownProductInfo?.maxStock;
+            this.model.createQueryParamFromEvent(stockKey, event.target.value, secondValue);
+        }
         this.initViewAndListeners();
     }
     private sortingEvent(event: Event): void {
-        if (event.target instanceof HTMLOptionElement) {
-            const key = 'sorting' as FilterKeys;
+        if (event.target instanceof HTMLSelectElement) {
+            const key = 'sorting';
             this.model.createQueryParamFromEvent(key, event.target?.value);
-            this.model.applyQueryParam();
-            this.model.sortProducts(event.target?.value as sortVariantsEnum);
+            this.model.sortProducts(event.target?.value as SortVariantsEnum);
         }
         this.initViewAndListeners();
     }
     private searchingEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
+        if (event.target instanceof HTMLInputElement) {
+            const text = event.target.value;
+            this.model.createQueryParamFromEvent('searching', text);
+        }
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {
@@ -144,6 +215,20 @@ export class Controller {
             const key = 'view' as FilterKeys;
             this.model.handleViewChange(event.target.id);
             this.model.createQueryParamFromEvent(key, event.target.id);
+            this.initViewAndListeners();
+        }
+    }
+    private addToCartEvent(event: Event): void {
+        if (event.target instanceof HTMLButtonElement) {
+            const length = `${EventTargetsIDEnum.cards}-`.length;
+            const cardID = event.target.id.slice(length);
+            const isInCart = this.model.cart?.checkProductInCart(cardID);
+
+            if (isInCart) {
+                this.model.cart?.drop(cardID);
+            } else {
+                this.model.cart?.addNew(cardID);
+            }
             this.initViewAndListeners();
         }
     }

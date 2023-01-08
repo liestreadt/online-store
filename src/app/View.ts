@@ -10,7 +10,7 @@ import createCartItem from './view-methods/cart-page/create-cart-item';
 import createCartContainer from './view-methods/cart-page/create-cart-container';
 
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     FilterParamsValues,
     filterParamsKeys,
@@ -18,8 +18,12 @@ import {
     ModelData,
     ElementsToListen,
     EventTargetsIDEnum,
+    PageCase,
+    FilterKeys,
 } from './intefaces/types';
-import { CURRENCY_SYMBOL } from './constants/constants';
+import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
+import { checkSearchFocused } from './tools/Functions';
+import Cart from './Cart';
 
 class View {
     modelData: Partial<ModelData>;
@@ -35,20 +39,25 @@ class View {
             this.renderHeader();
             this.renderMain();
             switch (this.modelData.page) {
-                case 'store':
+                case PageCase.store:
                     {
                         this.renderStorePage();
                         this.getDualSlider();
                     }
                     break;
-                case 'details':
+                case PageCase.details:
                     {
                         this.renderProdDetailsPage();
                     }
                     break;
-                case 'cart':
+                case PageCase.cart:
                     {
                         this.renderCartPage();
+                    }
+                    break;
+                case PageCase.error:
+                    {
+                        console.log('DRAW ERROR PAGE');
                     }
                     break;
                 default:
@@ -60,6 +69,7 @@ class View {
             }
             this.renderFooter();
             this.renderModal();
+            this.addFocusToLastUsed();
         }
     }
     renderLoadingPage() {
@@ -95,13 +105,12 @@ class View {
     }
     renderCartPage() {
         const containerMain = document.querySelector('main');
-        // skeleton for the future, when current product will be given after click on detail
-        const cartItems = this.modelData.filteredProducts;
-        if (containerMain && cartItems) {
+
+        if (containerMain) {
             containerMain.outerHTML = `
                 <main class="main-cart">
-                    ${this.getCartContainer(cartItems[1])}
-                    ${this.getCartSummary()}
+                    ${this.getCartContainer(this.modelData.cart ?? null)}
+                    ${this.modelData.cart && this.getCartSummary(this.modelData.cart)}
                 </main>
             `;
         }
@@ -110,7 +119,7 @@ class View {
         document.body.innerHTML += `<main></main>`;
     }
     renderHeader() {
-        document.body.innerHTML = createHeader();
+        document.body.innerHTML = createHeader(this.modelData);
     }
     renderFooter() {
         document.body.innerHTML += createFooter();
@@ -130,26 +139,28 @@ class View {
         const sliderContainerStock = document.querySelector(`#${EventTargetsIDEnum.stock}`) as HTMLElement;
 
         const minPrice = this.modelData.initialFilterValues?.minPrice || 0;
-        const minUserPrice = this.modelData.calculatedFilters?.minUserPrice || 0;
-        const maxPrice = this.modelData.initialFilterValues?.maxPrice || 10000;
-        const maxUserPrice = this.modelData.calculatedFilters?.maxUserPrice || 10000;
+        const minUserPrice = this.modelData.shownProductInfo?.minPrice || 0;
+        const maxPrice = this.modelData.initialFilterValues?.maxPrice || Infinity;
+        const maxUserPrice = this.modelData.shownProductInfo?.maxPrice || Infinity;
+
+        const minStock = this.modelData.initialFilterValues?.minStock || 0;
+        const minUserStock = this.modelData.shownProductInfo?.minStock || 0;
+        const maxStock = this.modelData.initialFilterValues?.maxStock || Infinity;
+        const maxUserStock = this.modelData.shownProductInfo?.maxStock || Infinity;
 
         const dualSliderPrice = new DualSlider(minPrice, maxPrice, minUserPrice, maxUserPrice, CURRENCY_SYMBOL);
-        const dualSliderStock = new DualSlider(0, 500);
+        const dualSliderStock = new DualSlider(minStock, maxStock, minUserStock, maxUserStock);
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
-    getProdDetailsContainer(data: ProductDetail): string {
+    getProdDetailsContainer(data: ProductDetails): string {
         return createProdDetailsContainer(data);
     }
-    getCartContainer(data: ProductDetail): string {
-        return createCartContainer(data);
+    getCartContainer(cart: Cart | null): string {
+        return createCartContainer(cart);
     }
-    getCartItem(data: ProductDetail): string {
-        return createCartItem(data);
-    }
-    getCartSummary(): string {
-        return createCartSummary();
+    getCartSummary(cart: Cart): string {
+        return createCartSummary(cart);
     }
     getButtonsArray() {
         return [...document.body.querySelectorAll('button')];
@@ -158,7 +169,7 @@ class View {
         console.log('copy url');
     }
     getElementsForEvents(): ElementsToListen {
-        return {
+        const elements: ElementsToListen = {
             store: {
                 reset: document.body.querySelector(`#${EventTargetsIDEnum.reset}`),
                 copy: document.body.querySelector(`#${EventTargetsIDEnum.copy}`),
@@ -169,8 +180,28 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+                cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
+            },
+            cart: {
+                pageBack: document.querySelector(`#${EventTargetsIDEnum.PAGE_BACK}`),
+                pageForward: document.querySelector(`#${EventTargetsIDEnum.PAGE_FORWARD}`),
+                listLimit: document.querySelector(`#${EventTargetsIDEnum.LIST_LIMIT}`),
+                cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
+                promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
             },
         };
+        return elements;
+    }
+    addFocusToLastUsed() {
+        const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);
+        const isSearchFocused = checkSearchFocused();
+
+        if (isSearchFocused && searchField instanceof HTMLInputElement) {
+            const textLength = searchField.value.length;
+            searchField.focus();
+            searchField.setSelectionRange(textLength, textLength);
+        }
     }
 }
 
