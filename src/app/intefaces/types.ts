@@ -12,6 +12,7 @@ export interface ProductDetails {
     images: Array<string>;
     rating: number;
     stock: number;
+    isImagesUnique: boolean;
 }
 export interface ProductShort {
     id: number;

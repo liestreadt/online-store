@@ -1,5 +1,5 @@
 import Cart from './Cart';
-import increaseValueInMap from './tools/Functions';
+import increaseValueInMap, { calculateImages } from './tools/Functions';
 import { FilterCalculator } from './FilterCalculator';
 import { PAGES_HASH } from './constants/constants';
 import {
@@ -59,6 +59,11 @@ class Model {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
+            if (this.productJSON?.products) {
+                this.productJSON.products.forEach((elem: ProductDetails) => {
+                    elem.isImagesUnique = false;
+                });
+            }
             this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.readParamsFromURL();
             this.findInitialFilterValues();

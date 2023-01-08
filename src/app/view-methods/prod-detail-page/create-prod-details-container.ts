@@ -1,20 +1,6 @@
 import { CAPTION_ADD, CAPTION_DROP } from '../../constants/constants';
 import { EventTargetsIDEnum, ModelData, ProductDetails } from '../../intefaces/types';
 
-export async function calculateImages(product: ProductDetails) {
-    const asd: (string | null)[] = [];
-    for (let i = 0; i < product.images.length; i++) {
-        const imgResponse = await fetch(product.images[i], { method: 'HEAD' });
-        const imgSize = imgResponse.headers.get('content-length');
-        if (asd.includes(imgSize)) {
-            delete product.images[i];
-        } else {
-            asd.push(imgSize);
-        }
-    }
-    return product.images;
-}
-
 function getCapture(isInCart: boolean): string {
     return isInCart ? CAPTION_DROP.toUpperCase() : CAPTION_ADD.toUpperCase();
 }
@@ -100,7 +86,7 @@ export function createProdDetailsContainer(product: ProductDetails, mainImageSrc
                 </div>
                 <div class="details__controls">
                     <div class="details__price">
-                        Price: <span class="details__price-text">€1565</span>
+                        Price: <span class="details__price-text">${product.price}</span>
                     </div>
                     <button
                         id="${EventTargetsIDEnum.detailsAddToCart}"

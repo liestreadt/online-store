@@ -1,4 +1,4 @@
-import { FilterKeys } from '../intefaces/types';
+import { FilterKeys, ProductDetails } from '../intefaces/types';
 
 export function increaseValueInMap(myMap: Map<string, number>, value: string): void {
     if (!myMap.has(value)) {
@@ -15,4 +15,22 @@ export function checkSearchFocused(): boolean {
     }
     return false;
 }
+
+export async function calculateImages(product: ProductDetails) {
+    const duplicateImages: (string | null)[] = [];
+    for (let i = 0; i < product.images.length; i++) {
+        const imgResponse = await fetch(product.images[i], { method: 'HEAD' });
+        const imgSize = imgResponse.headers.get('content-length');
+        if (duplicateImages.includes(imgSize)) {
+            delete product.images[i];
+        } else {
+            duplicateImages.push(imgSize);
+        }
+    }
+    if (!product.isImagesUnique) {
+        product.isImagesUnique = true;
+    }
+    return product.images;
+}
+
 export default increaseValueInMap;

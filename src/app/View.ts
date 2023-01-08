@@ -4,11 +4,9 @@ import createFooter from './view-methods/store-page/create-footer';
 import createHeader from './view-methods/store-page/create-header';
 import createStoreFilters from './view-methods/store-page/create-store-filters';
 import createSortingSection from './view-methods/store-page/create-sorting-section';
-import {
-    calculateImages,
-    createProdDetailsContainer,
-} from './view-methods/prod-detail-page/create-prod-details-container';
+import { createProdDetailsContainer } from './view-methods/prod-detail-page/create-prod-details-container';
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
+import { calculateImages } from './tools/Functions';
 
 import {
     ProductDetails,
@@ -51,14 +49,17 @@ class View {
                 case PageCase.details:
                     {
                         this.renderProdDetailsPage();
-                        const asd = this.modelData.filteredProducts?.find(
+                        const currentProduct = this.modelData.filteredProducts?.find(
                             (item) => item.id === this.modelData.detailsID
                         );
-                        if (asd) {
-                            calculateImages(asd).then((data) => {
-                                console.log(data);
-                                this.renderImages(data);
-                            });
+                        if (currentProduct) {
+                            if (!currentProduct.isImagesUnique) {
+                                calculateImages(currentProduct).then((data) => {
+                                    this.renderImages(data);
+                                });
+                            } else {
+                                this.renderImages(currentProduct.images);
+                            }
                         }
                     }
                     break;
