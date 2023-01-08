@@ -252,6 +252,7 @@ export class Controller {
     }
     private detailsImagesEvent(event: Event): void {
         if (event.target instanceof HTMLImageElement) {
+            this.model.modelData.detailsMainImageSrc = event.target.src;
             this.view.handleDetailsImagesClick(event.target.src);
         }
     }
