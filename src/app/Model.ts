@@ -41,7 +41,7 @@ class Model {
             allCategories: [],
             filteredProducts: null,
             page: '',
-            currentView: 'view-small',
+            currentView: 'view-big',
             shownProductInfo: null,
             calculatedFilters: null,
         };

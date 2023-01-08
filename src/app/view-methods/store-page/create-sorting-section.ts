@@ -1,11 +1,13 @@
 import { EventTargetsIDEnum } from '../../intefaces/types';
 import { ModelData } from '../../intefaces/types';
 import createStoreCard from './create-store-card';
-import createStoreCardTiny from './create-store-card-tiny';
+import createStoreCardBig from './create-store-card-big';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
-    const currentViewFunc = modelData.currentView === 'view-small' ? createStoreCard : createStoreCardTiny;
-    const currentCardContainerSize = modelData.currentView === 'view-small' ? 'small' : 'tiny';
+    const currentViewFunc = modelData.currentView === 'view-big' ? createStoreCardBig : createStoreCard;
+    const currentCardContainerSize = modelData.currentView === 'view-big' ? 'big' : 'small';
+    const isViewButtonBigSelected = modelData.currentView === 'view-big' ? 'sorting__big-view_selected' : '';
+    const isViewButtonSmallSelected = modelData.currentView === 'view-big' ? '' : 'sorting__small-view_selected';
     return `
         <section class="sorting">
             <div class="sorting-header">
@@ -26,8 +28,8 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     class="sorting__search"
                     placeholder="Search product">
                 <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
-                    Choose view: <button id="view-tiny" class="sorting__tiny-view">📱</button>
-                    <button id="view-small" class="sorting__small-view">💻</button>
+                    Choose view: <button id="view-big" class="sorting__big-view ${isViewButtonBigSelected}">☰</button>
+                    <button id="view-small" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
                 </div>
             </div>
             <div class="sorting__card-container sorting__card-container_${currentCardContainerSize}">
