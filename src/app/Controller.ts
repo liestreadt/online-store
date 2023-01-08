@@ -60,6 +60,7 @@ export class Controller {
             case PageCase.details: {
                 const elementsToListen: ElementsToListen['details'] = this.view.getElementsForEvents().details;
                 elementsToListen.images?.addEventListener('click', this);
+                elementsToListen.detailsAddToCart?.addEventListener('click', this);
                 break;
             }
             default: {
@@ -92,6 +93,7 @@ export class Controller {
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
             [EventTargetsIDEnum.cards]: this.addToCartEvent,
+            [EventTargetsIDEnum.detailsAddToCart]: this.detailsAddToCartEvent,
 
             [EventTargetsIDEnum.PAGE_BACK]: this.pageBackEvent,
             [EventTargetsIDEnum.PAGE_FORWARD]: this.pageForwardEvent,
@@ -237,13 +239,14 @@ export class Controller {
         if (event.target instanceof HTMLButtonElement) {
             const length = `${EventTargetsIDEnum.cards}-`.length;
             const cardID = event.target.id.slice(length);
-            const isInCart = this.model.cart?.checkProductInCart(cardID);
-
-            if (isInCart) {
-                this.model.cart?.drop(cardID);
-            } else {
-                this.model.cart?.addNew(cardID);
-            }
+            this.model.cart?.toggleProductInCart(cardID);
+            this.initViewAndListeners();
+        }
+    }
+    private detailsAddToCartEvent(event: Event): void {
+        if (event.target instanceof HTMLButtonElement) {
+            const cardID = this.model.modelData.detailsID;
+            this.model.cart?.toggleProductInCart(`${cardID}`);
             this.initViewAndListeners();
         }
     }

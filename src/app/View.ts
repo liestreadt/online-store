@@ -180,7 +180,11 @@ class View {
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
     getProdDetailsContainer(data: ProductDetails, mainImageSrc: string): string {
-        return createProdDetailsContainer(data, mainImageSrc);
+        return createProdDetailsContainer(
+            data,
+            mainImageSrc,
+            this.modelData.cart?.checkProductInCart(`${data.id}`) ?? false
+        );
     }
     getCartContainer(cart: Cart | null): string {
         return createCartContainer(cart);
@@ -218,6 +222,7 @@ class View {
             },
             details: {
                 images: document.body.querySelector('.details__aside-slides'),
+                detailsAddToCart: document.body.querySelector(`#${EventTargetsIDEnum.detailsAddToCart}`),
             },
         };
         return elements;

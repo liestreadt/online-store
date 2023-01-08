@@ -103,6 +103,7 @@ export interface ElementsToListen {
     };
     details: {
         images: HTMLDivElement | null;
+        detailsAddToCart: HTMLButtonElement | null;
     };
 }
 
@@ -117,6 +118,7 @@ export enum EventTargetsIDEnum {
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
     cards = 'card-container',
+    detailsAddToCart = 'details-add-to-cart',
 
     PAGE_BACK = 'pagination-back',
     PAGE_FORWARD = 'pagination-forward',

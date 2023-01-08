@@ -1,4 +1,5 @@
-import { ProductDetails } from '../../intefaces/types';
+import { CAPTION_ADD, CAPTION_DROP } from '../../constants/constants';
+import { EventTargetsIDEnum, ModelData, ProductDetails } from '../../intefaces/types';
 
 export async function calculateImages(product: ProductDetails) {
     const asd: (string | null)[] = [];
@@ -14,7 +15,14 @@ export async function calculateImages(product: ProductDetails) {
     return product.images;
 }
 
-export function createProdDetailsContainer(product: ProductDetails, mainImageSrc: string): string {
+function getCapture(isInCart: boolean): string {
+    return isInCart ? CAPTION_DROP.toUpperCase() : CAPTION_ADD.toUpperCase();
+}
+function getColorModifier(isInCart: boolean): string {
+    return isInCart ? 'product-card__btn_added' : '';
+}
+
+export function createProdDetailsContainer(product: ProductDetails, mainImageSrc: string, isInCart: boolean): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>
@@ -94,8 +102,10 @@ export function createProdDetailsContainer(product: ProductDetails, mainImageSrc
                     <div class="details__price">
                         Price: <span class="details__price-text">€1565</span>
                     </div>
-                    <button class="details__btn-add-to-cart">
-                        Add to cart
+                    <button
+                        id="${EventTargetsIDEnum.detailsAddToCart}"
+                        class="details__btn-add-to-cart ${getColorModifier(isInCart)}">
+                        ${getCapture(isInCart)}
                     </button>
                     <button class="details__btn-buy-now">
                         Buy Now
