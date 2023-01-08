@@ -26,13 +26,8 @@ export function createProdDetailsContainer(product: ProductDetails, mainImageSrc
             <div class="details__body">
                 <div id="details-images" class="details__aside-slides">
                 </div>
-                <div
-                    class="details__main-picture"
-                    style="
-                        background: url('${mainImageSrc}');
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        background-size: contain;">
+                <div class="details__main-picture">
+                    <img id="details-main-image" src="${mainImageSrc}" alt="${product.title}">
                 </div>
                 <div class="details__info">
                     <div class="details__description details-item">

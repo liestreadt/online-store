@@ -20,6 +20,13 @@
     @extend %border;
     max-width: 90%;
 
+    img {
+        margin-bottom: $margin-tiny;
+        border: $border-small;
+        border-radius: $radius-small;
+        @extend %transition-fast;
+    }
+
     &__header {
         border-bottom: $border;
         padding: $padding-small 0;
@@ -38,14 +45,10 @@
         flex-direction: column;
         align-items: center;
         padding: 0 $padding-small;
-        width: 7.5rem;
+        width: 8rem;
 
         img {
-            margin-bottom: $margin-tiny;
-            border: $border-small;
-            border-radius: $radius-small;
             width: 7rem;
-            @extend %transition-fast;
 
             &:hover {
                 border: $border-small-focus;
@@ -60,8 +63,12 @@
         align-items: center;
         justify-content:  center;
         margin: 0 $margin-small;
-        width: 35rem;
-        height: inherit;
+        width: 30rem;
+
+        img {
+            max-width: 28rem;
+            max-height: 45rem;
+        }
     }
 
     &__info {

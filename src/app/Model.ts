@@ -60,6 +60,7 @@ class Model {
             const data = await response.json();
             this.productJSON = data;
             if (this.productJSON?.products) {
+                this.productJSON.products = this.productJSON.products.slice(0, 50);
                 this.productJSON.products.forEach((elem: ProductDetails) => {
                     elem.isImagesUnique = false;
                 });

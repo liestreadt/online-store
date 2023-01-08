@@ -55,10 +55,10 @@ class View {
                         if (currentProduct) {
                             if (!currentProduct.isImagesUnique) {
                                 calculateImages(currentProduct).then((data) => {
-                                    this.renderImages(data);
+                                    this.renderImages(data, currentProduct.title);
                                 });
                             } else {
-                                this.renderImages(currentProduct.images);
+                                this.renderImages(currentProduct.images, currentProduct.title);
                             }
                         }
                     }
@@ -86,13 +86,13 @@ class View {
         }
     }
 
-    renderImages(data: string[]) {
+    renderImages(data: string[], title: string) {
         const cont = document.querySelector('#details-images');
         if (cont) {
             cont.innerHTML += `
                 ${data
                     .map((item) => {
-                        return `<img src="${item}" alt="title">`;
+                        return `<img src="${item}" alt="${title}">`;
                     })
                     .join('')}
             `;
@@ -239,17 +239,9 @@ class View {
         }
     }
     handleDetailsImagesClick(imageSource: string): void {
-        const mainImg = document.body.querySelector('.details__main-picture') as HTMLDivElement;
+        const mainImg = document.body.querySelector('#details-main-image') as HTMLImageElement;
         if (mainImg) {
-            mainImg.setAttribute(
-                'style',
-                `
-                background: url('${imageSource}');
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: contain;
-            `
-            );
+            mainImg.setAttribute('src', `${imageSource}`);
         }
     }
 }
