@@ -254,12 +254,20 @@ export class Controller {
     }
     private modalDebitValidToEvent(event: Event) {
         const input = event.target as HTMLInputElement;
-        input.value = input.value.replace(/[^0-9]/g, '');
+        const inputType = (event as InputEvent).inputType;
+        input.value = input.value.replace(/[^\d\\/]/g, '');
         // input.value = input.value.replace(/^([0-9]{2})$/g, `${input.value} / `);
         const regexDebitValidTo = /^[0-9]{2}$/g;
-        if (input.value.match(regexDebitValidTo)) {
+        console.log(event);
+        console.log('value', input.value);
+        console.log('length', input.value.length);
+        console.log('last', input.value.at(-1));
+        if (input.value.length === 2 && inputType === 'insertText') {
             input.value += '/';
             console.log('ValidTo Error');
+        }
+        if (input.value.length === 3 && inputType === 'deleteContentBackward') {
+            input.value.slice(-1);
         }
     }
     private modalDebitCodeEvent(event: Event) {
