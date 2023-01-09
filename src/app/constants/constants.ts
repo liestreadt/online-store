@@ -13,3 +13,21 @@ export const CAPTION_ADD = 'add to cart';
 export const CAPTION_DROP = 'drop from cart';
 export const DECREASE_ID_PREFIX = 'cart-button-decrease-';
 export const INCREASE_ID_PREFIX = 'cart-button-increase-';
+
+export interface PromoFields {
+    promoKey: string;
+    discount: number;
+    description: string;
+}
+export const PROMO_CODES: PromoFields[] = [
+    {
+        promoKey: 'rss',
+        discount: 10,
+        description: 'Rolling Scopes School',
+    },
+    {
+        promoKey: 'epam',
+        discount: 10,
+        description: 'EPAM Systems',
+    },
+];
