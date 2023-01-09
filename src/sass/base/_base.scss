@@ -1,0 +1,82 @@
+html {
+    box-sizing: border-box;
+    color: $color-font;
+    font-size: 10px;
+    @media (max-width: $screen-medium) {
+        font-size: 9px;
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+    @extend %body-gradient;
+    background-attachment: fixed;
+    min-height: 100vh;
+    font-family: 'Domine', serif;
+    font-size: 1.6rem;
+}
+main {
+    flex-grow: 10;
+    padding: $padding-medium 0;
+}
+a {
+    text-decoration: none;
+    color: $color-font;
+    &:visited {
+        color: $color-font;
+    }
+}
+p {
+    margin: 1rem;
+}
+h1 {
+    margin: 0;
+}
+h2 {
+    margin: 0;
+}
+h3 {
+    margin: 0;
+}
+button {
+    @include button();
+    font-family: inherit;
+}
+input, select {
+    border: $border-small;
+    text-align: center;
+
+    &:focus-visible {
+        border: $border-small-focus;
+        outline-width: 0;
+        background-color: $color-sand-gradient;
+    }
+
+    &::placeholder {
+        text-align: center;
+    }
+
+    &::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+.header_medium {
+    @include header;
+    font-size: 2rem;
+}
+.header_small {
+    @include header;
+    font-size: 1.8rem;
+    @media (max-width: $screen-wide) {
+        flex-wrap: wrap;
+        font-size: 1.4rem;
+    }
+}
+.header_empty {
+    @include header($border-bottom: none, $border-radius-top: $radius-small);
+    font-size: 1.8rem;
+}

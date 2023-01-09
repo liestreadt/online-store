@@ -1,0 +1,238 @@
+.main-cart {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart {
+    display: flex;
+    flex-direction: column;
+    margin: $margin-medium auto;
+    @extend %border;
+    width: 80%;
+    height: fit-content;
+
+    &__header {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    &__pagination {
+        display: flex;
+
+        .pagination-left,
+        .pagination-right {
+            @include button;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        & div:nth-child(n) {
+            margin: 0 $margin-medium;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        margin: $margin-tiny $margin-tiny 0 $margin-tiny;
+    }
+
+    &__amount-num {
+        border: $border;
+        border-radius: $radius-small;
+        max-width: $width-number-input;
+        font-family: inherit;
+        font-size: 1.6rem;
+
+        &::-webkit-inner-spin-button {
+            opacity: 1;
+        }
+    }
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: $margin-tiny 0;
+    border-top: $border;
+    border-bottom: $border;
+    padding: $padding-tiny;
+    min-height: 8rem;
+    font-size: $font-body;
+    @media (max-width: $screen-medium) {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    &__num {
+        display: flex;
+        justify-content: center;
+        margin: auto 0;
+        border: $border;
+        border-radius: $radius-big;
+        padding: $padding-tiny;
+        width: 2rem;
+        height: fit-content;
+    }
+
+    &__pic {
+        border: $border;
+        border-radius: $radius-small;
+        min-width: 120px;
+        @media (max-width: $screen-medium) {
+            height: $height-picture-small;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 75%;
+        @media (max-width: $screen-wide) {
+            width: 95%;
+        }
+    }
+
+    &__title {
+        border-bottom: $border-small;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    &__description {
+        height: 3.6rem;
+        overflow: hidden;
+    }
+
+    &__metrics {
+        display: flex;
+        gap: 0.2rem;
+        flex-wrap: wrap;
+        flex-direction: column;
+        font-size: $font-body;
+        span {
+            text-align: center;
+        }
+        @media (max-width: $screen-wide) {
+            align-content: center;
+        }
+    }
+
+    &__manage {
+        display: flex;
+        gap: 0.4rem;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 9rem;
+    }
+
+    &__amount {
+        text-align: center;
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: space-between;
+
+        .controls{
+
+            &-increase,
+            &-decrease {
+                padding: 0;
+                width: 3rem;
+                font-size: 2rem;
+            }
+
+            &-count {
+                display: flex;
+                align-items: center;
+                margin: 0 $margin-tiny;
+            }
+        }
+    }
+
+    &__price {
+        text-align: center;
+    }
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: $margin-medium auto;
+    @extend %border;
+    padding: $padding-small $padding-medium;
+    width: fit-content;
+    font-size: $font-body;
+
+    &__header {
+        margin-bottom: $margin-tiny;
+        border-bottom: $border;
+        padding-bottom: $padding-small;
+        width: 100%;
+        text-align: center;
+        font-size: $font-header;
+    }
+
+    &__body {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        grid-template-rows: 1fr $height-button-buy;
+        margin-top: $margin-tiny;
+    }
+
+    &__total_promo-applied {
+        text-decoration: line-through;
+    }
+
+    &__left-side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    &__right-side {
+        @extend %border;
+        display: flex;
+        gap: 1rem;
+        flex-direction: column;
+        align-items: center;
+        padding: $padding-tiny;
+    }
+
+    &__promo-header {
+        border-bottom: $border;
+    }
+
+    &__active-codes {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__code {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &__promo-input {
+        border-radius: $radius-big;
+        padding: $padding-small;
+
+        font-size: inherit;
+    }
+
+    &__btn-buy {
+        grid-column: 1 / span 2;
+        margin: auto;
+        height: 50%;
+        width: 40%;
+    }
+}

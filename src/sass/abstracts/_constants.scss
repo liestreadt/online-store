@@ -1,0 +1,59 @@
+$color-blue-gradient:  rgb(164, 164, 245);
+$color-sand-gradient:  rgb(237, 206, 112);
+$color-font: rgb(81, 81, 81);
+$color-bag: rgb(116, 99, 46);
+$color-primary-light: rgb(255, 255, 255);
+$color-minor-light: fade($color-primary-light, 95%);
+$color-headers-bkg: rgba(220, 164, 245, 0.5);
+$color-cards-info: rgba(246, 227, 255, 0.9);
+$color-modal-bkg: rgba(32, 32, 47, 0.8);
+$color-modal-input-error: rgba(235, 11, 11, 0.05);
+$color-modal-input-passed: rgba(35, 178, 16, 0.05);
+$color-modal-border-error: rgba(235, 11, 11, 0.9);
+$color-modal-border-passed:rgba(35, 178, 16, 0.9);
+$color-cart-added: rgb(19, 57, 117);
+
+$font-body-small: 1.5rem;
+$font-header: 2rem;
+$font-body: 1.6rem;
+$font-header-big: 2.4rem;
+$font-body-big: 1.8rem;
+
+$radius-tiny: 0.5rem;
+$radius-small: 1rem;
+$radius-big: 5rem;
+
+$padding-tiny: 0.5rem;
+$padding-small: 1rem;
+$padding-medium: 2rem;
+
+$margin-tiny: 0.5rem;
+$margin-small: 1rem;
+$margin-medium: 2rem;
+
+$screen-wide: 800px;
+$screen-medium: 700px;
+$screen-main-wrap: 500px;
+
+$width-card-small: 320px;
+$width-card-tiny: 200px;
+$width-small: 360px;
+$width-medium: 500px;
+$width-number-input: 5rem;
+
+$height-picture-small: 100px;
+$height-card-small: 260px;
+$height-card-big: 300px;
+
+$height-range: 1rem;
+$width-range-thumb: 1rem;
+$height-range-thumb: 2rem;
+$height-button-buy: 6rem;
+
+$border: 2px solid $color-primary-light;
+$border-error: 1px solid $color-modal-border-error;
+$border-passed: 1px solid $color-modal-border-passed;
+$border-small: 1px solid #FAEBD7;
+$border-small-focus: 1px solid rgb(75, 75, 75);
+
+$shadow: 0 0 0.5rem 0.5rem $color-sand-gradient;

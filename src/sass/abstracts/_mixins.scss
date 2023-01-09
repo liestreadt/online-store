@@ -1,0 +1,35 @@
+@mixin button($var-radius: $radius-big, $var-font-size: inherit) {
+    border: $border-small;
+    border-radius: $var-radius;
+    padding: $padding-tiny $padding-small;
+    background-color: $color-blue-gradient;
+    cursor: pointer;
+    color: $color-font;
+    font-size: $var-font-size;
+    @extend %transition-fast;
+
+    &:hover {
+        @extend %transform-hover;
+    }
+
+    &:active {
+        border: $border-small-focus;
+        @extend %transform-active;
+    }
+}
+
+@mixin header($border-bottom: $border, $border-radius-top: $radius-small $radius-small 0 0) {
+    border-bottom: $border-bottom;
+    border-radius: $border-radius-top;
+    padding: $padding-tiny;
+    background-color: $color-headers-bkg;
+    text-align: center;
+}
+
+@mixin modal-input($var-width: 95%, $var-height: 95%) {
+    display: block;
+    margin: 0 auto;
+    border-radius: $radius-big;
+    width: $var-width;
+    height: $var-height;
+}
