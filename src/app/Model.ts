@@ -413,6 +413,16 @@ class Model {
         history.pushState({ key, values }, '', url.toString());
         //console.log('delete category from url search params');
     }
+    resetAllParams() {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        filterParamsKeys.forEach((elem) => {
+            urlSearch.delete(elem);
+        });
+        url.search = urlSearch.toString();
+        history.pushState({}, '', url.toString());
+        this.updatePage();
+    }
     changeParamInURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
         const urlSearch: URLSearchParams = url.searchParams;
@@ -420,6 +430,9 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, value }, '', url.toString());
+    }
+    copyParams() {
+        navigator.clipboard.writeText(window.location.href);
     }
     reInit() {
         this.readParamsFromURL();
