@@ -7,8 +7,15 @@ import {
     SortVariantsEnum,
     EventTargetsIDEnum,
     ViewVariantsEnum,
+    filterParamsKeys,
 } from './intefaces/types';
-import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
+import {
+    DECREASE_ID_PREFIX,
+    INCREASE_ID_PREFIX,
+    PAGES_HASH,
+    SLIDER_MAX_ID,
+    SLIDER_MIN_ID,
+} from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
     if (element instanceof HTMLInputElement) {
@@ -170,7 +177,7 @@ export class Controller {
         console.log('buyButtonEvent!');
     }
     private resetEvent(event: Event): void {
-        console.log('this.model.resetFilters()');
+        this.model.resetAllParams();
         this.initViewAndListeners();
     }
     private copyEvent(event: Event): void {
