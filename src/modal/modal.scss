@@ -54,6 +54,20 @@
         @include modal-input;
     }
 
+    &__debit-image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: $radius-tiny;
+        background-color: $color-primary-light;
+        width: 12%;
+        height: 100%;
+    }
+    &__debit-image {
+        width: 80%;
+        height: 70%;
+    }
+
     &__debit-card {
         display: flex;
         flex-direction: column;
@@ -72,11 +86,20 @@
         }
 
         &-number {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             width: 90%;
             height: 25px;
 
             &-input {
                 @include modal-input;
+                width: 70%;
+            }
+
+            .input-error-message {
+                position: relative;
+                top: 0;
             }
         }
 

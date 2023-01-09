@@ -430,6 +430,7 @@ export class Controller {
     private modalDebitNumberEvent(event: Event): void {
         const eventType = event.type;
         const input = event.target as HTMLInputElement;
+        const debitImage = document.body.querySelector('#modalDebitImage') as HTMLImageElement;
 
         if (eventType === 'input') {
             let cardCode = input.value.replace(/[^\d]/g, '').substring(0, 16);
@@ -438,6 +439,29 @@ export class Controller {
                 cardCode = cardCode !== '' ? cardASD : '';
             }
             input.value = cardCode;
+            if (
+                input.value.slice(0, 1) !== '3' ||
+                input.value.slice(0, 1) !== '4' ||
+                input.value.slice(0, 1) !== '5' ||
+                input.value.slice(0, 1) !== '6'
+            ) {
+                debitImage.src =
+                    'https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71';
+            }
+            if (input.value.slice(0, 1) === '3') {
+                debitImage.src =
+                    'https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg';
+            }
+            if (input.value.slice(0, 1) === '4') {
+                debitImage.src = 'https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png';
+            }
+            if (input.value.slice(0, 1) === '5') {
+                debitImage.src =
+                    'https://www.mastercard.hu/content/dam/public/mastercardcom/eu/hu/images/mc-logo-52.svg';
+            }
+            if (input.value.slice(0, 1) === '6') {
+                debitImage.src = 'https://m.unionpayintl.com/imp_file/global/wap/en/static/images/logo.png';
+            }
         }
         if (eventType === 'focusout') {
             if (!input.value.match(regexDebitNumber)) {
