@@ -18,6 +18,7 @@ import {
     InitialFilterValues,
     ModelData,
     ElementsToListen,
+    ElementsToValidate,
     EventTargetsIDEnum,
     PageCase,
     FilterKeys,
@@ -151,7 +152,10 @@ class View {
         document.body.innerHTML += createFooter();
     }
     renderModal() {
-        document.body.innerHTML += createModal();
+        const modalDisplayStatus = this.modelData.modalDisplayStatus;
+        if (modalDisplayStatus) {
+            document.body.innerHTML += createModal(modalDisplayStatus);
+        }
     }
 
     getStoreFilters(data: Partial<ModelData>): string {
@@ -198,6 +202,20 @@ class View {
     copyURLtoClipboard() {
         console.log('copy url');
     }
+    getElementsForValidation(): ElementsToValidate {
+        return {
+            form: document.body.querySelector(`#${EventTargetsIDEnum.modalForm}`),
+            formElements: {
+                name: document.body.querySelector(`#${EventTargetsIDEnum.modalName}`),
+                number: document.body.querySelector(`#${EventTargetsIDEnum.modalNumber}`),
+                address: document.body.querySelector(`#${EventTargetsIDEnum.modalAddress}`),
+                email: document.body.querySelector(`#${EventTargetsIDEnum.modalEmail}`),
+                debitCardNumber: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitNumber}`),
+                debitCardExpireDate: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitValidTo}`),
+                debitCardCode: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitCode}`),
+            },
+        };
+    }
     getElementsForEvents(): ElementsToListen {
         const elements: ElementsToListen = {
             store: {
@@ -210,6 +228,7 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
                 cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
             cart: {
@@ -219,10 +238,13 @@ class View {
                 cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
                 promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
                 buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
             details: {
                 images: document.body.querySelector('.details__aside-slides'),
                 detailsAddToCart: document.body.querySelector(`#${EventTargetsIDEnum.detailsAddToCart}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
         };
         return elements;
@@ -242,6 +264,41 @@ class View {
         if (mainImg) {
             mainImg.setAttribute('src', `${imageSource}`);
         }
+    }
+    hadleModalInputError(input: HTMLInputElement) {
+        input.classList.add('error');
+        const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
+        inputErrorMessage.style.display = 'flex';
+    }
+    hadleModalInputPassed(input: HTMLInputElement) {
+        input.classList.remove('error');
+        const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
+        inputErrorMessage.style.display = 'none';
+    }
+    toggleModalErrorMessage(display: string) {
+        const formErrorMessage = document.body.querySelector('#modal-error-message') as HTMLDivElement;
+        if (formErrorMessage) {
+            formErrorMessage.style.display = `${display}`;
+        }
+    }
+    handleFormError() {
+        this.toggleModalErrorMessage('block');
+        const modalErrors = this.modelData.modalErrors;
+        for (const key in modalErrors) {
+            if (modalErrors[key as keyof typeof modalErrors]) {
+                const currentInput = document.body.querySelector(`#${key}`) as HTMLInputElement;
+                this.hadleModalInputError(currentInput);
+            }
+        }
+    }
+    handleFormPassed() {
+        this.toggleModalErrorMessage('none');
+        const modalWindow = document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`) as HTMLDivElement;
+        modalWindow.innerHTML = `
+            <div class="modal__confirmed-window">
+                Thanks for order. You will be redirected to main page in 3 seconds.
+            </div>
+        `;
     }
 }
 
