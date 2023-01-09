@@ -7,7 +7,6 @@
     flex-wrap: wrap;
     justify-content: space-around;
     padding: $padding-small;
-    font-size: $font-header-big;
 }
 
 .sorting-option {
@@ -35,6 +34,13 @@
         border-radius: $radius-small;
         text-align: center;
         font-family: inherit;
+    }
+
+    &__view-buttons {
+
+        button {
+            font-size: $font-header;
+        }
     }
 
     &__big-view_selected {
