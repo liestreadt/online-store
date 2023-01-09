@@ -12,6 +12,7 @@ export interface ProductDetails {
     images: Array<string>;
     rating: number;
     stock: number;
+    isImagesUnique: boolean;
 }
 export interface ProductShort {
     id: number;
@@ -78,7 +79,8 @@ export interface ModelData {
     shownProductInfo: ShownProductInfo | null;
     calculatedFilters: FilterCalculator | null;
     page: PageCase;
-    detailsID: string;
+    detailsID: number;
+    detailsMainImageSrc?: string;
     cart: Cart | null;
 }
 export interface ElementsToListen {
@@ -102,6 +104,10 @@ export interface ElementsToListen {
         promoInput: HTMLInputElement | null;
         buyButton: HTMLButtonElement | null;
     };
+    details: {
+        images: HTMLDivElement | null;
+        detailsAddToCart: HTMLButtonElement | null;
+    };
 }
 
 export enum EventTargetsIDEnum {
@@ -115,6 +121,7 @@ export enum EventTargetsIDEnum {
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
     cards = 'card-container',
+    detailsAddToCart = 'details-add-to-cart',
 
     PAGE_BACK = 'pagination-back',
     PAGE_FORWARD = 'pagination-forward',
@@ -122,6 +129,7 @@ export enum EventTargetsIDEnum {
     CART_LIST = 'cart-list',
     PROMO = 'promo-input',
     BUY = 'buy-button',
+    detailsImages = 'details-images',
 }
 
 export enum SortVariantsEnum {
