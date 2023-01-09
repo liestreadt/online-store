@@ -47,6 +47,9 @@ export default function createModal(modalDisplayStatus: string): string {
                     <h2 class="modal__header">Debit / Credit card details</h2>
                     <div class="modal__debit-card-data">
                         <div class="modal__debit-card-number">
+                            <div class="modal__debit-image-container">
+                                <img alt="" id="modalDebitImage" class="modal__debit-image" src="https://i.guim.co.uk/img/media/b73cc57cb1d46ae742efd06b6c58805e8600d482/16_0_2443_1466/master/2443.jpg?width=700&quality=85&auto=format&fit=max&s=fb1dca6cdd4589cd9ef2fc941935de71">
+                            </div>
                             <input
                                 type="text"
                                 placeholder="Enter card number"

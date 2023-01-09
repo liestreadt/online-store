@@ -191,7 +191,7 @@ export interface ShowCart {
 export interface PromoFields {
     promoKey: string;
     discount: number;
-    description: stringж
+    description: string;
 }
 export enum ViewVariantsEnum {
     SMALL = 'view-small',
