@@ -1,0 +1,48 @@
+.side-filter {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    margin: 0 $margin-tiny;
+    @extend %border;
+    padding: $padding-tiny;
+    width: $width-small;
+
+    &__control-buttons {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    &__field {
+        display: flex;
+        flex-direction: column;
+        margin-top: $margin-medium;
+        @extend %border;
+    }
+
+    &__items-container {
+        overflow-y: scroll;
+        height: 10rem;
+    }
+}
+
+.brand-item,
+.category-item {
+    display: flex;
+    align-items: center;
+    padding: 0 $padding-tiny;
+    height: 2.5rem;
+}
+.filter-item {
+
+    &__amount {
+        flex-grow: 10;
+        text-align: end;
+    }
+
+    &__dual-range {
+        display: block;
+        margin: $margin-tiny auto;
+        width: 90%;
+    }
+}

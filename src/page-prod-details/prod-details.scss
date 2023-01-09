@@ -1,0 +1,122 @@
+.main-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.breadcrumbs {
+    margin: $margin-medium 0;
+    text-align: center;
+    font-size: $font-header;
+
+    &__item {
+        margin: 0 $margin-medium;
+    }
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    margin: $margin-medium auto;
+    @extend %border;
+    max-width: 90%;
+
+    img {
+        margin-bottom: $margin-tiny;
+        border: $border-small;
+        border-radius: $radius-small;
+        @extend %transition-fast;
+    }
+
+    &__header {
+        border-bottom: $border;
+        padding: $padding-small 0;
+        text-align: center;
+        font-size: $font-header;
+    }
+
+    &__body {
+        display: flex;
+        padding: $padding-small 0;
+        font-size: $font-body;
+
+        @media (max-width: $screen-wide) {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+    }
+
+    &__description-text {
+        max-width: $width-small;
+    }
+
+    &__aside-slides {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 $padding-small;
+        width: 8rem;
+
+        img {
+            width: 7rem;
+
+            &:hover {
+                border: $border-small-focus;
+                cursor: pointer;
+                @extend %transform-hover;
+            }
+        }
+    }
+
+    &__main-picture {
+        display: flex;
+        align-items: center;
+        justify-content:  center;
+        margin: 0 $margin-small;
+        width: 30rem;
+
+        img {
+            max-width: 28rem;
+            max-height: 45rem;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        padding: 0 $padding-small;
+
+        .details-item {
+            @extend %border;
+            text-align: center;
+
+            &:nth-child(-n + 5) {
+                margin-bottom: $margin-medium;
+            }
+
+            &__head {
+                border-bottom: $border;
+                padding: $padding-tiny 0;
+                font-weight: bold;
+            }
+
+            &__body {
+                padding: $padding-tiny $padding-small;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 $padding-medium;
+    }
+
+    &__btn-add-to-cart,
+    &__btn-buy-now {
+        margin-top: $margin-medium;
+        width: 15rem;
+    }
+}

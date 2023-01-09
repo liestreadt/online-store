@@ -1,4 +1,4 @@
+import { Controller } from './app/Controller';
 import './sass/style.scss';
 
-console.log('line');
-console.log('another line');
+const controller = new Controller();
