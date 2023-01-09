@@ -71,13 +71,13 @@ export interface ModelData {
     page: PageCase;
     detailsID: string;
     modalErrors: {
-        name: boolean;
-        number: boolean;
-        address: boolean;
-        email: boolean;
-        debitNumber: boolean;
-        // debitValidTo: boolean;
-        debitCode: boolean;
+        modalName: boolean;
+        modalNumber: boolean;
+        modalAddress: boolean;
+        modalEmail: boolean;
+        modalDebitNumber: boolean;
+        modalDebitValidTo: boolean;
+        modalDebitCode: boolean;
     };
 }
 export interface ElementsToListen {
@@ -117,14 +117,14 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
-    modalForm = 'modal-form',
-    modalName = 'modal-name',
-    modalNumber = 'modal-number',
-    modalAddress = 'modal-address',
-    modalEmail = 'modal-email',
-    modalDebitNumber = 'modal-debit-number',
-    modalDebitValidTo = 'modal-debit-valid-to',
-    modalDebitCode = 'modal-debit-code',
+    modalForm = 'modalForm',
+    modalName = 'modalName',
+    modalNumber = 'modalNumber',
+    modalAddress = 'modalAddress',
+    modalEmail = 'modalEmail',
+    modalDebitNumber = 'modalDebitNumber',
+    modalDebitValidTo = 'modalDebitValidTo',
+    modalDebitCode = 'modalDebitCode',
 }
 
 // TODO: view should take options values from this enum
@@ -140,4 +140,11 @@ export enum PageCase {
     cart,
     details,
     error,
+}
+
+export enum InputValueStringLength {
+    ONE = 1,
+    TWO,
+    THREE,
+    FOUR,
 }

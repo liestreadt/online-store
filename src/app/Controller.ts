@@ -1,6 +1,12 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, ElementsToValidate, FilterKeys, sortVariantsEnum } from './intefaces/types';
+import {
+    ElementsToListen,
+    ElementsToValidate,
+    FilterKeys,
+    InputValueStringLength,
+    sortVariantsEnum,
+} from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
 import { SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
@@ -26,12 +32,11 @@ export class Controller {
     initViewAndListeners(): void {
         this.view = new View(this.model.modelData);
         this.addListeners();
-        // this.addListenersToModalElems();
     }
     addListeners(): void {
         window.addEventListener('hashchange', this);
         //window.addEventListener('popstate', this);
-
+        const elementsToValidate: ElementsToValidate = this.view.getElementsForValidation();
         switch (this.model.modelData.page) {
             default:
                 {
@@ -39,7 +44,6 @@ export class Controller {
                     //type Values = ElementsToListenStore[Keys];
                     //const elementsToListen: Values = this.view.getElementsForEvents();
                     const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
-                    const elementsToValidate: ElementsToValidate = this.view.getElementsForValidation();
 
                     elementsToListen.reset?.addEventListener('click', this);
                     elementsToListen.copy?.addEventListener('click', this);
@@ -55,13 +59,88 @@ export class Controller {
                     elementsToValidate.formElements.name?.addEventListener('input', this);
                     elementsToValidate.formElements.number?.addEventListener('input', this);
                     elementsToValidate.formElements.address?.addEventListener('input', this);
-                    elementsToValidate.formElements.email?.addEventListener('input', this);
+                    elementsToValidate.formElements.email?.addEventListener('focusout', this);
                     elementsToValidate.formElements.debitCardNumber?.addEventListener('input', this);
                     elementsToValidate.formElements.debitCardExpireDate?.addEventListener('input', this);
                     elementsToValidate.formElements.debitCardCode?.addEventListener('input', this);
                 }
                 break;
         }
+
+        elementsToValidate.formElements.name?.addEventListener('focusout', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
+            if (!input.value.match(regexName)) {
+                console.log('name Error');
+                this.model.modelData.modalErrors.modalName = true;
+                this.view.hadleModalInputError(input);
+            } else {
+                console.log('name Passed');
+                this.model.modelData.modalErrors.modalName = false;
+                this.view.hadleModalInputPassed(input);
+            }
+            console.log(input);
+        });
+        elementsToValidate.formElements.number?.addEventListener('focusout', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            const regexNumber = /\+(\d{9})/g;
+            if (!input.value.match(regexNumber)) {
+                this.model.modelData.modalErrors.modalNumber = true;
+                this.view.hadleModalInputError(input);
+            } else {
+                this.model.modelData.modalErrors.modalNumber = false;
+                this.view.hadleModalInputPassed(input);
+            }
+            console.log(input);
+        });
+        elementsToValidate.formElements.address?.addEventListener('focusout', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            const regexAddress = /(^[^\s]{5,})(\s{1})([^\s]{5,})(\s{1})([^\s]{5,})$/gi;
+            if (!input.value.match(regexAddress)) {
+                this.model.modelData.modalErrors.modalAddress = true;
+                this.view.hadleModalInputError(input);
+            } else {
+                this.model.modelData.modalErrors.modalAddress = false;
+                this.view.hadleModalInputPassed(input);
+            }
+            console.log(input);
+        });
+        elementsToValidate.formElements.debitCardNumber?.addEventListener('focusout', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            const regexDebitNumber = /^(\d{4}\s\d{4}\s\d{4}\s\d{4})$/g;
+            if (!input.value.match(regexDebitNumber)) {
+                this.model.modelData.modalErrors.modalDebitNumber = true;
+                this.view.hadleModalInputError(input);
+            } else {
+                this.model.modelData.modalErrors.modalDebitNumber = false;
+                this.view.hadleModalInputPassed(input);
+            }
+            console.log(input);
+        });
+        elementsToValidate.formElements.debitCardExpireDate?.addEventListener('focusout', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            const regexValidTo = /^(\d{2}\s\/\s\d{2})$/g;
+            if (!input.value.match(regexValidTo)) {
+                this.model.modelData.modalErrors.modalDebitValidTo = true;
+                this.view.hadleModalInputError(input);
+            } else {
+                this.model.modelData.modalErrors.modalDebitValidTo = false;
+                this.view.hadleModalInputPassed(input);
+            }
+            console.log(input);
+        });
+        elementsToValidate.formElements.debitCardCode?.addEventListener('focusout', (event: Event) => {
+            const input = event.target as HTMLInputElement;
+            const regexDebitNumber = /^(\d{3})$/g;
+            if (!input.value.match(regexDebitNumber)) {
+                this.model.modelData.modalErrors.modalDebitCode = true;
+                this.view.hadleModalInputError(input);
+            } else {
+                this.model.modelData.modalErrors.modalDebitCode = false;
+                this.view.hadleModalInputPassed(input);
+            }
+            console.log(input);
+        });
     }
 
     handleEvent(event: Event): void {
@@ -174,8 +253,6 @@ export class Controller {
     private modalFormEvent(event: Event) {
         event.preventDefault();
         if (Object.values(this.model.modelData.modalErrors).includes(true)) {
-            console.log('Please fill the fields correctly');
-            console.log(Object.values(this.model.modelData.modalErrors));
             this.view.handleFormError();
         } else {
             console.log('Confirmed!');
@@ -184,121 +261,60 @@ export class Controller {
     }
     private modalNameEvent(event: Event) {
         const input = event.target as HTMLInputElement;
-        const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
         input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
-        if (!input.value.match(regexName)) {
-            console.log('name Error');
-            this.model.modelData.modalErrors.name = true;
-            this.view.hadleModalInputError(input);
-        } else {
-            console.log('name Passed');
-            this.model.modelData.modalErrors.name = false;
-            this.view.hadleModalInputPassed(input);
-        }
     }
     private modalNumberEvent(event: Event) {
         const input = event.target as HTMLInputElement;
-        const regexNumber = /\+(\d{9})/g;
         input.value = input.value.replace(/[^0-9\\+]/g, '');
         input.value = input.value.replace(/\+{2,}/g, '+');
-        if (!input.value.match(regexNumber)) {
-            console.log('number Error');
-            this.model.modelData.modalErrors.number = true;
-            this.view.hadleModalInputError(input);
-        } else {
-            console.log('number Passed');
-            this.model.modelData.modalErrors.number = false;
-            this.view.hadleModalInputPassed(input);
-        }
     }
     private modalAddressEvent(event: Event) {
         const input = event.target as HTMLInputElement;
-        const regexAddress = /(^[^\s]{5,})(\s{1})([^\s]{5,})(\s{1})([^\s]{5,})$/gi;
-        input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
-        if (!input.value.match(regexAddress)) {
-            console.log('name Error');
-            this.model.modelData.modalErrors.address = true;
-            this.view.hadleModalInputError(input);
-        } else {
-            console.log('adress Passed');
-            this.model.modelData.modalErrors.address = false;
-            this.view.hadleModalInputPassed(input);
-        }
+        input.value = input.value.replace(/[_/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
     }
     private modalEmailEvent(event: Event) {
         const input = event.target as HTMLInputElement;
         const regexEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
         if (!input.value.match(regexEmail)) {
-            console.log('email error');
-            this.model.modelData.modalErrors.email = true;
+            this.model.modelData.modalErrors.modalEmail = true;
             this.view.hadleModalInputError(input);
         } else {
-            console.log('email Passed');
-            this.model.modelData.modalErrors.email = false;
+            this.model.modelData.modalErrors.modalEmail = false;
             this.view.hadleModalInputPassed(input);
         }
     }
     private modalDebitNumberEvent(event: Event) {
         const input = event.target as HTMLInputElement;
-        const regexDebitNumber = /^(\d{16})$/g;
-        input.value = input.value.replace(/[^0-9]/g, '');
-        if (!input.value.match(regexDebitNumber)) {
-            console.log('debitNumber Error');
-            this.model.modelData.modalErrors.debitNumber = true;
-            this.view.hadleModalInputError(input);
-        } else {
-            console.log('debitNumber Passed');
-            this.model.modelData.modalErrors.debitNumber = false;
-            this.view.hadleModalInputPassed(input);
+        let cardCode = input.value.replace(/[^\d]/g, '').substring(0, 16);
+        const cardASD = cardCode.match(/.{1,4}/g)?.join(' ');
+        if (cardCode && cardASD) {
+            cardCode = cardCode !== '' ? cardASD : '';
         }
+        input.value = cardCode;
     }
     private modalDebitValidToEvent(event: Event) {
         const input = event.target as HTMLInputElement;
         const inputType = (event as InputEvent).inputType;
-        input.value = input.value.replace(/[^\d\\/]/g, '');
-        // input.value = input.value.replace(/^([0-9]{2})$/g, `${input.value} / `);
-        const regexDebitValidTo = /^[0-9]{2}$/g;
-        console.log(event);
-        console.log('value', input.value);
-        console.log('length', input.value.length);
-        console.log('last', input.value.at(-1));
-        if (input.value.length === 2 && inputType === 'insertText') {
-            input.value += '/';
-            console.log('ValidTo Error');
+
+        let debitValidToReplacedInput = input.value.replace(/[^\d]/g, '').substring(0, 4);
+        const debitValidToModifiedInput = debitValidToReplacedInput.match(/.{1,2}/g)?.join(' / ');
+        if (debitValidToReplacedInput && debitValidToModifiedInput) {
+            debitValidToReplacedInput = debitValidToReplacedInput !== '' ? debitValidToModifiedInput : '';
         }
-        if (input.value.length === 3 && inputType === 'deleteContentBackward') {
-            input.value.slice(-1);
+        input.value = debitValidToReplacedInput;
+
+        if (input.value.length === InputValueStringLength.ONE && inputType === 'insertText') {
+            input.value = input.value.replace(/[2-9]/g, '');
+        }
+        if (input.value.slice(0, 1) === '1' && input.value.length === 2 && inputType === 'insertText') {
+            input.value = input.value.replace(/[3-9]/g, '');
         }
     }
     private modalDebitCodeEvent(event: Event) {
         const input = event.target as HTMLInputElement;
-        const regexDebitNumber = /^(\d{3})$/g;
-        input.value = input.value.replace(/[^0-9]/g, '');
-        if (!input.value.match(regexDebitNumber)) {
-            console.log('debitCode Error');
-            this.model.modelData.modalErrors.debitCode = true;
-            this.view.hadleModalInputError(input);
-        } else {
-            console.log('debitCode Passed');
-            this.model.modelData.modalErrors.debitCode = false;
-            this.view.hadleModalInputPassed(input);
+        input.value = input.value.replace(/[^\d]/g, '');
+        if (input.value.length === InputValueStringLength.FOUR) {
+            input.value = input.value.slice(0, 3);
         }
     }
-
-    // private addListenersToModalElems() {
-    //     this.view.getElementsForValidation().formElements.name?.addEventListener('focusout', (event) => {
-    //         const regexName = /(\w{3,})(\s{1,})(\w{3,})/g;
-    //         const input = event.target as HTMLInputElement;
-    //         if (!input.value.match(regexName)) {
-    //             console.log('valid Error');
-    //         }
-    //     });
-    //     this.view.getElementsForValidation().formElements.number?.addEventListener('focusout', (event) => {
-    //         const regexName = /\+(\d{9})/g;
-    //         const input = event.target as HTMLInputElement;
-    //         if (!input.value.match(regexName)) {
-    //             console.log('valid Error');
-    //         }
-    //     });
-    // }
 }

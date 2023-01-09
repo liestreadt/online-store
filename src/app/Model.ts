@@ -47,13 +47,13 @@ class Model {
             page: this.getPageFromURL(),
             detailsID: '',
             modalErrors: {
-                name: true,
-                number: true,
-                address: true,
-                email: true,
-                debitNumber: true,
-                // debitValidTo: true,
-                debitCode: true,
+                modalName: true,
+                modalNumber: true,
+                modalAddress: true,
+                modalEmail: true,
+                modalDebitNumber: true,
+                modalDebitValidTo: true,
+                modalDebitCode: true,
             },
         };
         this.shownProductInfo = null;

@@ -11,6 +11,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: 3rem;
         align-items: center;
         margin: auto;
         @extend %border;
@@ -28,7 +29,6 @@
     &__number,
     &__address,
     &__e-mail {
-        margin-bottom: $margin-medium;
         width: 600px;
         height: 25px;
     }
@@ -70,6 +70,11 @@
             display: flex;
             justify-content: space-between;
             width: 95%;
+            height: 25px;
+
+            .input-error-message {
+                width: 100%;
+            }
         }
 
         &-valid-to-input,
@@ -100,12 +105,15 @@
     }
 }
 
+.input-error-message {
+    display: none;
+    justify-content: center;
+    position: relative;
+    top: 0.4rem;
+    color: $color-modal-border-error;
+}
+
 .error {
     border: $border-error;
     background-color: $color-modal-input-error;
-}
-
-.passed {
-    border: $border-passed;
-    background-color: $color-modal-input-passed;
 }

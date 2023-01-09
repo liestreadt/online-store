@@ -212,21 +212,30 @@ class View {
         }
     }
     hadleModalInputError(input: HTMLInputElement) {
-        input.classList.remove('passed');
         input.classList.add('error');
+        const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
+        inputErrorMessage.style.display = 'flex';
     }
     hadleModalInputPassed(input: HTMLInputElement) {
         input.classList.remove('error');
-        input.classList.add('passed');
+        const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
+        inputErrorMessage.style.display = 'none';
     }
     toggleModalErrorMessage(display: string) {
-        const errorMessage = document.body.querySelector('#modal-error-message') as HTMLDivElement;
-        if (errorMessage) {
-            errorMessage.style.display = `${display}`;
+        const formErrorMessage = document.body.querySelector('#modal-error-message') as HTMLDivElement;
+        if (formErrorMessage) {
+            formErrorMessage.style.display = `${display}`;
         }
     }
     handleFormError() {
         this.toggleModalErrorMessage('block');
+        const modalErrors = this.modelData.modalErrors;
+        for (const key in modalErrors) {
+            if (modalErrors[key as keyof typeof modalErrors]) {
+                const currentInput = document.body.querySelector(`#${key}`) as HTMLInputElement;
+                this.hadleModalInputError(currentInput);
+            }
+        }
     }
     handleFormPassed() {
         this.toggleModalErrorMessage('none');
