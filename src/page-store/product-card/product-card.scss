@@ -14,6 +14,12 @@
     height: $height-card-small;
     overflow: hidden;
 
+    &__header {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
     &__body {
         display: flex;
         flex-direction: column;

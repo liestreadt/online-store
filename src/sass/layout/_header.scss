@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: center;
     @extend %border;
+    border-top: none;
     border-radius: 0 0 $radius-small $radius-small;
     padding: $padding-tiny $padding-small;
 }
