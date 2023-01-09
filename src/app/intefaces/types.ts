@@ -143,6 +143,6 @@ export interface ShowCart {
 }
 
 export enum ViewVariantsEnum {
-    small = 'view-small',
-    big = 'view-big',
+    SMALL = 'view-small',
+    BIG = 'view-big',
 }

@@ -311,7 +311,8 @@ class Model {
         this.applyQueryParamsToCart();
     }
     applyQueryParamsToViewType() {
-        this.handleViewChange(this.modelData.activeFilters.view?.[0] as ViewVariantsEnum);
+        const viewKey = this.modelData.activeFilters.view?.[0];
+        this.handleViewChange(viewKey === ViewVariantsEnum.BIG ? ViewVariantsEnum.BIG : ViewVariantsEnum.SMALL);
     }
     getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
         filteredProductsInModelData.sort((prev, curr) => {
@@ -360,12 +361,8 @@ class Model {
             }
         }
     }
-    handleViewChange(view: string): void {
-        if (view) {
-            this.modelData.currentView = view;
-        } else {
-            this.modelData.currentView = ViewVariantsEnum.big;
-        }
+    handleViewChange(view: ViewVariantsEnum): void {
+        this.modelData.currentView = view;
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);

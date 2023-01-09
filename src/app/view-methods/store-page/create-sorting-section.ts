@@ -3,9 +3,14 @@ import createStoreCard from './create-store-card';
 import createStoreCardBig from './create-store-card-big';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
-    const currentCardContainerSize = modelData.currentView === 'view-big' ? 'big' : 'small';
-    const isViewButtonBigSelected = modelData.currentView === 'view-big' ? 'sorting__big-view_selected' : '';
-    const isViewButtonSmallSelected = modelData.currentView === 'view-big' ? '' : 'sorting__small-view_selected';
+    // const currentCardContainerSize = modelData.currentView === ViewVariantsEnum.BIG ? 'big' : 'small';
+    // const isViewButtonBigSelected = modelData.currentView === ViewVariantsEnum.BIG ? 'sorting__big-view_selected' : '';
+    // const isViewButtonSmallSelected =
+    //     modelData.currentView === ViewVariantsEnum.BIG ? '' : 'sorting__small-view_selected';
+    const [currentCardContainerSize, isViewButtonBigSelected, isViewButtonSmallSelected] =
+        modelData.currentView === ViewVariantsEnum.BIG
+            ? ['big', 'sorting__big-view_selected', '']
+            : ['small', '', 'sorting__small-view_selected'];
 
     const SORT_OPTIONS = Object.values(SortVariantsEnum);
     const sortNamesArr = [
@@ -39,10 +44,10 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     placeholder="Search product">
                 <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
                     Choose view: <button id="${
-                        ViewVariantsEnum.big
+                        ViewVariantsEnum.BIG
                     }" class="sorting__big-view ${isViewButtonBigSelected}">☰</button>
                     <button id="${
-                        ViewVariantsEnum.small
+                        ViewVariantsEnum.SMALL
                     }" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
                 </div>
             </div>
@@ -51,7 +56,7 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                 id="${EventTargetsIDEnum.cards}">
                 ${modelData.filteredProducts
                     ?.map((product) => {
-                        return modelData.currentView === 'view-big'
+                        return modelData.currentView === ViewVariantsEnum.BIG
                             ? createStoreCardBig(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
                             : createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false);
                     })

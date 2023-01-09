@@ -1,6 +1,6 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum } from './intefaces/types';
+import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum, ViewVariantsEnum } from './intefaces/types';
 import { EventTargetsIDEnum } from './intefaces/types';
 import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
@@ -212,9 +212,10 @@ export class Controller {
             event.target instanceof HTMLButtonElement && event.target.id !== this.model.modelData.currentView;
 
         if (isValidEventTarget) {
-            const key = 'view' as FilterKeys;
-            this.model.handleViewChange(event.target.id);
-            this.model.createQueryParamFromEvent(key, event.target.id);
+            const viewID = event.target.id;
+            const key = 'view';
+            this.model.handleViewChange(viewID === ViewVariantsEnum.BIG ? ViewVariantsEnum.BIG : ViewVariantsEnum.BIG);
+            this.model.createQueryParamFromEvent(key, viewID);
             this.initViewAndListeners();
         }
     }
