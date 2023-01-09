@@ -18,8 +18,9 @@ export const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
 export const regexNumber = /\+(\d{9})/g;
 export const regexAddress = /(^[^\s]{5,})(\s{1})([^\s]{5,})(\s{1})([^\s]{5,})$/gi;
 export const regexDebitNumber = /^(\d{4}\s\d{4}\s\d{4}\s\d{4})$/g;
-export const regexValidTo = /^(\d{2}\s\/\s\d{2})$/g;
+export const regexValidTo = /^((1[0-2]|0[1-9])\s\/\s\d{2})$/g;
 export const regexDebitCode = /^(\d{3})$/g;
+// (0\d)(1[0-2])
 
 export const regexToReplaceNumber = /[^0-9\\+]/g;
 export const regexToReplacePlus = /\+{2,}/g;

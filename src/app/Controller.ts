@@ -449,7 +449,11 @@ export class Controller {
         if (input.value.length === InputValueStringLength.ONE && inputType === 'insertText') {
             input.value = input.value.replace(/[2-9]/g, '');
         }
-        if (input.value.slice(0, 1) === '1' && input.value.length === 2 && inputType === 'insertText') {
+        if (
+            input.value.slice(0, 1) === '1' &&
+            input.value.length === InputValueStringLength.TWO &&
+            inputType === 'insertText'
+        ) {
             input.value = input.value.replace(/[3-9]/g, '');
         }
     }
