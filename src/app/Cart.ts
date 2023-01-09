@@ -1,14 +1,49 @@
 import { CART_ID } from './constants/constants';
-import { ProductCart, ProductDetail, ProductShort } from './intefaces/types';
+import { ProductCart, ProductDetails, ProductShort, ShowCart } from './intefaces/types';
+
+export const DEFAULT_LIMIT = 4;
+export const DEFAULT_CART_PAGE = 1;
 
 class Cart {
-    productsAll: ProductDetail[] | null;
+    productsAll: ProductDetails[] | null;
     products: Map<string, ProductCart>;
+    showProperties: ShowCart;
+    productsToShow: ProductCart[] | null;
 
-    constructor(productsAll: ProductDetail[] | null) {
+    constructor(productsAll: ProductDetails[] | null) {
         this.productsAll = productsAll;
         this.products = new Map();
         this.restore();
+        this.showProperties = {
+            limit: DEFAULT_LIMIT,
+            listPage: DEFAULT_CART_PAGE,
+        };
+        this.productsToShow = this.getProductsToShow();
+    }
+    lastPage() {
+        if (this.products) {
+            return Math.ceil(this.products.size / this.showProperties.limit);
+        }
+        return DEFAULT_CART_PAGE;
+    }
+    set limit(newLimit: number) {
+        this.showProperties.limit = newLimit;
+        this.productsToShow = this.getProductsToShow();
+    }
+    get limit() {
+        return this.showProperties.limit;
+    }
+    set listPage(newPage: number) {
+        if (this.checkValidPage(newPage)) {
+            this.showProperties.listPage = newPage;
+            this.productsToShow = this.getProductsToShow();
+        } else {
+            this.showProperties.listPage = DEFAULT_CART_PAGE;
+        }
+    }
+    checkValidPage(page: number): boolean {
+        const maxListPage = Math.ceil(this.products.size / this.limit);
+        return page > 0 && page <= maxListPage;
     }
     restore(): void {
         let saveList: ProductShort[] = [];
@@ -24,7 +59,7 @@ class Cart {
         }
     }
     getProduct(info: ProductShort): ProductCart | null {
-        const product: ProductDetail | null =
+        const product: ProductDetails | null =
             this.productsAll?.find((product) => {
                 return product.id === info.id;
             }) || null;
@@ -39,6 +74,21 @@ class Cart {
         }
         return null;
     }
+    getProductsToShow(): ProductCart[] | null {
+        if (!this.products.size) {
+            return null;
+        }
+        const { limit, listPage } = this.showProperties;
+        let list: ProductCart[] = [...this.products].map(([id, product]) => product);
+        // index + 1 is used to enumerate products in view
+        list = list.filter((product, index) => {
+            const firstIndexToShow = (listPage - 1) * limit;
+            const lastIndexToShow = listPage * limit - 1;
+            const isProductOnPage = index >= firstIndexToShow && index <= lastIndexToShow;
+            return isProductOnPage;
+        });
+        return list;
+    }
     private save(): void {
         const saveList: ProductShort[] = [];
         this.products.forEach((product) => {
@@ -47,6 +97,7 @@ class Cart {
                 amount: product.amount,
             });
         });
+        this.productsToShow = this.getProductsToShow();
         localStorage.setItem(CART_ID, JSON.stringify(saveList));
     }
     getTotalPrice(): number {
@@ -64,7 +115,7 @@ class Cart {
         return totalAmount;
     }
     addNew(id: string): void {
-        const product: ProductDetail | null =
+        const product: ProductDetails | null =
             this.productsAll?.find((product) => {
                 return product.id === +id;
             }) || null;
@@ -94,11 +145,11 @@ class Cart {
     }
     decreaseAmount(id: string): void {
         const product = this.products.get(id);
-        if (product && product.amount > 1) {
-            product.amount -= 1;
-        }
         if (product && product.amount === 1) {
             this.drop(id);
+        }
+        if (product && product.amount > 1) {
+            product.amount -= 1;
         }
         this.save();
     }
@@ -108,6 +159,14 @@ class Cart {
     }
     checkProductInCart(id: string): boolean {
         return this.products.has(id);
+    }
+    toggleProductInCart(cardId: string) {
+        const isInCart = this.checkProductInCart(cardId);
+        if (isInCart) {
+            this.drop(cardId);
+        } else {
+            this.addNew(cardId);
+        }
     }
 }
 

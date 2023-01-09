@@ -21,7 +21,7 @@ export class DualSlider {
         return Number.isFinite(this.inputMax) ? this.inputMax : this.maxScale;
     }
     private initialMin() {
-        return this.inputMin !== 0 ? this.inputMin : this.minScale;
+        return this.inputMin !== Infinity ? this.inputMin : this.minScale;
     }
 
     private updateSlider() {
@@ -37,7 +37,7 @@ export class DualSlider {
         class="dual-slider__input"
         min="${this._minScale}"
         max="${this.maxScale}"
-        value="${this.inputMin}"
+        value="${this.initialMin()}"
         >
     <input
         type="range"

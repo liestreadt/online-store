@@ -1,6 +1,14 @@
-import { ProductDetail } from '../../intefaces/types';
+import { CAPTION_ADD, CAPTION_DROP } from '../../constants/constants';
+import { EventTargetsIDEnum, ModelData, ProductDetails } from '../../intefaces/types';
 
-export default function createProdDetailsContainer(product: ProductDetail): string {
+function getCapture(isInCart: boolean): string {
+    return isInCart ? CAPTION_DROP.toUpperCase() : CAPTION_ADD.toUpperCase();
+}
+function getColorModifier(isInCart: boolean): string {
+    return isInCart ? 'product-card__btn_added' : '';
+}
+
+export function createProdDetailsContainer(product: ProductDetails, mainImageSrc: string, isInCart: boolean): string {
     return `
         <section class="breadcrumbs">
             <span class="breadcrumbs__item">Store</span>
@@ -16,15 +24,10 @@ export default function createProdDetailsContainer(product: ProductDetail): stri
                 <span class="details__header-text">${product.title}</span>
             </h2>
             <div class="details__body">
-                <div class="details__aside-slides">
-                    ${product.images
-                        .map((item) => {
-                            return `<img src="${item}" alt="macbook">`;
-                        })
-                        .join('')}
+                <div id="details-images" class="details__aside-slides">
                 </div>
                 <div class="details__main-picture">
-                    <img src="https://i.dummyjson.com/data/products/6/3.png" alt="macbook_id">
+                    <img id="details-main-image" src="${mainImageSrc}" alt="${product.title}">
                 </div>
                 <div class="details__info">
                     <div class="details__description details-item">
@@ -78,10 +81,12 @@ export default function createProdDetailsContainer(product: ProductDetail): stri
                 </div>
                 <div class="details__controls">
                     <div class="details__price">
-                        Price: <span class="details__price-text">€1565</span>
+                        Price: <span class="details__price-text">${product.price}</span>
                     </div>
-                    <button class="details__btn-add-to-cart">
-                        Add to cart
+                    <button
+                        id="${EventTargetsIDEnum.detailsAddToCart}"
+                        class="details__btn-add-to-cart ${getColorModifier(isInCart)}">
+                        ${getCapture(isInCart)}
                     </button>
                     <button class="details__btn-buy-now">
                         Buy Now

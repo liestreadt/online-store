@@ -10,15 +10,17 @@ function getColorModifier(isInCart: boolean): string {
 function getBorderModifier(isInCart: boolean) {
     return isInCart ? 'product-card_added' : '';
 }
-export default function createStoreCard(product: ProductDetails, isInCart: boolean): string {
+
+export default function createStoreCardBig(product: ProductDetails, isInCart: boolean): string {
     return `
-        <div class="product-card ${getBorderModifier(isInCart)}">
+        <div class="product-card_big">
             <h2 class="product-card__header header_small">
                 ${product.title}
             </h2>
-            <div
-                class="product-card__body"
-                style="
+            <div class="product-card__body">
+                <div
+                    class="product-card__image"
+                    style="
                     background: url('${
                         product.images.filter((i) => i.match(/thumbnail/)).length
                             ? product.images.filter((i) => i.match(/thumbnail/))
@@ -27,7 +29,11 @@ export default function createStoreCard(product: ProductDetails, isInCart: boole
                     background-repeat: no-repeat;
                     background-position: center;
                     background-size: cover;">
+                </div>
                 <div class="product-card__info">
+                    <div class="product-card__info-item">
+                        Description: <span class="product-card__description-text">${product.description}</span>
+                    </div>
                     <div class="product-card__info-item">
                         Category: <span class="product-card__category-text">${product.category}</span>
                     </div>

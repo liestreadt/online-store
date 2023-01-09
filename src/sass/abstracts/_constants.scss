@@ -14,6 +14,8 @@ $color-modal-border-passed:rgba(35, 178, 16, 0.9);
 
 $font-header: 2rem;
 $font-body: 1.6rem;
+$font-header-big: 2.4rem;
+$font-body-big: 1.8rem;
 
 $radius-small: 1rem;
 $radius-big: 5rem;
@@ -27,12 +29,13 @@ $margin-small: 1rem;
 $margin-medium: 2rem;
 
 $width-card-small: 320px;
-$width-card-tiny: 260px;
+$width-card-tiny: 200px;
 $width-small: 360px;
 $width-medium: 500px;
+$width-number-input: 5rem;
 
 $height-card-small: 260px;
-$height-card-tiny: 200px;
+$height-card-big: 300px;
 
 $height-range: 1rem;
 $width-range-thumb: 1rem;
@@ -43,3 +46,5 @@ $border-error: 1px solid $color-modal-border-error;
 $border-passed: 1px solid $color-modal-border-passed;
 $border-small: 1px solid #FAEBD7;
 $border-small-focus: 1px solid rgb(75, 75, 75);
+
+$shadow: 0 0 0.5rem 0.5rem $color-sand-gradient;

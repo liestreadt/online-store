@@ -1,17 +1,19 @@
-import Cart from './Cart';
-import increaseValueInMap from './tools/Functions';
+import Cart, { DEFAULT_CART_PAGE } from './Cart';
+import increaseValueInMap from './tools/helpers';
 import { FilterCalculator } from './FilterCalculator';
 import { CART_ID, PAGES_HASH } from './constants/constants';
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     ShownProductInfo,
     filterParamsKeys,
     FilterKeys,
     FilterParamsValues,
+    FilteredProductsKeys,
     InitialFilterValues,
     ModelData,
-    sortVariantsEnum,
+    ViewVariantsEnum,
+    SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
 
@@ -41,11 +43,16 @@ class Model {
             },
             allBrands: [],
             allCategories: [],
+            initialProducts: null,
             filteredProducts: null,
+            currentView: null,
+            currentOption: null,
             shownProductInfo: null,
             calculatedFilters: null,
             page: this.getPageFromURL(),
-            detailsID: '',
+            detailsID: Number(this.getDetailsID()),
+            detailsMainImageSrc: '',
+            cart: null,
             modalErrors: {
                 modalName: true,
                 modalNumber: true,
@@ -58,16 +65,22 @@ class Model {
         };
         this.shownProductInfo = null;
     }
-    async loadProducts(source = 'https://dummyjson.com/products?limit=100'): Promise<void> {
+    async loadProducts(source = 'https://dummyjson.com/products?limit=50'): Promise<void> {
         try {
             const response = await fetch(source);
             const data = await response.json();
             this.productJSON = data;
+            if (this.productJSON?.products) {
+                this.productJSON.products.forEach((elem: ProductDetails) => {
+                    elem.isImagesUnique = false;
+                });
+            }
+            this.cart = new Cart(this.productJSON && this.productJSON.products);
             this.readParamsFromURL();
             this.findInitialFilterValues();
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
-            this.cart = new Cart(this.productJSON && this.productJSON.products);
+            this.modelData.cart = this.cart;
         } catch {
             throw new Error('Fail to connect dummy json');
         }
@@ -98,10 +111,11 @@ class Model {
     updatePage() {
         this.modelData.page = this.getPageFromURL();
         if (this.modelData.page === PageCase.details) {
-            this.modelData.detailsID = this.getDetailsID();
+            this.modelData.detailsID = Number(this.getDetailsID());
         }
         this.readParamsFromURL();
         this.findInitialFilterValues();
+        this.applyQueryParamsToFilter();
         this.applyQueryParam();
     }
     readParamsFromURL(): Partial<FilterParamsValues> {
@@ -151,14 +165,38 @@ class Model {
         //console.log('PRODUCT INFO', this.shownProductInfo);
         //console.log('FILTER input INFO', this.filterCalculator);
     }
+    applyQueryParamsToCart() {
+        const active = this.modelData.activeFilters;
+        if (!this.cart) {
+            throw new Error('Cart is not initialized');
+        }
+        if (active.cartListLimit) {
+            this.cart.limit = +active.cartListLimit[0];
+        }
+        if (active.cartListPage) {
+            const pageFromQuery: number = +active.cartListPage[0];
+            const lastPage: number = this.cart.lastPage();
+            if (lastPage < pageFromQuery) {
+                this.changeParamInURL('cartListPage', `${lastPage}`);
+                this.reInit();
+            } else {
+                this.cart.listPage = +active.cartListPage[0];
+            }
+        } else {
+            this.cart.listPage = DEFAULT_CART_PAGE;
+        }
+    }
+    applyQueryParamsToSorting() {
+        this.sortProducts(this.modelData.activeFilters.sorting?.[0] as SortVariantsEnum);
+    }
     findInitialFilterValues() {
         if (this.productJSON && this.productJSON.products) {
-            const allProducts: Array<ProductDetail> = this.productJSON.products;
+            const allProducts: Array<ProductDetails> = this.productJSON.products;
             const allCategories: Array<string> = [];
             const allBrands: Array<string> = [];
 
             const productsSummaryInfo: InitialFilterValues = allProducts.reduce(
-                (info: InitialFilterValues, product: ProductDetail) => {
+                (info: InitialFilterValues, product: ProductDetails) => {
                     info.minPrice = Math.min(info.minPrice, product.price);
                     info.maxPrice = Math.max(info.maxPrice, product.price);
 
@@ -184,6 +222,7 @@ class Model {
             );
             this.modelData.allBrands = [...new Set(allBrands)];
             this.modelData.allCategories = [...new Set(allCategories)];
+            this.modelData.initialProducts = this.productJSON.products;
             this.modelData.initialFilterValues = productsSummaryInfo;
             return productsSummaryInfo;
         }
@@ -191,7 +230,8 @@ class Model {
     createQueryParamFromEvent(key: FilterKeys, value: string, secondValue?: number) {
         switch (key) {
             case 'sorting': {
-                // TODO: create url with added new sorting params
+                this.changeParamInURL('sorting', value);
+                this.reInit();
                 break;
             }
             case 'category': {
@@ -232,6 +272,11 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'view': {
+                this.changeParamInURL('view', value);
+                this.reInit();
+                break;
+            }
             case 'stockMin': {
                 if (secondValue && +value > secondValue) {
                     this.changeParamInURL('stockMax', value);
@@ -255,6 +300,23 @@ class Model {
             case 'searching': {
                 this.changeParamInURL('searching', value);
                 this.reInit();
+                break;
+            }
+            case 'cartListLimit': {
+                if (this.cart) {
+                    const integer = +value < 1 ? 1 : Math.floor(+value);
+                    const newLimit = Math.min(integer, this.cart.products.size);
+                    this.changeParamInURL('cartListLimit', `${newLimit}`);
+                }
+                this.reInit();
+                break;
+            }
+            case 'cartListPage': {
+                if (this.cart && this.cart.checkValidPage(+value)) {
+                    this.changeParamInURL('cartListPage', value);
+                    this.reInit();
+                }
+                break;
             }
         }
     }
@@ -262,10 +324,66 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.applyQueryParamsToViewType();
+        this.modelData.detailsMainImageSrc = this.modelData.filteredProducts?.find(
+            (elem) => elem.id === this.modelData.detailsID
+        )?.images[0];
+        this.applyQueryParamsToSorting();
+        this.applyQueryParamsToCart();
     }
-    sortProducts(sortVariant: sortVariantsEnum) {
-        // TODO: implemet sorting by option
-        // this.modelData.filteredProducts?.sort()
+    applyQueryParamsToViewType() {
+        const viewKey = this.modelData.activeFilters.view?.[0];
+        this.handleViewChange(viewKey === ViewVariantsEnum.BIG ? ViewVariantsEnum.BIG : ViewVariantsEnum.SMALL);
+    }
+    getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +prev[sortProperty] - +curr[sortProperty];
+        });
+    }
+    getDescendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
+        filteredProductsInModelData.sort((prev, curr) => {
+            return +curr[sortProperty] - +prev[sortProperty];
+        });
+    }
+    sortProducts(sortVariant: SortVariantsEnum): void {
+        if (this.modelData.filteredProducts) {
+            this.modelData.currentOption = sortVariant;
+            switch (sortVariant) {
+                case SortVariantsEnum.DEFAULT:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.PRICE_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'price');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_ASCENDING:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                case SortVariantsEnum.RATING_DESCENDING:
+                    {
+                        this.getDescendingSorting(this.modelData.filteredProducts, 'rating');
+                    }
+                    break;
+                default:
+                    {
+                        this.getAscendingSorting(this.modelData.filteredProducts, 'id');
+                    }
+                    break;
+            }
+        }
+    }
+    handleViewChange(view: ViewVariantsEnum): void {
+        this.modelData.currentView = view;
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
@@ -274,7 +392,6 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, value }, '', url.toString());
-        //console.log('add category to url search params');
     }
     deleteParamFromURL(key: FilterKeys, param: string) {
         const url: URL = new URL(window.location.href);
@@ -300,6 +417,7 @@ class Model {
     reInit() {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();
+        this.applyQueryParamsToSorting();
         this.applyQueryParam();
     }
     resetCart() {

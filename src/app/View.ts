@@ -4,11 +4,14 @@ import createFooter from './view-methods/store-page/create-footer';
 import createHeader from './view-methods/store-page/create-header';
 import createStoreFilters from './view-methods/store-page/create-store-filters';
 import createSortingSection from './view-methods/store-page/create-sorting-section';
-import createProdDetailsContainer from './view-methods/prod-detail-page/create-prod-details-container';
+import { createProdDetailsContainer } from './view-methods/prod-detail-page/create-prod-details-container';
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
+import createCartItem from './view-methods/cart-page/create-cart-item';
+import createCartContainer from './view-methods/cart-page/create-cart-container';
+import { calculateImages } from './tools/helpers';
 
 import {
-    ProductDetail,
+    ProductDetails,
     DummyJSON,
     FilterParamsValues,
     filterParamsKeys,
@@ -20,10 +23,9 @@ import {
     PageCase,
     FilterKeys,
 } from './intefaces/types';
-import createCartItem from './view-methods/cart-page/create-cart-item';
-import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
-import { checkSearchFocused } from './tools/Functions';
+import { checkSearchFocused } from './tools/helpers';
+import Cart from './Cart';
 
 class View {
     modelData: Partial<ModelData>;
@@ -32,7 +34,7 @@ class View {
         this.renderPage();
     }
     renderPage() {
-        if (!this.modelData.filteredProducts) {
+        if (document.readyState !== 'complete') {
             //TODO: if no product is sutable for filters, show empty sorting area
             this.renderLoadingPage();
         } else {
@@ -48,6 +50,18 @@ class View {
                 case PageCase.details:
                     {
                         this.renderProdDetailsPage();
+                        const currentProduct = this.modelData.filteredProducts?.find(
+                            (item) => item.id === this.modelData.detailsID
+                        );
+                        if (currentProduct) {
+                            if (!currentProduct.isImagesUnique) {
+                                calculateImages(currentProduct).then(() => {
+                                    this.renderImages(currentProduct.images, currentProduct.title);
+                                });
+                            } else {
+                                this.renderImages(currentProduct.images, currentProduct.title);
+                            }
+                        }
                     }
                     break;
                 case PageCase.cart:
@@ -72,6 +86,20 @@ class View {
             this.addFocusToLastUsed();
         }
     }
+
+    renderImages(data: string[], title: string) {
+        const imagesContainer = document.querySelector('#details-images');
+        if (imagesContainer) {
+            imagesContainer.innerHTML = `
+                ${data
+                    .map((item) => {
+                        return `<img src="${item}" alt="${title}">`;
+                    })
+                    .join('')}
+            `;
+        }
+    }
+
     renderLoadingPage() {
         document.body.innerHTML = `
             <main class="main-loading">
@@ -93,25 +121,24 @@ class View {
     }
     renderProdDetailsPage() {
         const containerMain = document.querySelector('main');
-        // skeleton for the future, when current product will be given after click on detail
-        const products = this.modelData.filteredProducts;
-        if (containerMain && products) {
+        const currentProduct = this.modelData.filteredProducts?.find((item) => item.id === this.modelData.detailsID);
+        const mainImageSrc = this.modelData.detailsMainImageSrc;
+        if (containerMain && currentProduct && mainImageSrc) {
             containerMain.outerHTML = `
                 <main class="main-details">
-                    ${this.getProdDetailsContainer(products[1])}
+                    ${this.getProdDetailsContainer(currentProduct, mainImageSrc)}
                 </main>
             `;
         }
     }
     renderCartPage() {
         const containerMain = document.querySelector('main');
-        // skeleton for the future, when current product will be given after click on detail
-        const cartItems = this.modelData.filteredProducts;
-        if (containerMain && cartItems) {
+
+        if (containerMain) {
             containerMain.outerHTML = `
                 <main class="main-cart">
-                    ${this.getCartContainer(cartItems[1])}
-                    ${this.getCartSummary()}
+                    ${this.getCartContainer(this.modelData.cart ?? null)}
+                    ${this.modelData.cart && this.getCartSummary(this.modelData.cart)}
                 </main>
             `;
         }
@@ -120,7 +147,7 @@ class View {
         document.body.innerHTML += `<main></main>`;
     }
     renderHeader() {
-        document.body.innerHTML = createHeader();
+        document.body.innerHTML = createHeader(this.modelData);
     }
     renderFooter() {
         document.body.innerHTML += createFooter();
@@ -154,17 +181,18 @@ class View {
         if (sliderContainerPrice) dualSliderPrice.insertSlider(sliderContainerPrice);
         if (sliderContainerStock) dualSliderStock.insertSlider(sliderContainerStock);
     }
-    getProdDetailsContainer(data: ProductDetail): string {
-        return createProdDetailsContainer(data);
+    getProdDetailsContainer(data: ProductDetails, mainImageSrc: string): string {
+        return createProdDetailsContainer(
+            data,
+            mainImageSrc,
+            this.modelData.cart?.checkProductInCart(`${data.id}`) ?? false
+        );
     }
-    getCartContainer(data: ProductDetail): string {
-        return createCartContainer(data);
+    getCartContainer(cart: Cart | null): string {
+        return createCartContainer(cart);
     }
-    getCartItem(data: ProductDetail): string {
-        return createCartItem(data);
-    }
-    getCartSummary(): string {
-        return createCartSummary();
+    getCartSummary(cart: Cart): string {
+        return createCartSummary(cart);
     }
     getButtonsArray() {
         return [...document.body.querySelectorAll('button')];
@@ -187,7 +215,7 @@ class View {
         };
     }
     getElementsForEvents(): ElementsToListen {
-        return {
+        const elements: ElementsToListen = {
             store: {
                 reset: document.body.querySelector(`#${EventTargetsIDEnum.reset}`),
                 copy: document.body.querySelector(`#${EventTargetsIDEnum.copy}`),
@@ -199,8 +227,22 @@ class View {
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
                 modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
+                cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
+            },
+            cart: {
+                pageBack: document.querySelector(`#${EventTargetsIDEnum.PAGE_BACK}`),
+                pageForward: document.querySelector(`#${EventTargetsIDEnum.PAGE_FORWARD}`),
+                listLimit: document.querySelector(`#${EventTargetsIDEnum.LIST_LIMIT}`),
+                cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
+                promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+            },
+            details: {
+                images: document.body.querySelector('.details__aside-slides'),
+                detailsAddToCart: document.body.querySelector(`#${EventTargetsIDEnum.detailsAddToCart}`),
             },
         };
+        return elements;
     }
     addFocusToLastUsed() {
         const searchField = document.querySelector(`#${EventTargetsIDEnum.searching}`);
@@ -210,6 +252,12 @@ class View {
             const textLength = searchField.value.length;
             searchField.focus();
             searchField.setSelectionRange(textLength, textLength);
+        }
+    }
+    handleDetailsImagesClick(imageSource: string): void {
+        const mainImg = document.body.querySelector('#details-main-image') as HTMLImageElement;
+        if (mainImg) {
+            mainImg.setAttribute('src', `${imageSource}`);
         }
     }
     hadleModalInputError(input: HTMLInputElement) {

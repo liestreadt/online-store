@@ -20,6 +20,13 @@
     @extend %border;
     max-width: 90%;
 
+    img {
+        margin-bottom: $margin-tiny;
+        border: $border-small;
+        border-radius: $radius-small;
+        @extend %transition-fast;
+    }
+
     &__header {
         border-bottom: $border;
         padding: $padding-small 0;
@@ -36,16 +43,17 @@
     &__aside-slides {
         display: flex;
         flex-direction: column;
+        align-items: center;
         padding: 0 $padding-small;
+        width: 8rem;
 
         img {
-            margin-bottom: $margin-tiny;
-            @extend %border;
             width: 7rem;
 
             &:hover {
                 border: $border-small-focus;
                 cursor: pointer;
+                @extend %transform-hover;
             }
         }
     }
@@ -53,12 +61,13 @@
     &__main-picture {
         display: flex;
         align-items: center;
-        padding: 0 $padding-small;
-        width: fit-content;
+        justify-content:  center;
+        margin: 0 $margin-small;
+        width: 30rem;
 
         img {
-            border-radius: $radius-small;
-            width: 35rem;
+            max-width: 28rem;
+            max-height: 45rem;
         }
     }
 
