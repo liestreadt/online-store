@@ -112,7 +112,10 @@
         gap: 0.2rem;
         flex-wrap: wrap;
         flex-direction: column;
-        font-size: 1.4rem;
+        font-size: $font-body;
+        span {
+            text-align: center;
+        }
         @media (max-width: $screen-wide) {
             align-content: center;
         }
