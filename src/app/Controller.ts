@@ -10,7 +10,14 @@ import {
     EventTargetsIDEnum,
     ViewVariantsEnum,
 } from './intefaces/types';
-import { CART_ID, DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
+import {
+    CART_ID,
+    DECREASE_ID_PREFIX,
+    INCREASE_ID_PREFIX,
+    PAGES_HASH,
+    SLIDER_MAX_ID,
+    SLIDER_MIN_ID,
+} from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
     if (element instanceof HTMLInputElement) {
@@ -274,6 +281,7 @@ export class Controller {
                 this.model.cart?.addNew(`${cardID}`);
             }
         }
+        this.model.redirect(PAGES_HASH.cart);
         this.model.modelData.modalDisplayStatus = 'flex';
         this.initViewAndListeners();
     }
@@ -384,8 +392,10 @@ export class Controller {
         } else {
             this.model.resetCart();
             this.view.handleFormPassed();
-            this.model.redirect();
-            this.initViewAndListeners();
+            setTimeout(() => {
+                this.model.redirect(PAGES_HASH.store);
+                this.initViewAndListeners();
+            }, 3000);
         }
     }
     private modalNameEvent(event: Event): void {

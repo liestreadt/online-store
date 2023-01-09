@@ -120,9 +120,9 @@ class Model {
         this.applyQueryParamsToFilter();
         this.applyQueryParam();
     }
-    redirect() {
+    redirect(page: string) {
         const mainPage = new URL(window.location.href);
-        mainPage.hash = PAGES_HASH.store;
+        mainPage.hash = page;
         history.pushState({}, '', mainPage);
         this.updatePage();
     }
