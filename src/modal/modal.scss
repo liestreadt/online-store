@@ -96,6 +96,11 @@
                 @include modal-input;
                 width: 70%;
             }
+
+            .input-error-message {
+                position: relative;
+                top: 0;
+            }
         }
 
         &-other {
