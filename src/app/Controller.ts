@@ -181,7 +181,9 @@ export class Controller {
         this.initViewAndListeners();
     }
     private copyEvent(event: Event): void {
-        console.log('this.view.copyURLtoClipboard()');
+        const copyButton = event.target as HTMLButtonElement;
+        this.model.copyParams();
+        this.view.handleCopyLinkClick(copyButton);
     }
     private categoryEvent(event: Event): void {
         if (event.target instanceof HTMLElement) {

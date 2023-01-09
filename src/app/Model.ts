@@ -415,6 +415,9 @@ class Model {
 
         history.pushState({ key, value }, '', url.toString());
     }
+    copyParams() {
+        navigator.clipboard.writeText(window.location.href);
+    }
     reInit() {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();

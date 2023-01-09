@@ -243,6 +243,14 @@ class View {
             mainImg.setAttribute('src', `${imageSource}`);
         }
     }
+    handleCopyLinkClick(button: HTMLButtonElement) {
+        button.innerText = 'Copied!';
+        button.style.backgroundColor = 'rgba(246, 227, 255, 0.9)';
+        setTimeout(() => {
+            button.innerText = 'Copy Link';
+            button.style.backgroundColor = 'rgb(164, 164, 245)';
+        }, 1000);
+    }
 }
 
 export default View;
