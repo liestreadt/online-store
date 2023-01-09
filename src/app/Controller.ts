@@ -157,11 +157,11 @@ export class Controller {
         }
     }
     promoInputEvent(event: Event) {
-        console.log('promoInputEvent!');
         const promoHandler = this.model.modelData.promo;
         const inputField = event.target;
         if (promoHandler && inputField instanceof HTMLInputElement) {
             promoHandler.userPromo = inputField.value;
+            this.view.summaryUpdater.updateSuggested();
             console.log('promoHandler.userPromo', promoHandler.userPromo);
         } else {
             console.log('no promo handler!');

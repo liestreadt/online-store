@@ -36,6 +36,10 @@ export class PromoHandler {
     getPromoByPromoKey(key: string): PromoCode | null {
         return this.avaliableCodes.find((promo) => promo.promoKey === key) ?? null;
     }
+    checkKeyPromo(key: string): boolean {
+        const isKeyPromo = this.getPromoByPromoKey(key);
+        return isKeyPromo ? true : false;
+    }
     addPromo(promoKey: string) {
         this.activeCodes.add(promoKey);
         this.save();
@@ -52,7 +56,7 @@ export class PromoHandler {
     }
     get promoPrice() {
         const totalDiscount = this.getTotalDiscount();
-        return (this.initialPrice * (100 - totalDiscount)) / 100;
+        return (this._initialPrice * (100 - totalDiscount)) / 100;
     }
     getTotalDiscount(): number {
         let totalDiscount = 0;

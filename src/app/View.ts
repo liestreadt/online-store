@@ -25,11 +25,14 @@ import createCartContainer from './view-methods/cart-page/create-cart-container'
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/helpers';
 import Cart from './Cart';
+import { SummaryUpdater } from './view-methods/cart-page/SummaryUpdater';
 
 class View {
     modelData: Partial<ModelData>;
+    summaryUpdater: SummaryUpdater;
     constructor(ModelData: Partial<ModelData>) {
         this.modelData = ModelData;
+        this.summaryUpdater = new SummaryUpdater(this.modelData.promo ?? null, this.modelData.cart ?? null);
         this.renderPage();
     }
     renderPage() {
@@ -142,6 +145,9 @@ class View {
                     ${this.modelData.cart && this.getCartSummary(this.modelData)}
                 </main>
             `;
+            this.summaryUpdater.updateActiveCodes();
+            this.summaryUpdater.updatePriceBlock();
+            this.summaryUpdater.updateSuggested();
         }
     }
     renderMain() {
