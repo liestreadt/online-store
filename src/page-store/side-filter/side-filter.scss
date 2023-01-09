@@ -14,6 +14,8 @@
     }
 
     &__field {
+        display: flex;
+        flex-direction: column;
         margin-top: $margin-medium;
         @extend %border;
     }
