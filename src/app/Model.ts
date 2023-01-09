@@ -73,7 +73,11 @@ class Model {
             this.applyQueryParam();
             this.modelData.cart = this.cart;
             this.modelData.promo = new PromoHandler(this.cart.getTotalPrice());
-            this.modelData.promo.addPromo('rss');
+            {
+                this.modelData.promo.addPromo('rss');
+                this.modelData.promo.addPromo('epam');
+                this.modelData.promo.userPromo = 'epam';
+            }
         } catch (error) {
             console.log('actual error', error);
             throw new Error('Fail to connect dummy json');

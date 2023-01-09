@@ -12,7 +12,7 @@ class PromoCode implements PromoFields {
         this.description = code.description;
     }
     getFullDescription() {
-        return `${this.description} - ${this.discount}% - `;
+        return `${this.description} - ${this.discount}% `;
     }
 }
 
@@ -20,6 +20,7 @@ export class PromoHandler {
     _initialPrice: number;
     avaliableCodes: PromoCode[];
     activeCodes: Set<string>;
+    userPromo: string;
     constructor(initialPrice: number) {
         this._initialPrice = initialPrice;
         this.avaliableCodes = PROMO_CODES.map((promo) => {
@@ -27,6 +28,10 @@ export class PromoHandler {
         });
         this.activeCodes = new Set();
         this.restore();
+        this.userPromo = '';
+    }
+    getSuggestedPromo() {
+        return this.getPromoByPromoKey(this.userPromo);
     }
     getPromoByPromoKey(key: string): PromoCode | null {
         return this.avaliableCodes.find((promo) => promo.promoKey === key) ?? null;

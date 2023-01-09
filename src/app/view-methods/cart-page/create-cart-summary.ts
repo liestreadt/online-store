@@ -18,11 +18,47 @@ function getPriceBlock(cart: Cart, promo: PromoHandler | null): string {
     </div>
     `;
 }
-function getPromoFound(): string {
+function getPromoFound(promo: PromoHandler | null): string {
+    const suggestedPromo = promo?.getSuggestedPromo() ?? null;
+    const userKey = promo?.userPromo;
+    const isUserKeyApplied = promo?.getPromoByPromoKey(userKey ?? '');
+
+    if (suggestedPromo) {
+        return `
+        <div class="summary__suggested">
+        <span class="summary__suggested-description">
+            ${suggestedPromo.getFullDescription()}
+        </span>
+        ${isUserKeyApplied ? '' : `<button class="summary__add-promo">ADD</button>`}
+        </div>
+        `;
+    }
     return '';
 }
-function getPromoApplied(): string {
+function getPromoApplied(promo: PromoHandler | null): string {
+    const isAnyActiveCode = promo?.activeCodes.size;
+    if (isAnyActiveCode) {
+        return `
+        <div class="summary__active-codes">
+            ${getActivePromoList(promo).reduce((fullList, description) => {
+                fullList = `${fullList}
+                <div class="summary__code">
+                    ${description}
+                    <button class="summary__add-promo">DROP</button>
+                </div>`;
+                return fullList;
+            }, '')}
+        </div>
+        `;
+    }
     return '';
+}
+function getActivePromoList(promo: PromoHandler): string[] {
+    const list: string[] = [];
+    promo.activeCodes.forEach((key) => {
+        list.push(promo.getPromoByPromoKey(key)?.getFullDescription() ?? '');
+    });
+    return list;
 }
 
 export default function createCartSummary(modelData: Partial<ModelData>): string {
@@ -46,15 +82,21 @@ export default function createCartSummary(modelData: Partial<ModelData>): string
                 ${getPriceBlock(cart, promo)}
                 </div>
                 <div class="summary__right-side">
+                    <h3 class="summary__promo-header">
+                        Promo codes
+                    </h3>
+                    ${getPromoApplied(promo)}
+
                     <div class="summary__promo">
                         <input
                             type="search"
                             placeholder="Enter promo code"
                             class="summary__promo-input"
                             id="${EventTargetsIDEnum.PROMO}"
+                            value="${promo?.userPromo}"
                         >
                     </div>
-                    ${getPromoFound()}
+                    ${getPromoFound(promo)}
                     <div class="summary__example">
                         Test promo-codes: "${PROMO_CODES[0].promoKey}", "${PROMO_CODES[1].promoKey}"
                     </div>
