@@ -16,6 +16,7 @@ import {
     SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
+import { PromoHandler } from './Promo';
 
 class Model {
     queryParams: URLSearchParams;
@@ -54,6 +55,7 @@ class Model {
             detailsMainImageSrc: '',
             modalDisplayStatus: 'none',
             cart: null,
+            promo: null,
             modalErrors: {
                 modalName: true,
                 modalNumber: true,
@@ -63,6 +65,7 @@ class Model {
                 modalDebitValidTo: true,
                 modalDebitCode: true,
             },
+
         };
         this.shownProductInfo = null;
     }
@@ -82,7 +85,9 @@ class Model {
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
             this.modelData.cart = this.cart;
-        } catch {
+            this.modelData.promo = new PromoHandler(this.cart.getTotalPrice());
+        } catch (error) {
+            console.log('actual error', error);
             throw new Error('Fail to connect dummy json');
         }
     }

@@ -1,5 +1,6 @@
 import Cart from '../Cart';
 import { FilterCalculator } from '../FilterCalculator';
+import { PromoHandler } from '../Promo';
 
 export interface ProductDetails {
     id: number;
@@ -83,6 +84,8 @@ export interface ModelData {
     detailsMainImageSrc?: string;
     modalDisplayStatus: string;
     cart: Cart | null;
+    promo: PromoHandler | null;
+
     modalErrors: {
         modalName: boolean;
         modalNumber: boolean;
@@ -185,12 +188,15 @@ export interface ShowCart {
     limit: number;
     listPage: number;
 }
-
+export interface PromoFields {
+    promoKey: string;
+    discount: number;
+    description: stringж
+}
 export enum ViewVariantsEnum {
     SMALL = 'view-small',
     BIG = 'view-big',
 }
-
 export enum InputValueStringLength {
     ONE = 1,
     TWO,

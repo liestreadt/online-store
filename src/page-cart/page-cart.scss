@@ -160,9 +160,13 @@
 
     &__body {
         display: grid;
-        grid-template-columns: 1.5fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1.2fr;
+        grid-template-rows: 1fr $height-button-buy;
         margin-top: $margin-tiny;
+    }
+
+    &__total_promo-applied {
+        text-decoration: line-through;
     }
 
     &__left-side {
@@ -173,16 +177,35 @@
     }
 
     &__right-side {
+        @extend %border;
         display: flex;
         gap: 1rem;
         flex-direction: column;
         align-items: center;
+        padding: $padding-tiny;
+    }
+
+    &__promo-header {
+        border-bottom: $border;
+    }
+
+    &__active-codes {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    &__code {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     &__promo-input {
         border-radius: $radius-big;
         padding: $padding-small;
-        background-color: $color-blue-gradient;
+
         font-size: inherit;
     }
 

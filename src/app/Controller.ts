@@ -96,6 +96,7 @@ export class Controller {
                 elementsToListen.promoInput?.addEventListener('input', this);
                 elementsToListen.buyButton?.addEventListener('click', this);
 
+
                 elementsToListen.modalWindow?.addEventListener('click', this);
                 elementsToValidate.form?.addEventListener('submit', this);
                 elementsToValidate.formElements.name?.addEventListener('input', this);
@@ -111,6 +112,8 @@ export class Controller {
                 elementsToValidate.formElements.debitCardExpireDate?.addEventListener('focusout', this);
                 elementsToValidate.formElements.debitCardCode?.addEventListener('input', this);
                 elementsToValidate.formElements.debitCardCode?.addEventListener('focusout', this);
+
+                this.view.summaryUpdater.updateFieldsAndListeners();
                 break;
             }
             case PageCase.details: {
@@ -228,8 +231,16 @@ export class Controller {
             this.initViewAndListeners();
         }
     }
-    promoInputEvent() {
-        console.log('promoInputEvent!');
+    promoInputEvent(event: Event) {
+        const promoHandler = this.model.modelData.promo;
+        const inputField = event.target;
+        if (promoHandler && inputField instanceof HTMLInputElement) {
+            promoHandler.userPromo = inputField.value;
+            this.view.summaryUpdater.updateFieldsAndListeners();
+            console.log('promoHandler.userPromo', promoHandler.userPromo);
+        } else {
+            console.log('no promo handler!');
+        }
     }
     buyButtonEvent() {
         if (this.model.modelData.page === PageCase.details) {

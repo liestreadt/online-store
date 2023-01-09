@@ -26,11 +26,14 @@ import {
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/helpers';
 import Cart from './Cart';
+import { SummaryUpdater } from './view-methods/cart-page/SummaryUpdater';
 
 class View {
     modelData: Partial<ModelData>;
+    summaryUpdater: SummaryUpdater;
     constructor(ModelData: Partial<ModelData>) {
         this.modelData = ModelData;
+        this.summaryUpdater = new SummaryUpdater(this.modelData.promo ?? null, this.modelData.cart ?? null);
         this.renderPage();
     }
     renderPage() {
@@ -39,11 +42,13 @@ class View {
         } else {
             this.renderHeader();
             this.renderMain();
+            let inputField: EventTargetsIDEnum | null = null;
             switch (this.modelData.page) {
                 case PageCase.store:
                     {
                         this.renderStorePage();
                         this.getDualSlider();
+                        inputField = EventTargetsIDEnum.searching;
                     }
                     break;
                 case PageCase.details:
@@ -137,9 +142,10 @@ class View {
             containerMain.outerHTML = `
                 <main class="main-cart">
                     ${this.getCartContainer(this.modelData.cart ?? null)}
-                    ${this.modelData.cart && this.getCartSummary(this.modelData.cart)}
+                    ${this.modelData.cart && this.getCartSummary(this.modelData)}
                 </main>
             `;
+            this.summaryUpdater.updateFieldsAndListeners();
         }
     }
     renderMain() {
@@ -193,8 +199,8 @@ class View {
     getCartContainer(cart: Cart | null): string {
         return createCartContainer(cart);
     }
-    getCartSummary(cart: Cart): string {
-        return createCartSummary(cart);
+    getCartSummary(modelData: Partial<ModelData>): string {
+        return createCartSummary(modelData);
     }
     getButtonsArray() {
         return [...document.body.querySelectorAll('button')];
