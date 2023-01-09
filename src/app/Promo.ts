@@ -20,7 +20,7 @@ export class PromoHandler {
     _initialPrice: number;
     avaliableCodes: PromoCode[];
     activeCodes: Set<string>;
-    userPromo: string;
+    _userPromo: string;
     constructor(initialPrice: number) {
         this._initialPrice = initialPrice;
         this.avaliableCodes = PROMO_CODES.map((promo) => {
@@ -28,7 +28,7 @@ export class PromoHandler {
         });
         this.activeCodes = new Set();
         this.restore();
-        this.userPromo = '';
+        this._userPromo = '';
     }
     getSuggestedPromo() {
         return this.getPromoByPromoKey(this.userPromo);
@@ -63,6 +63,12 @@ export class PromoHandler {
             }
         });
         return totalDiscount;
+    }
+    set userPromo(key) {
+        this._userPromo = key;
+    }
+    get userPromo(): string {
+        return this._userPromo;
     }
     save(): void {
         const saveList: string[] = [];

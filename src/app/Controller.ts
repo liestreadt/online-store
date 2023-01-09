@@ -156,8 +156,16 @@ export class Controller {
             this.initViewAndListeners();
         }
     }
-    promoInputEvent() {
+    promoInputEvent(event: Event) {
         console.log('promoInputEvent!');
+        const promoHandler = this.model.modelData.promo;
+        const inputField = event.target;
+        if (promoHandler && inputField instanceof HTMLInputElement) {
+            promoHandler.userPromo = inputField.value;
+            console.log('promoHandler.userPromo', promoHandler.userPromo);
+        } else {
+            console.log('no promo handler!');
+        }
     }
     buyButtonEvent() {
         console.log('buyButtonEvent!');

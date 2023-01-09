@@ -39,11 +39,13 @@ class View {
         } else {
             this.renderHeader();
             this.renderMain();
+            let inputField: EventTargetsIDEnum | null = null;
             switch (this.modelData.page) {
                 case PageCase.store:
                     {
                         this.renderStorePage();
                         this.getDualSlider();
+                        inputField = EventTargetsIDEnum.searching;
                     }
                     break;
                 case PageCase.details:
