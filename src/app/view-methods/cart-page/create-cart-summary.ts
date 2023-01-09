@@ -33,7 +33,7 @@ export default function createCartSummary(cart: Cart): string {
                         Test promo-codes: "rss", "epam"
                     </div>
                 </div>
-                <button class="summary__btn-buy" id="${EventTargetsIDEnum.BUY}">
+                <button id="${EventTargetsIDEnum.BUY}" class="summary__btn-buy" id="${EventTargetsIDEnum.BUY}">
                     Buy Now
                 </button>
             </div>

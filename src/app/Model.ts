@@ -1,7 +1,7 @@
 import Cart, { DEFAULT_CART_PAGE } from './Cart';
 import increaseValueInMap from './tools/helpers';
 import { FilterCalculator } from './FilterCalculator';
-import { PAGES_HASH } from './constants/constants';
+import { CART_ID, PAGES_HASH } from './constants/constants';
 import {
     ProductDetails,
     DummyJSON,
@@ -52,7 +52,17 @@ class Model {
             page: this.getPageFromURL(),
             detailsID: Number(this.getDetailsID()),
             detailsMainImageSrc: '',
+            modalDisplayStatus: 'none',
             cart: null,
+            modalErrors: {
+                modalName: true,
+                modalNumber: true,
+                modalAddress: true,
+                modalEmail: true,
+                modalDebitNumber: true,
+                modalDebitValidTo: true,
+                modalDebitCode: true,
+            },
         };
         this.shownProductInfo = null;
     }
@@ -104,15 +114,21 @@ class Model {
         if (this.modelData.page === PageCase.details) {
             this.modelData.detailsID = Number(this.getDetailsID());
         }
+        this.modelData.modalDisplayStatus = 'none';
         this.readParamsFromURL();
         this.findInitialFilterValues();
         this.applyQueryParamsToFilter();
         this.applyQueryParam();
     }
+    redirect(page: string) {
+        const mainPage = new URL(window.location.href);
+        mainPage.hash = page;
+        history.pushState({}, '', mainPage);
+        this.updatePage();
+    }
     readParamsFromURL(): Partial<FilterParamsValues> {
         const activeFilters: Partial<FilterParamsValues> = {};
         this.queryParams = new URL(window.location.href).searchParams;
-
         for (const key of this.queryParams.keys()) {
             if (filterParamsKeys.includes(key as FilterKeys)) {
                 const filter = key;
@@ -423,6 +439,10 @@ class Model {
         this.applyQueryParamsToFilter();
         this.applyQueryParamsToSorting();
         this.applyQueryParam();
+    }
+    resetCart() {
+        localStorage.removeItem(CART_ID);
+        this.cart?.restore();
     }
 }
 
