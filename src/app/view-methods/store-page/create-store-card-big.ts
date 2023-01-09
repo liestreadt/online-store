@@ -13,7 +13,7 @@ function getBorderModifier(isInCart: boolean) {
 
 export default function createStoreCardBig(product: ProductDetails, isInCart: boolean): string {
     return `
-        <div class="product-card_big">
+        <div class="product-card_big ${getBorderModifier(isInCart)}">
             <h2 class="product-card__header header_small">
                 ${product.title}
             </h2>
