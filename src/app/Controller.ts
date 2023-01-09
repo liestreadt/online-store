@@ -241,6 +241,10 @@ export class Controller {
         }
     }
     buyButtonEvent() {
+        const modalErrorsKeys = Object.keys(this.model.modelData.modalErrors);
+        modalErrorsKeys.forEach((elem) => {
+            this.model.modelData.modalErrors[elem as keyof typeof this.model.modelData.modalErrors] = true;
+        });
         if (this.model.modelData.page === PageCase.details) {
             const cardID = this.model.modelData.detailsID;
             if (!this.model.cart?.checkProductInCart(`${cardID}`)) {
