@@ -1,17 +1,42 @@
-import { ModelData, EventTargetsIDEnum, ViewVariantsEnum, SortVariantsEnum } from '../../intefaces/types';
+import {
+    ModelData,
+    EventTargetsIDEnum,
+    ViewVariantsEnum,
+    SortVariantsEnum,
+    ProductDetails,
+} from '../../intefaces/types';
 import createStoreCard from './create-store-card';
 import createStoreCardBig from './create-store-card-big';
 
+function getProductsToRender(modelData: Partial<ModelData>, cardContainerSize: string) {
+    if (modelData.filteredProducts?.length) {
+        return `
+            <div
+            class="sorting__card-container sorting__card-container_${cardContainerSize}"
+            id="${EventTargetsIDEnum.cards}">
+                ${modelData.filteredProducts
+                    ?.map((product) => {
+                        return modelData.currentView === ViewVariantsEnum.BIG
+                            ? createStoreCardBig(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
+                            : createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false);
+                    })
+                    .join('')}
+            </div>
+        `;
+    } else {
+        return `
+            <div class="sorting__no-products">
+                NO PRODUCTS FOUND
+            </div>
+        `;
+    }
+}
+
 export default function createSortingSection(modelData: Partial<ModelData>): string {
-    // const currentCardContainerSize = modelData.currentView === ViewVariantsEnum.BIG ? 'big' : 'small';
-    // const isViewButtonBigSelected = modelData.currentView === ViewVariantsEnum.BIG ? 'sorting__big-view_selected' : '';
-    // const isViewButtonSmallSelected =
-    //     modelData.currentView === ViewVariantsEnum.BIG ? '' : 'sorting__small-view_selected';
     const [currentCardContainerSize, isViewButtonBigSelected, isViewButtonSmallSelected] =
         modelData.currentView === ViewVariantsEnum.BIG
             ? ['big', 'sorting__big-view_selected', '']
             : ['small', '', 'sorting__small-view_selected'];
-
     const SORT_OPTIONS = Object.values(SortVariantsEnum);
     const sortNamesArr = [
         'default',
@@ -51,17 +76,7 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     }" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
                 </div>
             </div>
-            <div
-                class="sorting__card-container sorting__card-container_${currentCardContainerSize}"
-                id="${EventTargetsIDEnum.cards}">
-                ${modelData.filteredProducts
-                    ?.map((product) => {
-                        return modelData.currentView === ViewVariantsEnum.BIG
-                            ? createStoreCardBig(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
-                            : createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false);
-                    })
-                    .join('')}
-            </div>
+            ${getProductsToRender(modelData, currentCardContainerSize)}
         </section>
     `;
 }
