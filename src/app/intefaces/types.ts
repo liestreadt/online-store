@@ -1,5 +1,6 @@
 import Cart from '../Cart';
 import { FilterCalculator } from '../FilterCalculator';
+import { PromoHandler } from '../Promo';
 
 export interface ProductDetails {
     id: number;
@@ -80,6 +81,7 @@ export interface ModelData {
     detailsID: number;
     detailsMainImageSrc?: string;
     cart: Cart | null;
+    promo: PromoHandler | null;
 }
 export interface ElementsToListen {
     store: {
@@ -146,4 +148,9 @@ export enum PageCase {
 export interface ShowCart {
     limit: number;
     listPage: number;
+}
+export interface PromoFields {
+    promoKey: string;
+    discount: number;
+    description: string;
 }

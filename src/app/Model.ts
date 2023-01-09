@@ -15,6 +15,7 @@ import {
     SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
+import { PromoHandler } from './Promo';
 
 class Model {
     queryParams: URLSearchParams;
@@ -51,6 +52,7 @@ class Model {
             detailsID: Number(this.getDetailsID()),
             detailsMainImageSrc: '',
             cart: null,
+            promo: null,
         };
         this.shownProductInfo = null;
     }
@@ -70,7 +72,10 @@ class Model {
             this.applyQueryParamsToFilter();
             this.applyQueryParam();
             this.modelData.cart = this.cart;
-        } catch {
+            this.modelData.promo = new PromoHandler(this.cart.getTotalPrice());
+            this.modelData.promo.addPromo('rss');
+        } catch (error) {
+            console.log('actual error', error);
             throw new Error('Fail to connect dummy json');
         }
     }

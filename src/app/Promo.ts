@@ -1,4 +1,5 @@
-import { PROMO_CODES, PromoFields } from './constants/constants';
+import { PROMO_CODES, PROMO_ID } from './constants/constants';
+import { PromoFields } from './intefaces/types';
 
 class PromoCode implements PromoFields {
     promoKey: string;
@@ -25,15 +26,18 @@ export class PromoHandler {
             return new PromoCode(promo);
         });
         this.activeCodes = new Set();
+        this.restore();
     }
     getPromoByPromoKey(key: string): PromoCode | null {
         return this.avaliableCodes.find((promo) => promo.promoKey === key) ?? null;
     }
     addPromo(promoKey: string) {
         this.activeCodes.add(promoKey);
+        this.save();
     }
     removePromo(promoKey: string) {
         this.activeCodes.delete(promoKey);
+        this.save();
     }
     set initialPrice(price: number) {
         this._initialPrice = price;
@@ -54,5 +58,24 @@ export class PromoHandler {
             }
         });
         return totalDiscount;
+    }
+    save(): void {
+        const saveList: string[] = [];
+        this.activeCodes.forEach((key) => {
+            saveList.push(key);
+        });
+        localStorage.setItem(PROMO_ID, JSON.stringify(saveList));
+    }
+    restore(): void {
+        let saveList: string[] = [];
+        const list = localStorage.getItem(PROMO_ID);
+        if (list) {
+            saveList = JSON.parse(list);
+            saveList.forEach((promoKey) => {
+                this.activeCodes.add(promoKey);
+            });
+        } else {
+            this.activeCodes = new Set();
+        }
     }
 }
