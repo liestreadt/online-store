@@ -1,6 +1,6 @@
 .main-store {
     display:  flex;
-    @media (max-width: $screen-medium) {
+    @media (max-width: $screen-wide) {
         flex-wrap: wrap;
         gap: 0.5rem;
         justify-content: center;
