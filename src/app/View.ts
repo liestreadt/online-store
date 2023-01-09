@@ -6,6 +6,8 @@ import createStoreFilters from './view-methods/store-page/create-store-filters';
 import createSortingSection from './view-methods/store-page/create-sorting-section';
 import { createProdDetailsContainer } from './view-methods/prod-detail-page/create-prod-details-container';
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
+import createCartItem from './view-methods/cart-page/create-cart-item';
+import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { calculateImages } from './tools/helpers';
 
 import {
@@ -16,12 +18,11 @@ import {
     InitialFilterValues,
     ModelData,
     ElementsToListen,
+    ElementsToValidate,
     EventTargetsIDEnum,
     PageCase,
     FilterKeys,
 } from './intefaces/types';
-import createCartItem from './view-methods/cart-page/create-cart-item';
-import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/helpers';
 import Cart from './Cart';
@@ -37,7 +38,6 @@ class View {
     }
     renderPage() {
         if (document.readyState !== 'complete') {
-            //TODO: if no product is sutable for filters, show empty sorting area
             this.renderLoadingPage();
         } else {
             this.renderHeader();
@@ -59,8 +59,8 @@ class View {
                         );
                         if (currentProduct) {
                             if (!currentProduct.isImagesUnique) {
-                                calculateImages(currentProduct).then((data) => {
-                                    this.renderImages(data, currentProduct.title);
+                                calculateImages(currentProduct).then(() => {
+                                    this.renderImages(currentProduct.images, currentProduct.title);
                                 });
                             } else {
                                 this.renderImages(currentProduct.images, currentProduct.title);
@@ -94,7 +94,7 @@ class View {
     renderImages(data: string[], title: string) {
         const imagesContainer = document.querySelector('#details-images');
         if (imagesContainer) {
-            imagesContainer.innerHTML += `
+            imagesContainer.innerHTML = `
                 ${data
                     .map((item) => {
                         return `<img src="${item}" alt="${title}">`;
@@ -158,7 +158,10 @@ class View {
         document.body.innerHTML += createFooter();
     }
     renderModal() {
-        document.body.innerHTML += createModal();
+        const modalDisplayStatus = this.modelData.modalDisplayStatus;
+        if (modalDisplayStatus) {
+            document.body.innerHTML += createModal(modalDisplayStatus);
+        }
     }
 
     getStoreFilters(data: Partial<ModelData>): string {
@@ -205,6 +208,20 @@ class View {
     copyURLtoClipboard() {
         console.log('copy url');
     }
+    getElementsForValidation(): ElementsToValidate {
+        return {
+            form: document.body.querySelector(`#${EventTargetsIDEnum.modalForm}`),
+            formElements: {
+                name: document.body.querySelector(`#${EventTargetsIDEnum.modalName}`),
+                number: document.body.querySelector(`#${EventTargetsIDEnum.modalNumber}`),
+                address: document.body.querySelector(`#${EventTargetsIDEnum.modalAddress}`),
+                email: document.body.querySelector(`#${EventTargetsIDEnum.modalEmail}`),
+                debitCardNumber: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitNumber}`),
+                debitCardExpireDate: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitValidTo}`),
+                debitCardCode: document.body.querySelector(`#${EventTargetsIDEnum.modalDebitCode}`),
+            },
+        };
+    }
     getElementsForEvents(): ElementsToListen {
         const elements: ElementsToListen = {
             store: {
@@ -217,6 +234,7 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
                 cards: document.body.querySelector(`#${EventTargetsIDEnum.cards}`),
             },
             cart: {
@@ -226,10 +244,13 @@ class View {
                 cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
                 promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
                 buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
             details: {
                 images: document.body.querySelector('.details__aside-slides'),
                 detailsAddToCart: document.body.querySelector(`#${EventTargetsIDEnum.detailsAddToCart}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
         };
         return elements;
@@ -249,6 +270,49 @@ class View {
         if (mainImg) {
             mainImg.setAttribute('src', `${imageSource}`);
         }
+    }
+    handleCopyLinkClick(button: HTMLButtonElement) {
+        button.innerText = 'Copied!';
+        button.style.backgroundColor = 'rgba(246, 227, 255, 0.9)';
+        setTimeout(() => {
+            button.innerText = 'Copy Link';
+            button.style.backgroundColor = 'rgb(164, 164, 245)';
+        }, 1000);
+    }
+    hadleModalInputError(input: HTMLInputElement) {
+        input.classList.add('error');
+        const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
+        inputErrorMessage.style.display = 'flex';
+    }
+    hadleModalInputPassed(input: HTMLInputElement) {
+        input.classList.remove('error');
+        const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
+        inputErrorMessage.style.display = 'none';
+    }
+    toggleModalErrorMessage(display: string) {
+        const formErrorMessage = document.body.querySelector('#modal-error-message') as HTMLDivElement;
+        if (formErrorMessage) {
+            formErrorMessage.style.display = `${display}`;
+        }
+    }
+    handleFormError() {
+        this.toggleModalErrorMessage('block');
+        const modalErrors = this.modelData.modalErrors;
+        for (const key in modalErrors) {
+            if (modalErrors[key as keyof typeof modalErrors]) {
+                const currentInput = document.body.querySelector(`#${key}`) as HTMLInputElement;
+                this.hadleModalInputError(currentInput);
+            }
+        }
+    }
+    handleFormPassed() {
+        this.toggleModalErrorMessage('none');
+        const modalWindow = document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`) as HTMLDivElement;
+        modalWindow.innerHTML = `
+            <div class="modal__confirmed-window">
+                Thanks for order. You will be redirected to main page in 3 seconds.
+            </div>
+        `;
     }
 }
 

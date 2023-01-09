@@ -48,7 +48,7 @@ export default function createCartSummary(modelData: Partial<ModelData>): string
                         Test promo-codes: "${PROMO_CODES[0].promoKey}", "${PROMO_CODES[1].promoKey}"
                     </div>
                 </div>
-                <button class="summary__btn-buy" id="${EventTargetsIDEnum.BUY}">
+                <button id="${EventTargetsIDEnum.BUY}" class="summary__btn-buy" id="${EventTargetsIDEnum.BUY}">
                     Buy Now
                 </button>
             </div>

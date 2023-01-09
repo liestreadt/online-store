@@ -30,7 +30,6 @@ export async function calculateImages(product: ProductDetails) {
     if (!product.isImagesUnique) {
         product.isImagesUnique = true;
     }
-    return product.images;
 }
 
 export default increaseValueInMap;

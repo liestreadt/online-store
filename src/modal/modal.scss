@@ -1,16 +1,31 @@
 .modal {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     background-color: $color-modal-bkg;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+
+    &__confirmed-window {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        @extend %border;
+        padding: $padding-medium;
+        @extend %body-gradient;
+        width: 50%;
+        height: 30%;
+        font-size: $font-header;
+        text-align: center;
+    }
 
     &__window {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: 3rem;
         align-items: center;
         margin: auto;
         @extend %border;
@@ -28,7 +43,6 @@
     &__number,
     &__address,
     &__e-mail {
-        margin-bottom: $margin-medium;
         width: 600px;
         height: 25px;
     }
@@ -70,6 +84,11 @@
             display: flex;
             justify-content: space-between;
             width: 95%;
+            height: 25px;
+
+            .input-error-message {
+                width: 100%;
+            }
         }
 
         &-valid-to-input,
@@ -81,5 +100,34 @@
 
     &__btn-confirm {
         margin: $margin-small 0;
+        @include button();
     }
+
+    &__error-message {
+        display: none;
+        border: $border-error;
+        border-radius: $radius-small;
+        padding: $padding-small;
+        background-color: $color-modal-input-error;
+        font-size: 2rem;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+.input-error-message {
+    display: none;
+    justify-content: center;
+    position: relative;
+    top: 0.4rem;
+    color: $color-modal-border-error;
+}
+
+.error {
+    border: $border-error;
+    background-color: $color-modal-input-error;
 }

@@ -49,6 +49,7 @@ export const filterParamsKeys = [
     'stockMin',
     'stockMax',
     'searching',
+    'view',
     'cartListLimit',
     'cartListPage',
 ] as const;
@@ -72,6 +73,7 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
+    currentView: string | null;
     initialProducts: Array<ProductDetails> | null;
     filteredProducts: Array<ProductDetails> | null;
     currentOption: SortVariantsEnum | null;
@@ -80,8 +82,19 @@ export interface ModelData {
     page: PageCase;
     detailsID: number;
     detailsMainImageSrc?: string;
+    modalDisplayStatus: string;
     cart: Cart | null;
     promo: PromoHandler | null;
+
+    modalErrors: {
+        modalName: boolean;
+        modalNumber: boolean;
+        modalAddress: boolean;
+        modalEmail: boolean;
+        modalDebitNumber: boolean;
+        modalDebitValidTo: boolean;
+        modalDebitCode: boolean;
+    };
 }
 export interface ElementsToListen {
     store: {
@@ -94,6 +107,7 @@ export interface ElementsToListen {
         sorting: HTMLSelectElement | null;
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
+        modalWindow: HTMLDivElement | null;
         cards: HTMLDivElement | null;
     };
     cart: {
@@ -103,10 +117,26 @@ export interface ElementsToListen {
         cartList: HTMLDivElement | null;
         promoInput: HTMLInputElement | null;
         buyButton: HTMLButtonElement | null;
+        modalWindow: HTMLDivElement | null;
     };
     details: {
         images: HTMLDivElement | null;
         detailsAddToCart: HTMLButtonElement | null;
+        buyButton: HTMLButtonElement | null;
+        modalWindow: HTMLDivElement | null;
+    };
+}
+
+export interface ElementsToValidate {
+    form: HTMLFormElement | null;
+    formElements: {
+        name: HTMLInputElement | null;
+        number: HTMLInputElement | null;
+        address: HTMLInputElement | null;
+        email: HTMLInputElement | null;
+        debitCardNumber: HTMLInputElement | null;
+        debitCardExpireDate: HTMLInputElement | null;
+        debitCardCode: HTMLInputElement | null;
     };
 }
 
@@ -130,6 +160,15 @@ export enum EventTargetsIDEnum {
     PROMO = 'promo-input',
     BUY = 'buy-button',
     detailsImages = 'details-images',
+    modalWindow = 'modalWindow',
+    modalForm = 'modalForm',
+    modalName = 'modalName',
+    modalNumber = 'modalNumber',
+    modalAddress = 'modalAddress',
+    modalEmail = 'modalEmail',
+    modalDebitNumber = 'modalDebitNumber',
+    modalDebitValidTo = 'modalDebitValidTo',
+    modalDebitCode = 'modalDebitCode',
 }
 
 export enum SortVariantsEnum {
@@ -152,5 +191,15 @@ export interface ShowCart {
 export interface PromoFields {
     promoKey: string;
     discount: number;
-    description: string;
+    description: stringж
+}
+export enum ViewVariantsEnum {
+    SMALL = 'view-small',
+    BIG = 'view-big',
+}
+export enum InputValueStringLength {
+    ONE = 1,
+    TWO,
+    THREE,
+    FOUR,
 }

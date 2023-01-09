@@ -88,7 +88,7 @@ export function createProdDetailsContainer(product: ProductDetails, mainImageSrc
                         class="details__btn-add-to-cart ${getColorModifier(isInCart)}">
                         ${getCapture(isInCart)}
                     </button>
-                    <button class="details__btn-buy-now">
+                    <button id="${EventTargetsIDEnum.BUY}" class="details__btn-buy-now">
                         Buy Now
                     </button>
                 </div>

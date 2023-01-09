@@ -1,7 +1,7 @@
 import Cart, { DEFAULT_CART_PAGE } from './Cart';
 import increaseValueInMap from './tools/helpers';
 import { FilterCalculator } from './FilterCalculator';
-import { PAGES_HASH } from './constants/constants';
+import { CART_ID, PAGES_HASH } from './constants/constants';
 import {
     ProductDetails,
     DummyJSON,
@@ -12,6 +12,7 @@ import {
     FilteredProductsKeys,
     InitialFilterValues,
     ModelData,
+    ViewVariantsEnum,
     SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
@@ -45,14 +46,26 @@ class Model {
             allCategories: [],
             initialProducts: null,
             filteredProducts: null,
+            currentView: null,
             currentOption: null,
             shownProductInfo: null,
             calculatedFilters: null,
             page: this.getPageFromURL(),
             detailsID: Number(this.getDetailsID()),
             detailsMainImageSrc: '',
+            modalDisplayStatus: 'none',
             cart: null,
             promo: null,
+            modalErrors: {
+                modalName: true,
+                modalNumber: true,
+                modalAddress: true,
+                modalEmail: true,
+                modalDebitNumber: true,
+                modalDebitValidTo: true,
+                modalDebitCode: true,
+            },
+
         };
         this.shownProductInfo = null;
     }
@@ -106,15 +119,21 @@ class Model {
         if (this.modelData.page === PageCase.details) {
             this.modelData.detailsID = Number(this.getDetailsID());
         }
+        this.modelData.modalDisplayStatus = 'none';
         this.readParamsFromURL();
         this.findInitialFilterValues();
         this.applyQueryParamsToFilter();
         this.applyQueryParam();
     }
+    redirect(page: string) {
+        const mainPage = new URL(window.location.href);
+        mainPage.hash = page;
+        history.pushState({}, '', mainPage);
+        this.updatePage();
+    }
     readParamsFromURL(): Partial<FilterParamsValues> {
         const activeFilters: Partial<FilterParamsValues> = {};
         this.queryParams = new URL(window.location.href).searchParams;
-
         for (const key of this.queryParams.keys()) {
             if (filterParamsKeys.includes(key as FilterKeys)) {
                 const filter = key;
@@ -265,6 +284,11 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'view': {
+                this.changeParamInURL('view', value);
+                this.reInit();
+                break;
+            }
             case 'stockMin': {
                 if (secondValue && +value > secondValue) {
                     this.changeParamInURL('stockMax', value);
@@ -312,11 +336,16 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.applyQueryParamsToViewType();
         this.modelData.detailsMainImageSrc = this.modelData.filteredProducts?.find(
             (elem) => elem.id === this.modelData.detailsID
         )?.images[0];
         this.applyQueryParamsToSorting();
         this.applyQueryParamsToCart();
+    }
+    applyQueryParamsToViewType() {
+        const viewKey = this.modelData.activeFilters.view?.[0];
+        this.handleViewChange(viewKey === ViewVariantsEnum.BIG ? ViewVariantsEnum.BIG : ViewVariantsEnum.SMALL);
     }
     getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
         filteredProductsInModelData.sort((prev, curr) => {
@@ -365,6 +394,9 @@ class Model {
             }
         }
     }
+    handleViewChange(view: ViewVariantsEnum): void {
+        this.modelData.currentView = view;
+    }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
         const urlSearch: URLSearchParams = url.searchParams;
@@ -386,6 +418,16 @@ class Model {
         history.pushState({ key, values }, '', url.toString());
         //console.log('delete category from url search params');
     }
+    resetAllParams() {
+        const url: URL = new URL(window.location.href);
+        const urlSearch: URLSearchParams = url.searchParams;
+        filterParamsKeys.forEach((elem) => {
+            urlSearch.delete(elem);
+        });
+        url.search = urlSearch.toString();
+        history.pushState({}, '', url.toString());
+        this.updatePage();
+    }
     changeParamInURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);
         const urlSearch: URLSearchParams = url.searchParams;
@@ -394,11 +436,18 @@ class Model {
 
         history.pushState({ key, value }, '', url.toString());
     }
+    copyParams() {
+        navigator.clipboard.writeText(window.location.href);
+    }
     reInit() {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();
         this.applyQueryParamsToSorting();
         this.applyQueryParam();
+    }
+    resetCart() {
+        localStorage.removeItem(CART_ID);
+        this.cart?.restore();
     }
 }
 
