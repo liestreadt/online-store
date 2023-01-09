@@ -173,8 +173,6 @@ class Model {
             this.productJSON?.products || null,
             history.state?.key
         );
-        //console.log('PRODUCT INFO', this.shownProductInfo);
-        //console.log('FILTER input INFO', this.filterCalculator);
     }
     applyQueryParamsToCart() {
         const active = this.modelData.activeFilters;
@@ -332,7 +330,6 @@ class Model {
         }
     }
     applyQueryParam() {
-        //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
         this.applyQueryParamsToViewType();
@@ -415,7 +412,6 @@ class Model {
         url.search = urlSearch.toString();
 
         history.pushState({ key, values }, '', url.toString());
-        //console.log('delete category from url search params');
     }
     resetAllParams() {
         const url: URL = new URL(window.location.href);

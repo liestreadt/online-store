@@ -236,7 +236,6 @@ export class Controller {
         if (promoHandler && inputField instanceof HTMLInputElement) {
             promoHandler.userPromo = inputField.value;
             this.view.summaryUpdater.updateFieldsAndListeners();
-            console.log('promoHandler.userPromo', promoHandler.userPromo);
         } else {
             console.log('no promo handler!');
         }

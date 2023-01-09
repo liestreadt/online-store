@@ -68,7 +68,6 @@ export class SummaryUpdater {
         const newPriceContainer = document.querySelector('.summary__total-new');
 
         if (oldPriceContainer) {
-            console.log('oldPriceContainer.classList', oldPriceContainer.classList);
             if (isAnyActiveCode) {
                 oldPriceContainer.classList.add(oldPriceModifier);
             } else {
@@ -81,7 +80,6 @@ export class SummaryUpdater {
         } else {
             console.error('no price container!');
         }
-        console.log('this.promo?.promoPric', this.promo?.promoPrice);
         if (newPriceContainer) {
             newPriceContainer.innerHTML = `
             ${
@@ -100,21 +98,16 @@ export class SummaryUpdater {
         this.updateSuggested();
 
         const addButton = document.querySelector(`#${PROMO_ADD_ID}`);
-        console.log('addButton', addButton);
         addButton?.addEventListener('click', () => {
-            console.log('this', this);
             this.promo?.addPromo(this.promo.userPromo);
             this.updateFieldsAndListeners();
         });
 
         const dropButtons = document.querySelectorAll('.summary__drop-promo');
         dropButtons.forEach((button) => {
-            console.log('dropButtons', button);
             button.addEventListener('click', (event: Event) => {
-                console.log('click!');
                 if (event.target instanceof HTMLButtonElement) {
                     const promoKey = event.target.dataset.promoKey;
-                    console.log('event.target.dataset.promoKey', event.target.dataset.promoKey);
                     promoKey && this.promo?.removePromo(promoKey);
                     this.updateFieldsAndListeners();
                 }

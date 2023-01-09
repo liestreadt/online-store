@@ -205,9 +205,6 @@ class View {
     getButtonsArray() {
         return [...document.body.querySelectorAll('button')];
     }
-    copyURLtoClipboard() {
-        console.log('copy url');
-    }
     getElementsForValidation(): ElementsToValidate {
         return {
             form: document.body.querySelector(`#${EventTargetsIDEnum.modalForm}`),
