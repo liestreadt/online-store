@@ -10,7 +10,7 @@ import {
     EventTargetsIDEnum,
     ViewVariantsEnum,
 } from './intefaces/types';
-import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
+import { CART_ID, DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
     if (element instanceof HTMLInputElement) {
@@ -38,7 +38,9 @@ export class Controller {
     addListeners(): void {
         window.addEventListener('hashchange', this);
         window.addEventListener('popstate', this);
+
         const elementsToValidate: ElementsToValidate = this.view.getElementsForValidation();
+
         switch (this.model.modelData.page) {
             case PageCase.store: {
                 const elementsToListen: ElementsToListen['store'] = this.view.getElementsForEvents().store;
@@ -74,12 +76,33 @@ export class Controller {
                 elementsToListen.cartList?.addEventListener('click', this);
                 elementsToListen.promoInput?.addEventListener('input', this);
                 elementsToListen.buyButton?.addEventListener('click', this);
+
+                elementsToListen.modalWindow?.addEventListener('click', this);
+                elementsToValidate.form?.addEventListener('submit', this);
+                elementsToValidate.formElements.name?.addEventListener('input', this);
+                elementsToValidate.formElements.number?.addEventListener('input', this);
+                elementsToValidate.formElements.address?.addEventListener('input', this);
+                elementsToValidate.formElements.email?.addEventListener('focusout', this);
+                elementsToValidate.formElements.debitCardNumber?.addEventListener('input', this);
+                elementsToValidate.formElements.debitCardExpireDate?.addEventListener('input', this);
+                elementsToValidate.formElements.debitCardCode?.addEventListener('input', this);
                 break;
             }
             case PageCase.details: {
                 const elementsToListen: ElementsToListen['details'] = this.view.getElementsForEvents().details;
                 elementsToListen.images?.addEventListener('click', this);
                 elementsToListen.detailsAddToCart?.addEventListener('click', this);
+                elementsToListen.buyButton?.addEventListener('click', this);
+
+                elementsToListen.modalWindow?.addEventListener('click', this);
+                elementsToValidate.form?.addEventListener('submit', this);
+                elementsToValidate.formElements.name?.addEventListener('input', this);
+                elementsToValidate.formElements.number?.addEventListener('input', this);
+                elementsToValidate.formElements.address?.addEventListener('input', this);
+                elementsToValidate.formElements.email?.addEventListener('focusout', this);
+                elementsToValidate.formElements.debitCardNumber?.addEventListener('input', this);
+                elementsToValidate.formElements.debitCardExpireDate?.addEventListener('input', this);
+                elementsToValidate.formElements.debitCardCode?.addEventListener('input', this);
                 break;
             }
             default: {
@@ -92,15 +115,12 @@ export class Controller {
             const input = event.target as HTMLInputElement;
             const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
             if (!input.value.match(regexName)) {
-                console.log('name Error');
                 this.model.modelData.modalErrors.modalName = true;
                 this.view.hadleModalInputError(input);
             } else {
-                console.log('name Passed');
                 this.model.modelData.modalErrors.modalName = false;
                 this.view.hadleModalInputPassed(input);
             }
-            console.log(input);
         });
         elementsToValidate.formElements.number?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
@@ -112,7 +132,6 @@ export class Controller {
                 this.model.modelData.modalErrors.modalNumber = false;
                 this.view.hadleModalInputPassed(input);
             }
-            console.log(input);
         });
         elementsToValidate.formElements.address?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
@@ -124,7 +143,6 @@ export class Controller {
                 this.model.modelData.modalErrors.modalAddress = false;
                 this.view.hadleModalInputPassed(input);
             }
-            console.log(input);
         });
         elementsToValidate.formElements.debitCardNumber?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
@@ -136,7 +154,6 @@ export class Controller {
                 this.model.modelData.modalErrors.modalDebitNumber = false;
                 this.view.hadleModalInputPassed(input);
             }
-            console.log(input);
         });
         elementsToValidate.formElements.debitCardExpireDate?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
@@ -148,7 +165,6 @@ export class Controller {
                 this.model.modelData.modalErrors.modalDebitValidTo = false;
                 this.view.hadleModalInputPassed(input);
             }
-            console.log(input);
         });
         elementsToValidate.formElements.debitCardCode?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
@@ -160,7 +176,6 @@ export class Controller {
                 this.model.modelData.modalErrors.modalDebitCode = false;
                 this.view.hadleModalInputPassed(input);
             }
-            console.log(input);
         });
     }
 
@@ -185,7 +200,7 @@ export class Controller {
             [EventTargetsIDEnum.PROMO]: this.promoInputEvent,
             [EventTargetsIDEnum.BUY]: this.buyButtonEvent,
             [EventTargetsIDEnum.detailsImages]: this.detailsImagesEvent,
-            [EventTargetsIDEnum.modalWindow]: this.modalWindowEvent,
+            [EventTargetsIDEnum.modalWindow]: this.modalCloseWindowEvent,
 
             [EventTargetsIDEnum.modalForm]: this.modalFormEvent,
             [EventTargetsIDEnum.modalName]: this.modalNameEvent,
@@ -253,7 +268,14 @@ export class Controller {
         console.log('promoInputEvent!');
     }
     buyButtonEvent() {
-        console.log('buyButtonEvent!');
+        if (this.model.modelData.page === PageCase.details) {
+            const cardID = this.model.modelData.detailsID;
+            if (!this.model.cart?.checkProductInCart(`${cardID}`)) {
+                this.model.cart?.addNew(`${cardID}`);
+            }
+        }
+        this.model.modelData.modalDisplayStatus = 'flex';
+        this.initViewAndListeners();
     }
     private resetEvent(event: Event): void {
         console.log('this.model.resetFilters()');
@@ -348,10 +370,11 @@ export class Controller {
             this.initViewAndListeners();
         }
     }
-    private modalWindowEvent(event: Event): void {
+    private modalCloseWindowEvent(event: Event): void {
         const modalWindow = event.target as HTMLDivElement;
         if (modalWindow.id === EventTargetsIDEnum.modalWindow) {
-            modalWindow.style.display = 'none';
+            this.model.modelData.modalDisplayStatus = 'none';
+            this.initViewAndListeners();
         }
     }
     private modalFormEvent(event: Event): void {
@@ -359,12 +382,13 @@ export class Controller {
         if (Object.values(this.model.modelData.modalErrors).includes(true)) {
             this.view.handleFormError();
         } else {
-            console.log('Confirmed!');
+            this.model.resetCart();
             this.view.handleFormPassed();
+            this.model.redirect();
+            this.initViewAndListeners();
         }
     }
     private modalNameEvent(event: Event): void {
-        this.model.resetCart();
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
     }

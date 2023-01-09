@@ -81,6 +81,7 @@ export interface ModelData {
     page: PageCase;
     detailsID: number;
     detailsMainImageSrc?: string;
+    modalDisplayStatus: string;
     cart: Cart | null;
     modalErrors: {
         modalName: boolean;
@@ -113,10 +114,13 @@ export interface ElementsToListen {
         cartList: HTMLDivElement | null;
         promoInput: HTMLInputElement | null;
         buyButton: HTMLButtonElement | null;
+        modalWindow: HTMLDivElement | null;
     };
     details: {
         images: HTMLDivElement | null;
         detailsAddToCart: HTMLButtonElement | null;
+        buyButton: HTMLButtonElement | null;
+        modalWindow: HTMLDivElement | null;
     };
 }
 

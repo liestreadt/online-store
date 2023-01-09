@@ -46,6 +46,7 @@ class Cart {
         return page > 0 && page <= maxListPage;
     }
     restore(): void {
+        this.products = new Map();
         let saveList: ProductShort[] = [];
         const list = localStorage.getItem(CART_ID);
         if (list) {

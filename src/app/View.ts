@@ -153,7 +153,10 @@ class View {
         document.body.innerHTML += createFooter();
     }
     renderModal() {
-        document.body.innerHTML += createModal();
+        const modalDisplayStatus = this.modelData.modalDisplayStatus;
+        if (modalDisplayStatus) {
+            document.body.innerHTML += createModal(modalDisplayStatus);
+        }
     }
 
     getStoreFilters(data: Partial<ModelData>): string {
@@ -236,10 +239,13 @@ class View {
                 cartList: document.querySelector(`#${EventTargetsIDEnum.CART_LIST}`),
                 promoInput: document.querySelector(`#${EventTargetsIDEnum.PROMO}`),
                 buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
             details: {
                 images: document.body.querySelector('.details__aside-slides'),
                 detailsAddToCart: document.body.querySelector(`#${EventTargetsIDEnum.detailsAddToCart}`),
+                buyButton: document.querySelector(`#${EventTargetsIDEnum.BUY}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
         };
         return elements;

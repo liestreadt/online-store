@@ -52,6 +52,7 @@ class Model {
             page: this.getPageFromURL(),
             detailsID: Number(this.getDetailsID()),
             detailsMainImageSrc: '',
+            modalDisplayStatus: 'none',
             cart: null,
             modalErrors: {
                 modalName: true,
@@ -113,15 +114,21 @@ class Model {
         if (this.modelData.page === PageCase.details) {
             this.modelData.detailsID = Number(this.getDetailsID());
         }
+        this.modelData.modalDisplayStatus = 'none';
         this.readParamsFromURL();
         this.findInitialFilterValues();
         this.applyQueryParamsToFilter();
         this.applyQueryParam();
     }
+    redirect() {
+        const mainPage = new URL(window.location.href);
+        mainPage.hash = PAGES_HASH.store;
+        history.pushState({}, '', mainPage);
+        this.updatePage();
+    }
     readParamsFromURL(): Partial<FilterParamsValues> {
         const activeFilters: Partial<FilterParamsValues> = {};
         this.queryParams = new URL(window.location.href).searchParams;
-
         for (const key of this.queryParams.keys()) {
             if (filterParamsKeys.includes(key as FilterKeys)) {
                 const filter = key;
@@ -422,6 +429,7 @@ class Model {
     }
     resetCart() {
         localStorage.removeItem(CART_ID);
+        this.cart?.restore();
     }
 }
 

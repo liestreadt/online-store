@@ -1,6 +1,6 @@
-export default function createModal(): string {
+export default function createModal(modalDisplayStatus: string): string {
     return `
-        <section id="modalWindow" class="modal">
+        <section id="modalWindow" class="modal" style="display: ${modalDisplayStatus};">
             <form id="modalForm" class="modal__window">
                 <h2 class="modal__header">Personal details</h2>
                 <div class="modal__name">
