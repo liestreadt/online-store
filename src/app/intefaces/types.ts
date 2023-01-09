@@ -91,6 +91,7 @@ export interface ElementsToListen {
         sorting: HTMLSelectElement | null;
         searching: HTMLInputElement | null;
         viewButtons: HTMLDivElement | null;
+        modalWindow: HTMLDivElement | null;
     };
 }
 
@@ -117,6 +118,7 @@ export enum EventTargetsIDEnum {
     sorting = 'sorting-options',
     searching = 'searching-field',
     viewButtons = 'view-buttons-container',
+    modalWindow = 'modalWindow',
     modalForm = 'modalForm',
     modalName = 'modalName',
     modalNumber = 'modalNumber',

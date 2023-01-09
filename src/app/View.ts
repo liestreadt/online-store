@@ -198,6 +198,7 @@ class View {
                 sorting: document.body.querySelector(`#${EventTargetsIDEnum.sorting}`),
                 searching: document.body.querySelector(`#${EventTargetsIDEnum.searching}`),
                 viewButtons: document.body.querySelector(`#${EventTargetsIDEnum.viewButtons}`),
+                modalWindow: document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`),
             },
         };
     }
@@ -239,6 +240,12 @@ class View {
     }
     handleFormPassed() {
         this.toggleModalErrorMessage('none');
+        const modalWindow = document.body.querySelector(`#${EventTargetsIDEnum.modalWindow}`) as HTMLDivElement;
+        modalWindow.innerHTML = `
+            <div class="modal__confirmed-window">
+                Thanks for order. You will be redirected to main page in 3 seconds.
+            </div>
+        `;
     }
 }
 

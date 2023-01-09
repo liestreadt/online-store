@@ -1,7 +1,7 @@
 import Cart from './Cart';
 import increaseValueInMap from './tools/Functions';
 import { FilterCalculator } from './FilterCalculator';
-import { PAGES_HASH } from './constants/constants';
+import { CART_ID, PAGES_HASH } from './constants/constants';
 import {
     ProductDetail,
     DummyJSON,
@@ -301,6 +301,9 @@ class Model {
         this.readParamsFromURL();
         this.applyQueryParamsToFilter();
         this.applyQueryParam();
+    }
+    resetCart() {
+        localStorage.removeItem(CART_ID);
     }
 }
 

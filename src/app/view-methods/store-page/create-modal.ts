@@ -1,6 +1,6 @@
 export default function createModal(): string {
     return `
-        <section class="modal">
+        <section id="modalWindow" class="modal">
             <form id="modalForm" class="modal__window">
                 <h2 class="modal__header">Personal details</h2>
                 <div class="modal__name">

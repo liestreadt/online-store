@@ -54,6 +54,7 @@ export class Controller {
                     elementsToListen.sorting?.addEventListener('change', this);
                     elementsToListen.searching?.addEventListener('input', this);
                     elementsToListen.viewButtons?.addEventListener('click', this);
+                    elementsToListen.modalWindow?.addEventListener('click', this);
 
                     elementsToValidate.form?.addEventListener('submit', this);
                     elementsToValidate.formElements.name?.addEventListener('input', this);
@@ -154,6 +155,7 @@ export class Controller {
             [EventTargetsIDEnum.sorting]: this.sortingEvent,
             [EventTargetsIDEnum.searching]: this.searchingEvent,
             [EventTargetsIDEnum.viewButtons]: this.viewButtonsEvent,
+            [EventTargetsIDEnum.modalWindow]: this.modalWindowEvent,
 
             [EventTargetsIDEnum.modalForm]: this.modalFormEvent,
             [EventTargetsIDEnum.modalName]: this.modalNameEvent,
@@ -250,7 +252,13 @@ export class Controller {
         `);
         this.initViewAndListeners();
     }
-    private modalFormEvent(event: Event) {
+    private modalWindowEvent(event: Event): void {
+        const modalWindow = event.target as HTMLDivElement;
+        if (modalWindow.id === EventTargetsIDEnum.modalWindow) {
+            modalWindow.style.display = 'none';
+        }
+    }
+    private modalFormEvent(event: Event): void {
         event.preventDefault();
         if (Object.values(this.model.modelData.modalErrors).includes(true)) {
             this.view.handleFormError();
@@ -259,20 +267,21 @@ export class Controller {
             this.view.handleFormPassed();
         }
     }
-    private modalNameEvent(event: Event) {
+    private modalNameEvent(event: Event): void {
+        this.model.resetCart();
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
     }
-    private modalNumberEvent(event: Event) {
+    private modalNumberEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/[^0-9\\+]/g, '');
         input.value = input.value.replace(/\+{2,}/g, '+');
     }
-    private modalAddressEvent(event: Event) {
+    private modalAddressEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/[_/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
     }
-    private modalEmailEvent(event: Event) {
+    private modalEmailEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
         const regexEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
         if (!input.value.match(regexEmail)) {
@@ -283,7 +292,7 @@ export class Controller {
             this.view.hadleModalInputPassed(input);
         }
     }
-    private modalDebitNumberEvent(event: Event) {
+    private modalDebitNumberEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
         let cardCode = input.value.replace(/[^\d]/g, '').substring(0, 16);
         const cardASD = cardCode.match(/.{1,4}/g)?.join(' ');
@@ -292,7 +301,7 @@ export class Controller {
         }
         input.value = cardCode;
     }
-    private modalDebitValidToEvent(event: Event) {
+    private modalDebitValidToEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
         const inputType = (event as InputEvent).inputType;
 
@@ -310,7 +319,7 @@ export class Controller {
             input.value = input.value.replace(/[3-9]/g, '');
         }
     }
-    private modalDebitCodeEvent(event: Event) {
+    private modalDebitCodeEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
         input.value = input.value.replace(/[^\d]/g, '');
         if (input.value.length === InputValueStringLength.FOUR) {
