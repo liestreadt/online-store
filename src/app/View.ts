@@ -272,6 +272,7 @@ class View {
             button.innerText = 'Copy Link';
             button.style.backgroundColor = 'rgb(164, 164, 245)';
         }, 1000);
+    }
     hadleModalInputError(input: HTMLInputElement) {
         input.classList.add('error');
         const inputErrorMessage = input.parentNode?.querySelector('.input-error-message') as HTMLDivElement;
