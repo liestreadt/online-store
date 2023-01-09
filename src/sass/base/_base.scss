@@ -2,6 +2,9 @@ html {
     box-sizing: border-box;
     color: $color-font;
     font-size: 10px;
+    @media (max-width: $screen-medium) {
+        font-size: 9px;
+    }
 }
 
 body {
@@ -16,6 +19,7 @@ body {
     font-size: 1.6rem;
 }
 main {
+    flex-grow: 10;
     padding: $padding-medium 0;
 }
 a {

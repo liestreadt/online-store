@@ -14,6 +14,12 @@
     height: $height-card-small;
     overflow: hidden;
 
+    &__header {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
     &__body {
         display: flex;
         flex-direction: column;
@@ -57,7 +63,7 @@
     }
 
     &_added {
-        box-shadow: 0 0 5px 2px $color-sand-gradient;
+        box-shadow: 0 0 5px 2px $color-cart-added;
     }
 
     &__link-to-details {
@@ -86,7 +92,7 @@
 
         &__body {
             display: grid;
-            grid-template-columns: 25% 58% 15%;
+            grid-template-columns: 25% 54% 19%;
             grid-gap: 1%;
             padding: $padding-small;
             font-size: $font-body-big;
@@ -116,6 +122,58 @@
             align-items: center;
             margin: auto 0;
             font-size: $font-body;
+            button {
+                white-space: normal;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1600px) {
+
+    .product-card_big {
+        .product-card {
+
+            &__body {
+                grid-template-columns: 25% 50% 23%;
+            }
+
+            &__info {
+                font-size: $font-body;
+
+            }
+
+            &__controls {
+                font-size: $font-body-small;
+                button {
+                    border-radius: $radius-small;
+                }
+                a {
+                    border-radius: $radius-small;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $screen-wide) {
+
+    .product-card_big {
+        height: fit-content;
+        .product-card {
+            &__image {
+                height: 150px;
+            }
+
+            &__body {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            &__controls {
+                flex-direction: row;
+                font-size: $font-body;
+            }
         }
     }
 }

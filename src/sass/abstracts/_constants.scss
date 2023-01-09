@@ -11,7 +11,9 @@ $color-modal-input-error: rgba(235, 11, 11, 0.05);
 $color-modal-input-passed: rgba(35, 178, 16, 0.05);
 $color-modal-border-error: rgba(235, 11, 11, 0.9);
 $color-modal-border-passed:rgba(35, 178, 16, 0.9);
+$color-cart-added: rgb(19, 57, 117);
 
+$font-body-small: 1.5rem;
 $font-header: 2rem;
 $font-body: 1.6rem;
 $font-header-big: 2.4rem;
@@ -28,6 +30,10 @@ $padding-medium: 2rem;
 $margin-tiny: 0.5rem;
 $margin-small: 1rem;
 $margin-medium: 2rem;
+
+$screen-wide: 800px;
+$screen-medium: 700px;
+$screen-main-wrap: 500px;
 
 $width-card-small: 320px;
 $width-card-tiny: 200px;

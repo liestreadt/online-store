@@ -1,12 +1,12 @@
 .footer {
     display: flex;
-    align-self: center;
     flex-wrap: wrap;
+    justify-content: center;
     align-content: center;
     @extend %border;
-    border-radius: $radius-small;
+    border-bottom: none;
+    border-radius: $radius-small $radius-small 0 0;
     padding: $padding-small;
-    width: fit-content;
 }
 .footer__logo {
     display: block;
