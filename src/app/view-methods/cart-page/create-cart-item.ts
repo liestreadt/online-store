@@ -30,8 +30,10 @@ export default function createCartItem(product: ProductCart, index: number, cart
                     ${product.description}
                 </p>
                 <div class="cart-item__metrics">
-                    <span class="cart-item__rating">Rating: ${product.rating}</span>
-                    <span class="cart-item__discount">Discount: ${product.discountPercentage}%</span>
+                <span class="cart-item__rating">Rating: ${product.rating}</span>
+                <span class="cart-item__rating">Brand: ${product.brand}</span>
+                <span class="cart-item__rating">Category: ${product.category}</span>
+                <span class="cart-item__rating">Discount: ${product.discountPercentage}%</span>
                 </div>
             </div>
             <div class="cart-item__manage">

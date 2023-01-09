@@ -71,6 +71,10 @@ input, select {
 .header_small {
     @include header;
     font-size: 1.8rem;
+    @media (max-width: $screen-wide) {
+        flex-wrap: wrap;
+        font-size: 1.4rem;
+    }
 }
 .header_empty {
     @include header($border-bottom: none, $border-radius-top: $radius-small);
