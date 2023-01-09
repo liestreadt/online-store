@@ -145,9 +145,7 @@ class View {
                     ${this.modelData.cart && this.getCartSummary(this.modelData)}
                 </main>
             `;
-            this.summaryUpdater.updateActiveCodes();
-            this.summaryUpdater.updatePriceBlock();
-            this.summaryUpdater.updateSuggested();
+            this.summaryUpdater.updateFieldsAndListeners();
         }
     }
     renderMain() {

@@ -55,6 +55,8 @@ export class Controller {
                 elementsToListen.cartList?.addEventListener('click', this);
                 elementsToListen.promoInput?.addEventListener('input', this);
                 elementsToListen.buyButton?.addEventListener('click', this);
+
+                this.view.summaryUpdater.updateFieldsAndListeners();
                 break;
             }
             case PageCase.details: {
@@ -161,7 +163,7 @@ export class Controller {
         const inputField = event.target;
         if (promoHandler && inputField instanceof HTMLInputElement) {
             promoHandler.userPromo = inputField.value;
-            this.view.summaryUpdater.updateSuggested();
+            this.view.summaryUpdater.updateFieldsAndListeners();
             console.log('promoHandler.userPromo', promoHandler.userPromo);
         } else {
             console.log('no promo handler!');
