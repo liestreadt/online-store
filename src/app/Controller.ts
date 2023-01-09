@@ -17,6 +17,17 @@ import {
     PAGES_HASH,
     SLIDER_MAX_ID,
     SLIDER_MIN_ID,
+    regexName,
+    regexAddress,
+    regexDebitNumber,
+    regexNumber,
+    regexValidTo,
+    regexDebitCode,
+    regexToReplaceName,
+    regexToReplaceAddress,
+    regexToReplaceEmail,
+    regexToReplaceNumber,
+    regexToReplacePlus,
 } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
@@ -120,7 +131,6 @@ export class Controller {
 
         elementsToValidate.formElements.name?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
-            const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
             if (!input.value.match(regexName)) {
                 this.model.modelData.modalErrors.modalName = true;
                 this.view.hadleModalInputError(input);
@@ -131,7 +141,6 @@ export class Controller {
         });
         elementsToValidate.formElements.number?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
-            const regexNumber = /\+(\d{9})/g;
             if (!input.value.match(regexNumber)) {
                 this.model.modelData.modalErrors.modalNumber = true;
                 this.view.hadleModalInputError(input);
@@ -142,7 +151,6 @@ export class Controller {
         });
         elementsToValidate.formElements.address?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
-            const regexAddress = /(^[^\s]{5,})(\s{1})([^\s]{5,})(\s{1})([^\s]{5,})$/gi;
             if (!input.value.match(regexAddress)) {
                 this.model.modelData.modalErrors.modalAddress = true;
                 this.view.hadleModalInputError(input);
@@ -153,7 +161,6 @@ export class Controller {
         });
         elementsToValidate.formElements.debitCardNumber?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
-            const regexDebitNumber = /^(\d{4}\s\d{4}\s\d{4}\s\d{4})$/g;
             if (!input.value.match(regexDebitNumber)) {
                 this.model.modelData.modalErrors.modalDebitNumber = true;
                 this.view.hadleModalInputError(input);
@@ -164,7 +171,6 @@ export class Controller {
         });
         elementsToValidate.formElements.debitCardExpireDate?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
-            const regexValidTo = /^(\d{2}\s\/\s\d{2})$/g;
             if (!input.value.match(regexValidTo)) {
                 this.model.modelData.modalErrors.modalDebitValidTo = true;
                 this.view.hadleModalInputError(input);
@@ -175,8 +181,7 @@ export class Controller {
         });
         elementsToValidate.formElements.debitCardCode?.addEventListener('focusout', (event: Event) => {
             const input = event.target as HTMLInputElement;
-            const regexDebitNumber = /^(\d{3})$/g;
-            if (!input.value.match(regexDebitNumber)) {
+            if (!input.value.match(regexDebitCode)) {
                 this.model.modelData.modalErrors.modalDebitCode = true;
                 this.view.hadleModalInputError(input);
             } else {
@@ -400,21 +405,20 @@ export class Controller {
     }
     private modalNameEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
-        input.value = input.value.replace(/[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
+        input.value = input.value.replace(regexToReplaceName, '');
     }
     private modalNumberEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
-        input.value = input.value.replace(/[^0-9\\+]/g, '');
-        input.value = input.value.replace(/\+{2,}/g, '+');
+        input.value = input.value.replace(regexToReplaceNumber, '');
+        input.value = input.value.replace(regexToReplacePlus, '+');
     }
     private modalAddressEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
-        input.value = input.value.replace(/[_/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g, '');
+        input.value = input.value.replace(regexToReplaceAddress, '');
     }
     private modalEmailEvent(event: Event): void {
         const input = event.target as HTMLInputElement;
-        const regexEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-        if (!input.value.match(regexEmail)) {
+        if (!input.value.match(regexToReplaceEmail)) {
             this.model.modelData.modalErrors.modalEmail = true;
             this.view.hadleModalInputError(input);
         } else {
