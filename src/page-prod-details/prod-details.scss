@@ -38,6 +38,16 @@
         display: flex;
         padding: $padding-small 0;
         font-size: $font-body;
+
+        @media (max-width: $screen-wide) {
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+    }
+
+    &__description-text {
+        max-width: $width-small;
     }
 
     &__aside-slides {
