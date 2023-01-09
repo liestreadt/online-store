@@ -54,8 +54,8 @@ class View {
                         );
                         if (currentProduct) {
                             if (!currentProduct.isImagesUnique) {
-                                calculateImages(currentProduct).then((data) => {
-                                    this.renderImages(data, currentProduct.title);
+                                calculateImages(currentProduct).then(() => {
+                                    this.renderImages(currentProduct.images, currentProduct.title);
                                 });
                             } else {
                                 this.renderImages(currentProduct.images, currentProduct.title);
@@ -89,7 +89,7 @@ class View {
     renderImages(data: string[], title: string) {
         const imagesContainer = document.querySelector('#details-images');
         if (imagesContainer) {
-            imagesContainer.innerHTML += `
+            imagesContainer.innerHTML = `
                 ${data
                     .map((item) => {
                         return `<img src="${item}" alt="${title}">`;

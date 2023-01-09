@@ -1,6 +1,13 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum, EventTargetsIDEnum, ViewVariantsEnum } from './intefaces/types';
+import {
+    ElementsToListen,
+    FilterKeys,
+    PageCase,
+    SortVariantsEnum,
+    EventTargetsIDEnum,
+    ViewVariantsEnum,
+} from './intefaces/types';
 import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
