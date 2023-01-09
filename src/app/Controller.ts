@@ -96,7 +96,6 @@ export class Controller {
                 elementsToListen.promoInput?.addEventListener('input', this);
                 elementsToListen.buyButton?.addEventListener('click', this);
 
-
                 elementsToListen.modalWindow?.addEventListener('click', this);
                 elementsToValidate.form?.addEventListener('submit', this);
                 elementsToValidate.formElements.name?.addEventListener('input', this);

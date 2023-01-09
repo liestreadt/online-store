@@ -65,7 +65,6 @@ class Model {
                 modalDebitValidTo: true,
                 modalDebitCode: true,
             },
-
         };
         this.shownProductInfo = null;
     }

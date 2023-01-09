@@ -31,7 +31,6 @@ export const PROMO_CODES: PromoFields[] = [
     },
 ];
 
-
 export const regexName = /(^[^\s]{3,})(\s{1})([^\s]{3,})$/gi;
 export const regexNumber = /\+(\d{9})/g;
 export const regexAddress = /(^[^\s]{5,})(\s{1})([^\s]{5,})(\s{1})([^\s]{5,})$/gi;
@@ -45,4 +44,3 @@ export const regexToReplacePlus = /\+{2,}/g;
 export const regexToReplaceAddress = /[_/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g;
 export const regexToReplaceName = /[_0-9/\\?.*\-+,><{}\\[\]()!@#;:\\$%\\^&="№|`~]/g;
 export const regexToReplaceEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-
