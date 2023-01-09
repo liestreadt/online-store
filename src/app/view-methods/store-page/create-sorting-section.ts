@@ -3,10 +3,6 @@ import createStoreCard from './create-store-card';
 import createStoreCardBig from './create-store-card-big';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
-    // const currentCardContainerSize = modelData.currentView === ViewVariantsEnum.BIG ? 'big' : 'small';
-    // const isViewButtonBigSelected = modelData.currentView === ViewVariantsEnum.BIG ? 'sorting__big-view_selected' : '';
-    // const isViewButtonSmallSelected =
-    //     modelData.currentView === ViewVariantsEnum.BIG ? '' : 'sorting__small-view_selected';
     const [currentCardContainerSize, isViewButtonBigSelected, isViewButtonSmallSelected] =
         modelData.currentView === ViewVariantsEnum.BIG
             ? ['big', 'sorting__big-view_selected', '']
