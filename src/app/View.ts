@@ -6,6 +6,8 @@ import createStoreFilters from './view-methods/store-page/create-store-filters';
 import createSortingSection from './view-methods/store-page/create-sorting-section';
 import { createProdDetailsContainer } from './view-methods/prod-detail-page/create-prod-details-container';
 import createCartSummary from './view-methods/cart-page/create-cart-summary';
+import createCartItem from './view-methods/cart-page/create-cart-item';
+import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { calculateImages } from './tools/helpers';
 
 import {
@@ -20,8 +22,6 @@ import {
     PageCase,
     FilterKeys,
 } from './intefaces/types';
-import createCartItem from './view-methods/cart-page/create-cart-item';
-import createCartContainer from './view-methods/cart-page/create-cart-container';
 import { CURRENCY_SYMBOL, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 import { checkSearchFocused } from './tools/helpers';
 import Cart from './Cart';
@@ -54,8 +54,8 @@ class View {
                         );
                         if (currentProduct) {
                             if (!currentProduct.isImagesUnique) {
-                                calculateImages(currentProduct).then((data) => {
-                                    this.renderImages(data, currentProduct.title);
+                                calculateImages(currentProduct).then(() => {
+                                    this.renderImages(currentProduct.images, currentProduct.title);
                                 });
                             } else {
                                 this.renderImages(currentProduct.images, currentProduct.title);
@@ -89,7 +89,7 @@ class View {
     renderImages(data: string[], title: string) {
         const imagesContainer = document.querySelector('#details-images');
         if (imagesContainer) {
-            imagesContainer.innerHTML += `
+            imagesContainer.innerHTML = `
                 ${data
                     .map((item) => {
                         return `<img src="${item}" alt="${title}">`;

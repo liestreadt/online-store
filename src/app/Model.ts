@@ -12,6 +12,7 @@ import {
     FilteredProductsKeys,
     InitialFilterValues,
     ModelData,
+    ViewVariantsEnum,
     SortVariantsEnum,
     PageCase,
 } from './intefaces/types';
@@ -44,6 +45,7 @@ class Model {
             allCategories: [],
             initialProducts: null,
             filteredProducts: null,
+            currentView: null,
             currentOption: null,
             shownProductInfo: null,
             calculatedFilters: null,
@@ -261,6 +263,11 @@ class Model {
                 this.reInit();
                 break;
             }
+            case 'view': {
+                this.changeParamInURL('view', value);
+                this.reInit();
+                break;
+            }
             case 'stockMin': {
                 if (secondValue && +value > secondValue) {
                     this.changeParamInURL('stockMax', value);
@@ -308,11 +315,16 @@ class Model {
         //console.log('apply filters to product list');
         this.modelData.shownProductInfo = this.shownProductInfo;
         this.modelData.filteredProducts = this.shownProductInfo?.shownProducts || null;
+        this.applyQueryParamsToViewType();
         this.modelData.detailsMainImageSrc = this.modelData.filteredProducts?.find(
             (elem) => elem.id === this.modelData.detailsID
         )?.images[0];
         this.applyQueryParamsToSorting();
         this.applyQueryParamsToCart();
+    }
+    applyQueryParamsToViewType() {
+        const viewKey = this.modelData.activeFilters.view?.[0];
+        this.handleViewChange(viewKey === ViewVariantsEnum.BIG ? ViewVariantsEnum.BIG : ViewVariantsEnum.SMALL);
     }
     getAscendingSorting(filteredProductsInModelData: ProductDetails[], sortProperty: FilteredProductsKeys): void {
         filteredProductsInModelData.sort((prev, curr) => {
@@ -360,6 +372,9 @@ class Model {
                     break;
             }
         }
+    }
+    handleViewChange(view: ViewVariantsEnum): void {
+        this.modelData.currentView = view;
     }
     appendParamToURL(key: FilterKeys, value: string) {
         const url: URL = new URL(window.location.href);

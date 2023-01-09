@@ -1,6 +1,13 @@
 import View from './View';
 import Model from './Model';
-import { ElementsToListen, FilterKeys, PageCase, SortVariantsEnum, EventTargetsIDEnum } from './intefaces/types';
+import {
+    ElementsToListen,
+    FilterKeys,
+    PageCase,
+    SortVariantsEnum,
+    EventTargetsIDEnum,
+    ViewVariantsEnum,
+} from './intefaces/types';
 import { DECREASE_ID_PREFIX, INCREASE_ID_PREFIX, SLIDER_MAX_ID, SLIDER_MIN_ID } from './constants/constants';
 
 function getIDfromLabelInput(element: HTMLElement | null): string | null {
@@ -229,10 +236,16 @@ export class Controller {
         this.initViewAndListeners();
     }
     private viewButtonsEvent(event: Event): void {
-        console.log(`
-            this.model.applyQueryParam(event.currentTarget);
-        `);
-        this.initViewAndListeners();
+        const isValidEventTarget =
+            event.target instanceof HTMLButtonElement && event.target.id !== this.model.modelData.currentView;
+
+        if (isValidEventTarget) {
+            const viewID = event.target.id;
+            const key = 'view';
+            this.model.handleViewChange(viewID === ViewVariantsEnum.BIG ? ViewVariantsEnum.BIG : ViewVariantsEnum.BIG);
+            this.model.createQueryParamFromEvent(key, viewID);
+            this.initViewAndListeners();
+        }
     }
     private addToCartEvent(event: Event): void {
         if (event.target instanceof HTMLButtonElement) {

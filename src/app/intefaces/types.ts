@@ -48,6 +48,7 @@ export const filterParamsKeys = [
     'stockMin',
     'stockMax',
     'searching',
+    'view',
     'cartListLimit',
     'cartListPage',
 ] as const;
@@ -71,6 +72,7 @@ export interface ModelData {
     initialFilterValues: InitialFilterValues;
     allBrands: string[];
     allCategories: string[];
+    currentView: string | null;
     initialProducts: Array<ProductDetails> | null;
     filteredProducts: Array<ProductDetails> | null;
     currentOption: SortVariantsEnum | null;
@@ -146,4 +148,9 @@ export enum PageCase {
 export interface ShowCart {
     limit: number;
     listPage: number;
+}
+
+export enum ViewVariantsEnum {
+    SMALL = 'view-small',
+    BIG = 'view-big',
 }

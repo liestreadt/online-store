@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding: $padding-tiny  $padding-small;
+    padding: $padding-small;
 }
 
 .sorting-option {
@@ -36,6 +36,21 @@
         font-family: inherit;
     }
 
+    &__view-buttons {
+
+        button {
+            font-size: $font-header;
+        }
+    }
+
+    &__big-view_selected {
+        background-color: $color-headers-bkg;
+    }
+
+    &__small-view_selected {
+        background-color: $color-headers-bkg;
+    }
+
     &__card-container {
         justify-content: center;
         display: grid;
@@ -47,7 +62,7 @@
         grid-template-columns: repeat(auto-fill, $width-card-small);
     }
 
-    &__card-container_tiny {
-        grid-template-columns: repeat(auto-fill, $width-card-tiny);
+    &__card-container_big {
+        grid-template-columns: 1fr;
     }
 }

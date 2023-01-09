@@ -1,8 +1,17 @@
-import { ModelData, SortVariantsEnum } from '../../intefaces/types';
-import { EventTargetsIDEnum } from '../../intefaces/types';
+import { ModelData, EventTargetsIDEnum, ViewVariantsEnum, SortVariantsEnum } from '../../intefaces/types';
 import createStoreCard from './create-store-card';
+import createStoreCardBig from './create-store-card-big';
 
 export default function createSortingSection(modelData: Partial<ModelData>): string {
+    // const currentCardContainerSize = modelData.currentView === ViewVariantsEnum.BIG ? 'big' : 'small';
+    // const isViewButtonBigSelected = modelData.currentView === ViewVariantsEnum.BIG ? 'sorting__big-view_selected' : '';
+    // const isViewButtonSmallSelected =
+    //     modelData.currentView === ViewVariantsEnum.BIG ? '' : 'sorting__small-view_selected';
+    const [currentCardContainerSize, isViewButtonBigSelected, isViewButtonSmallSelected] =
+        modelData.currentView === ViewVariantsEnum.BIG
+            ? ['big', 'sorting__big-view_selected', '']
+            : ['small', '', 'sorting__small-view_selected'];
+
     const SORT_OPTIONS = Object.values(SortVariantsEnum);
     const sortNamesArr = [
         'default',
@@ -34,15 +43,23 @@ export default function createSortingSection(modelData: Partial<ModelData>): str
                     value="${modelData.calculatedFilters?.searchName || ''}"
                     placeholder="Search product">
                 <div id="${EventTargetsIDEnum.viewButtons}" class="sorting__view-buttons">
-                    Choose view: <button class="sorting__tiny-view">📱</button>
-                    <button class="sorting__small-view">💻</button>
+                    Choose view: <button id="${
+                        ViewVariantsEnum.BIG
+                    }" class="sorting__big-view ${isViewButtonBigSelected}">☰</button>
+                    <button id="${
+                        ViewVariantsEnum.SMALL
+                    }" class="sorting__small-view ${isViewButtonSmallSelected}">☷</button>
                 </div>
             </div>
-            <div class="sorting__card-container sorting__card-container_small" id="${EventTargetsIDEnum.cards}">
+            <div
+                class="sorting__card-container sorting__card-container_${currentCardContainerSize}"
+                id="${EventTargetsIDEnum.cards}">
                 ${modelData.filteredProducts
-                    ?.map((product) =>
-                        createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
-                    )
+                    ?.map((product) => {
+                        return modelData.currentView === ViewVariantsEnum.BIG
+                            ? createStoreCardBig(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false)
+                            : createStoreCard(product, modelData.cart?.checkProductInCart(`${product.id}`) ?? false);
+                    })
                     .join('')}
             </div>
         </section>

@@ -31,6 +31,8 @@
     }
 
     &__info-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-weight: bold;
 
         & span {
@@ -64,5 +66,56 @@
         @include button;
         height: fit-content;
         color: $color-font;
+    }
+}
+
+.product-card_big {
+    display: flex;
+    flex-direction: column;
+    @extend %border;
+    width: 100%;
+    height: $height-card-big;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .product-card {
+
+        &__header {
+            font-size: $font-header-big;
+        }
+
+        &__body {
+            display: grid;
+            grid-template-columns: 25% 58% 15%;
+            grid-gap: 1%;
+            padding: $padding-small;
+            font-size: $font-body-big;
+        }
+
+        &__image {
+            @extend %border;
+            margin: auto 0;
+            width: inherit;
+            height: inherit;
+        }
+
+        &__info {
+            margin: auto 0;
+            border: 0;
+            border-radius: $radius-small;
+            background: none;
+            width: 100%;
+        }
+
+        &__info-item {
+            padding: $padding-tiny;
+        }
+
+        &__controls {
+            flex-direction: column;
+            align-items: center;
+            margin: auto 0;
+            font-size: $font-body;
+        }
     }
 }
